@@ -1,7 +1,7 @@
 import type { Difficulty } from "../schema";
 
 /** 1プレイの最大問題数（仕様上の上限） */
-export const MAX_QUESTIONS = 10;
+export const MAX_QUESTIONS = 11;
 
 /** 選択肢の数（MVP は4択固定） */
 export const CHOICE_COUNT = 4;
