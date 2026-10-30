@@ -1,0 +1,35 @@
+version: 2
+updates:
+  # npm パッケージ（pnpm-lock.yaml も更新される）
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      timezone: Asia/Tokyo
+    # 公開直後の版は避ける（乗っ取られたパッケージが公開されてもすぐ取り込まないため）
+    cooldown:
+      default-days: 7
+    # minor・patch の更新は1つの PR にまとめて、PR の数を抑える
+    groups:
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # メジャー更新は当面提案させない。Node 20 では Vite 7 以降などが動かないため。
+      # Node を上げるときに、この設定を外してまとめて更新する
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    open-pull-requests-limit: 5
+
+  # GitHub Actions（ci.yml に固定した SHA とバージョンのコメントが更新される）
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      timezone: Asia/Tokyo
+    cooldown:
+      default-days: 7
+    groups:
+      github-actions:
+        patterns: ["*"]
