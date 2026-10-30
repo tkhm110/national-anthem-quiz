@@ -174,6 +174,18 @@ if (result.ok) console.log(`1 / ${result.totalQuestions}`);
 fixture はおおまかな仕様の確認に使い、件数の境界条件はテスト内で架空国を必要な数だけ作って確認している（`makeAnthem`）。
 こうすると、境界ごとに fixture ファイルを増やさずに済む。
 
+## CI（GitHub Actions）
+
+[.github/workflows/ci.yml](.github/workflows/ci.yml) で、PR の作成・更新時と main への push 時に次を順に実行する。
+どれか1つでも失敗すると CI 全体が失敗になる。
+
+`pnpm install --frozen-lockfile` → `lint` → `format:check` → `typecheck` → `validate:data` → `test` → `build`
+
+- `--frozen-lockfile`：`pnpm-lock.yaml` と `package.json` が食い違っていたら失敗させる（手元と同じ依存関係で検証するため）。
+- 権限は `contents: read` だけにしている。
+- 使うアクションはタグではなくコミット SHA で固定している。タグは後から別のコミットに付け替えられるため。
+- Node のバージョンは手元の環境（20）に合わせている。Node を上げるときは `ci.yml` も一緒に変更する。
+
 ## 技術選定の理由
 
 - **Vite + React + TypeScript（strict）**：静的サイトの標準的な構成。`noUncheckedIndexedAccess` も有効にし、配列の範囲外アクセスを型で見つけやすくしている。
