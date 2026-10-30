@@ -1,0 +1,19 @@
+{
+  "id": "xh",
+  "nameJa": "テスト国XH",
+  "nameEn": "Testland XH",
+  "anthemTitle": {
+    "original": "Test Anthem XH"
+  },
+  "region": "europe",
+  "difficulty": 4,
+  "audio": {
+    "file": "xh.mp3",
+    "durationSec": 40
+  },
+  "license": {
+    "type": "cc0",
+    "author": "Test fixture (not a real recording)",
+    "sourceUrl": "https://example.com/fixtures/xh"
+  }
+}

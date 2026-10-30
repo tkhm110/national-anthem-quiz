@@ -1,0 +1,2 @@
+# OS や git の設定（core.autocrlf）によらず、テキストファイルの改行は LF に統一する（Prettier の既定と合わせる）
+* text=auto eol=lf

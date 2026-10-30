@@ -1,0 +1,5 @@
+dist
+coverage
+pnpm-lock.yaml
+# 意図的に壊したJSON（構文エラーの検出テスト用）
+tests/fixtures/invalid

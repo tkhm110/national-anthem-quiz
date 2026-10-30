@@ -1,0 +1,19 @@
+{
+  "id": "xm",
+  "nameJa": "テスト国XM",
+  "nameEn": "Testland XM",
+  "anthemTitle": {
+    "original": "Test Anthem XM"
+  },
+  "region": "asia",
+  "difficulty": 4,
+  "audio": {
+    "file": "xm.mp3",
+    "durationSec": 30
+  },
+  "license": {
+    "type": "cc0",
+    "author": "Test fixture (not a real recording)",
+    "sourceUrl": "https://example.com/fixtures/xm"
+  }
+}

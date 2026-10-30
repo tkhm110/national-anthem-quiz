@@ -1,0 +1,14 @@
+{
+  "id": "xw",
+  "nameJa": "不正地域国",
+  "nameEn": "Bad Region Land",
+  "anthemTitle": { "original": "Bad Region Anthem" },
+  "region": "antarctica",
+  "difficulty": 5,
+  "audio": { "file": "xw.mp3", "durationSec": 60 },
+  "license": {
+    "type": "proprietary",
+    "author": "Test fixture (not a real recording)",
+    "sourceUrl": "not-a-url"
+  }
+}

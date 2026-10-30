@@ -1,0 +1,9 @@
+{
+  "id": "xu",
+  "nameJa": "ライセンス欠落国",
+  "nameEn": "Missing License Land",
+  "anthemTitle": { "original": "No License Anthem" },
+  "region": "europe",
+  "difficulty": 1,
+  "audio": { "file": "xu.mp3", "durationSec": 60 }
+}

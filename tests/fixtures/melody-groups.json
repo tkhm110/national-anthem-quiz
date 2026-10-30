@@ -1,0 +1,32 @@
+[
+  {
+    "id": "fixture-identical-ab",
+    "relationType": "identical",
+    "countryIds": ["xa", "xb"],
+    "description": "テスト用：同一旋律（xb-xg と合わせて xa=xb=xg の推移閉包を確認する）"
+  },
+  {
+    "id": "fixture-identical-bg",
+    "relationType": "identical",
+    "countryIds": ["xb", "xg"],
+    "description": "テスト用：同一旋律"
+  },
+  {
+    "id": "fixture-identical-pq",
+    "relationType": "identical",
+    "countryIds": ["xp", "xq"],
+    "description": "テスト用：北アメリカで4択を組めなくする同一旋律"
+  },
+  {
+    "id": "fixture-similar-ch",
+    "relationType": "similar",
+    "countryIds": ["xc", "xh"],
+    "description": "テスト用：類似旋律"
+  },
+  {
+    "id": "fixture-similar-hd",
+    "relationType": "similar",
+    "countryIds": ["xh", "xd"],
+    "description": "テスト用：類似旋律（xc と xd は直接の類似ではない）"
+  }
+]

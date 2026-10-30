@@ -1,0 +1,19 @@
+{
+  "id": "xd",
+  "nameJa": "テスト国XD",
+  "nameEn": "Testland XD",
+  "anthemTitle": {
+    "original": "Test Anthem XD"
+  },
+  "region": "europe",
+  "difficulty": 1,
+  "audio": {
+    "file": "xd.mp3",
+    "durationSec": 48
+  },
+  "license": {
+    "type": "cc0",
+    "author": "Test fixture (not a real recording)",
+    "sourceUrl": "https://example.com/fixtures/xd"
+  }
+}
