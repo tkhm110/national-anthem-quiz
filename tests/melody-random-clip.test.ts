@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { mulberry32, randomInt, shuffle } from "../src/lib/random";
-import { buildMelodyRelations, computeClip, DIFFICULTY_SETTINGS } from "../src/lib/quiz";
+import {
+  buildMelodyRelations,
+  computeClip,
+  DIFFICULTY_SETTINGS,
+  type ClipSetting,
+} from "../src/lib/quiz";
 import type { MelodyGroup } from "../src/lib/schema";
 import { loadFixtureDataset } from "./helpers";
 
@@ -85,55 +90,62 @@ describe("シード付き乱数", () => {
 describe("再生区間の計算", () => {
   const rng = () => 0.999999;
 
-  it("初級・中級は冒頭から 15秒・10秒", () => {
-    expect(computeClip(60, DIFFICULTY_SETTINGS[1].clip, rng)).toEqual({
-      startSec: 0,
-      durationSec: 15,
-    });
-    expect(computeClip(60, DIFFICULTY_SETTINGS[2].clip, rng)).toEqual({
-      startSec: 0,
-      durationSec: 10,
-    });
+  // computeClip 自体のテストは、難易度の設定値に依存させず個別の設定で行う
+  const fromBeginning: ClipSetting = { start: "beginning", durationSec: 15 };
+  const fromMiddle: ClipSetting = { start: "random", durationSec: 5 };
+
+  it("現在の設定：全難易度で冒頭から60秒（イントロの無音対策）", () => {
+    for (const difficulty of [1, 2, 3, 4] as const) {
+      expect(DIFFICULTY_SETTINGS[difficulty].clip).toEqual({ start: "beginning", durationSec: 60 });
+      expect(computeClip(90, DIFFICULTY_SETTINGS[difficulty].clip, rng)).toEqual({
+        startSec: 0,
+        durationSec: 60,
+      });
+    }
   });
 
-  it("上級・超級は途中から 5秒・3秒で、音源の末尾を超えない", () => {
-    for (const difficulty of [3, 4] as const) {
-      const setting = DIFFICULTY_SETTINGS[difficulty].clip;
-      for (const value of [0, 0.5, 0.999999]) {
-        const clip = computeClip(37.3, setting, () => value);
-        expect(clip.durationSec).toBe(setting.durationSec);
-        expect(clip.startSec).toBeGreaterThanOrEqual(0);
-        expect(clip.startSec + clip.durationSec).toBeLessThanOrEqual(37.3);
-      }
+  it("冒頭から再生する設定では、乱数によらず開始位置は0", () => {
+    expect(computeClip(60, fromBeginning, rng)).toEqual({ startSec: 0, durationSec: 15 });
+    expect(computeClip(60, fromBeginning, () => 0)).toEqual({ startSec: 0, durationSec: 15 });
+  });
+
+  it("途中から再生する設定では、音源の末尾を超えない", () => {
+    for (const value of [0, 0.5, 0.999999]) {
+      const clip = computeClip(37.3, fromMiddle, () => value);
+      expect(clip.durationSec).toBe(5);
+      expect(clip.startSec).toBeGreaterThanOrEqual(0);
+      expect(clip.startSec + clip.durationSec).toBeLessThanOrEqual(37.3);
     }
   });
 
   it("途中再生の開始位置は乱数で決まり、再現可能", () => {
-    const setting = DIFFICULTY_SETTINGS[3].clip;
-    expect(computeClip(60, setting, mulberry32(5))).toEqual(
-      computeClip(60, setting, mulberry32(5)),
+    expect(computeClip(60, fromMiddle, mulberry32(5))).toEqual(
+      computeClip(60, fromMiddle, mulberry32(5)),
     );
-    expect(computeClip(60, setting, () => 0.5)).toEqual({ startSec: 27.5, durationSec: 5 });
+    expect(computeClip(60, fromMiddle, () => 0.5)).toEqual({ startSec: 27.5, durationSec: 5 });
   });
 
   it("短い音源ではクリップ長を音源の長さに縮める", () => {
-    expect(computeClip(2, DIFFICULTY_SETTINGS[1].clip, rng)).toEqual({
+    expect(computeClip(2, fromBeginning, rng)).toEqual({ startSec: 0, durationSec: 2 });
+    expect(computeClip(4, fromMiddle, rng)).toEqual({ startSec: 0, durationSec: 4 });
+    // 60秒未満の国歌は実際にあり得る
+    expect(computeClip(45, DIFFICULTY_SETTINGS[1].clip, rng)).toEqual({
       startSec: 0,
-      durationSec: 2,
-    });
-    expect(computeClip(4, DIFFICULTY_SETTINGS[3].clip, rng)).toEqual({
-      startSec: 0,
-      durationSec: 4,
-    });
-    expect(computeClip(3, DIFFICULTY_SETTINGS[4].clip, rng)).toEqual({
-      startSec: 0,
-      durationSec: 3,
+      durationSec: 45,
     });
   });
 
   it("音源の長さが 0・負・非有限なら例外", () => {
     for (const bad of [0, -1, Number.NaN, Number.POSITIVE_INFINITY]) {
-      expect(() => computeClip(bad, DIFFICULTY_SETTINGS[1].clip, rng)).toThrow(RangeError);
+      expect(() => computeClip(bad, fromBeginning, rng)).toThrow(RangeError);
+    }
+  });
+
+  it("クリップ長の設定が 0・負なら例外", () => {
+    for (const bad of [0, -1]) {
+      expect(() => computeClip(60, { start: "beginning", durationSec: bad }, rng)).toThrow(
+        RangeError,
+      );
     }
   });
 });
