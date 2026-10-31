@@ -46,7 +46,7 @@ CI（`.github/workflows/ci.yml` のジョブ `check`）も同じものを実行�
 
 ## Review guidelines（レビューするとき）
 
-役割は、Claude Code が実装、Gemini CLI が push 前の事前レビュー、Codex が GitHub 上の PR レビュー。
+役割は、Claude Code が実装、Antigravity CLI が push 前の事前レビュー、Codex が GitHub 上の PR レビュー。
 GitHub 上の自動レビューも含め、レビューするときは必ず [REVIEW.md](REVIEW.md) の観点と重大度の基準に従う。
 
 - CI で確認できること（Lint・型・整形・テストの成否）は指摘しない。

@@ -209,7 +209,7 @@ fixture はおおまかな仕様の確認に使い、件数の境界条件はテ
 | 担当                         | 役割                                   |
 | ---------------------------- | -------------------------------------- |
 | Claude Code                  | 実装・テスト・文書の更新               |
-| Gemini CLI                   | push 前の事前レビュー（手元）          |
+| Antigravity CLI（Gemini）    | push 前の事前レビュー（手元）          |
 | Codex                        | GitHub 上の PR レビュー                |
 | GitHub Actions（CI `check`） | 自動テストと品質ゲート（マージの条件） |
 

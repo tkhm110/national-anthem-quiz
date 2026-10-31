@@ -6,8 +6,8 @@
 
 ## Claude Code の役割：実装担当
 
-- 実装・テスト・文書の更新は Claude Code が行う。レビューは Gemini CLI（push 前・手元）と Codex（GitHub 上の PR）が [REVIEW.md](REVIEW.md) に沿って行う。
-- 中・高リスクの変更をコミットしたら、push の前に Gemini CLI で事前レビューするようユーザーに伝える（REVIEW.md の「4.1」）。
+- 実装・テスト・文書の更新は Claude Code が行う。レビューは Antigravity CLI（push 前・手元）と Codex（GitHub 上の PR）が [REVIEW.md](REVIEW.md) に沿って行う。
+- 中・高リスクの変更をコミットしたら、push の前に Antigravity CLI で事前レビューするようユーザーに伝える（REVIEW.md の「4.1」）。
 - 他のエージェントの指摘を受け取ったら、1件ずつ「採用（修正する）／不採用（理由）／要相談」に分けて答える。
   自分の実装を守る方向に偏らないよう、判断が分かれるものは「要相談」としてユーザーに委ねる。
 
