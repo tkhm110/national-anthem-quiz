@@ -10,14 +10,15 @@ updates:
     # 公開直後の版は避ける（乗っ取られたパッケージが公開されてもすぐ取り込まないため）
     cooldown:
       default-days: 7
-    # minor・patch の更新は1つの PR にまとめて、PR の数を抑える
+    # minor・patch の更新は1つの PR にまとめて、PR の数を抑える。
+    # メジャー更新はまとめず、パッケージごとに別の PR になる（原因を切り分けやすくするため）
     groups:
       npm-minor-and-patch:
         update-types: [minor, patch]
     ignore:
-      # メジャー更新は当面提案させない。Node 20 では Vite 7 以降などが動かないため。
-      # Node を上げるときに、この設定を外してまとめて更新する
-      - dependency-name: "*"
+      # Node の型定義は、実際に使う Node のメジャー版（.node-version）に合わせる。
+      # Node を上げるときに、手で一緒に上げる
+      - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
     open-pull-requests-limit: 5
 
