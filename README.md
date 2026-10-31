@@ -206,7 +206,14 @@ fixture はおおまかな仕様の確認に使い、件数の境界条件はテ
 | [REVIEW.md](REVIEW.md)                                               | リスクに応じたレビューの観点と、AI にレビューを頼む手順          |
 | [.github/pull_request_template.md](.github/pull_request_template.md) | PR の本文の形式（検証結果と AI レビューの記録）                  |
 
-実装は Claude Code、レビューは Codex・Gemini などの別のエージェントが手動で行う。AI のレビューは助言で、マージの必須条件は CI の `check` だけ。
+| 担当                         | 役割                                   |
+| ---------------------------- | -------------------------------------- |
+| Claude Code                  | 実装・テスト・文書の更新               |
+| Gemini CLI                   | push 前の事前レビュー（手元）          |
+| Codex                        | GitHub 上の PR レビュー                |
+| GitHub Actions（CI `check`） | 自動テストと品質ゲート（マージの条件） |
+
+どの AI レビューをいつ使うかは、変更のリスクに応じて [REVIEW.md](REVIEW.md) で決めている。AI のレビューは助言で、マージの必須条件は CI の `check` だけ。
 
 ## 技術選定の理由
 
