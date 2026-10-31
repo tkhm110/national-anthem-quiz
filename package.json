@@ -2,6 +2,7 @@
   "name": "national-anthem-quiz",
   "private": true,
   "version": "0.1.0",
+  "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@10.34.9",
   "engines": {
