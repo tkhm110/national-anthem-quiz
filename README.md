@@ -7,7 +7,7 @@
 
 ## セットアップ
 
-必要なもの：Node.js 20.12 以上（推奨は現行のLTS）、pnpm 10。
+必要なもの：Node.js 24（LTS。バージョンは [.node-version](.node-version) に書いてある）、pnpm 10。
 
 ```bash
 # pnpm が未インストールの場合（どちらか一方）
@@ -185,7 +185,7 @@ fixture はおおまかな仕様の確認に使い、件数の境界条件はテ
 - `--frozen-lockfile`：`pnpm-lock.yaml` と `package.json` が食い違っていたら失敗させる（手元と同じ依存関係で検証するため）。
 - 権限は `contents: read` だけにしている。
 - 使うアクションはタグではなくコミット SHA で固定している。タグは後から別のコミットに付け替えられるため。
-- Node のバージョンは手元の環境（20）に合わせている。Node を上げるときは `ci.yml` も一緒に変更する。
+- Node のバージョンは `.node-version` で一元管理し、CI もこのファイルを読む（`node-version-file`）。Node を上げるときは、このファイルと `package.json` の `engines`・`@types/node` を一緒に変更する。
 - main は Rulesets で保護している。直接の push・force push・削除は禁止で、`check` ジョブが成功した PR だけをマージできる。
 
 ### 依存関係の自動更新（Dependabot）
@@ -194,7 +194,8 @@ fixture はおおまかな仕様の確認に使い、件数の境界条件はテ
 
 - minor・patch の更新は1つの PR にまとめる。CI が通れば、内容を確認してマージする。
 - 公開されてから7日未満の版は提案させない（`cooldown`）。乗っ取られたパッケージをすぐ取り込まないため。
-- **メジャー更新は当面提案させない。** Node 20 では Vite 7 以降などが動かないため。Node を上げるときにこの設定を外し、まとめて更新する。
+- メジャー更新はまとめず、パッケージごとに別の PR になる。問題が起きたときに原因を切り分けやすくするため。
+- `@types/node` だけはメジャー更新を提案させない。型定義を、実際に使う Node のメジャー版（`.node-version`）に合わせるため。
 - 脆弱性の修正（セキュリティ更新）はこの設定とは別の仕組みなので、メジャー更新でも PR が作られる。
 
 ## 開発の進め方（AI エージェントとの分担）
@@ -218,10 +219,10 @@ fixture はおおまかな仕様の確認に使い、件数の境界条件はテ
 ## 技術選定の理由
 
 - **Vite + React + TypeScript（strict）**：静的サイトの標準的な構成。`noUncheckedIndexedAccess` も有効にし、配列の範囲外アクセスを型で見つけやすくしている。
-- **Vite 6**：現在の環境の Node 20.12 では Vite 7 以降が動かないため。Node を上げたら更新を検討する。
+- **Vite 6**：最初に開発した環境が Node 20.12 で、Vite 7 以降が動かなかったため。Node 24 に上げたので、今後のメジャー更新で新しい版に移る。
 - **Zod 4**：JSON の実行時検証と TypeScript の型を1か所で定義できる（`z.infer`）。
 - **Vitest**：Vite と設定を共有でき、TypeScript をそのまま実行できる。
-- **tsx**：Node 20 では TypeScript を直接実行できないため、`validate:data` の実行に使う。
+- **tsx**：`validate:data` の実行に使う。Node 24 は型を取り除くだけなら TypeScript を直接実行できるが、import に拡張子を書かない今のコードの書き方には対応していないため。
 - **ESLint + Prettier**：Lint と整形を分けて担当させる標準的な組み合わせ。
 
 ## 今後のフェーズ

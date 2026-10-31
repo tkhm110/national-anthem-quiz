@@ -29,8 +29,8 @@ jobs:
 
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          # 手元の環境（Node 20）に合わせている。Node を上げるときはここも一緒に変更する
-          node-version: 20
+          # Node のバージョンは .node-version で一元管理する（手元の環境と合わせる）
+          node-version-file: .node-version
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
