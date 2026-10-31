@@ -20,18 +20,17 @@ export type DifficultySetting = {
   preferSimilarDistractors: boolean;
 };
 
-/** 難易度ごとの出題ルール。秒数などの調整はここだけを変更すればよい（仮設定）。 */
+/**
+ * 再生区間（暫定）：全難易度で冒頭から60秒。
+ * イントロで最初の数秒に何も流れない音源があり得るため、短い区間や途中からの再生は当面使わない。
+ * 難易度ごとに変えたくなったら、各難易度の clip を個別に書き換える（"random" で途中から再生できる）。
+ */
+const DEFAULT_CLIP: ClipSetting = { start: "beginning", durationSec: 60 };
+
+/** 難易度ごとの出題ルール。秒数などの調整はここだけを変更すればよい。 */
 export const DIFFICULTY_SETTINGS: Record<Difficulty, DifficultySetting> = {
-  1: {
-    label: "初級",
-    clip: { start: "beginning", durationSec: 15 },
-    preferSimilarDistractors: false,
-  },
-  2: {
-    label: "中級",
-    clip: { start: "beginning", durationSec: 10 },
-    preferSimilarDistractors: false,
-  },
-  3: { label: "上級", clip: { start: "random", durationSec: 5 }, preferSimilarDistractors: false },
-  4: { label: "超級", clip: { start: "random", durationSec: 3 }, preferSimilarDistractors: true },
+  1: { label: "初級", clip: DEFAULT_CLIP, preferSimilarDistractors: false },
+  2: { label: "中級", clip: DEFAULT_CLIP, preferSimilarDistractors: false },
+  3: { label: "上級", clip: DEFAULT_CLIP, preferSimilarDistractors: false },
+  4: { label: "超級", clip: DEFAULT_CLIP, preferSimilarDistractors: true },
 };
