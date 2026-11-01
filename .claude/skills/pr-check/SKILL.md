@@ -5,8 +5,8 @@ description: Check a pull request's CI status and Codex review (including Codex'
 
 # Check a PR (CI, Codex review, findings, merge decision)
 
-Collect the PR's state from GitHub, decide whether it can be merged, and report to the user in Japanese.
-**This is read-only. Do not push, comment, merge or resolve threads; the user does those** (see AGENTS.md).
+Collect the PR's state from GitHub, decide whether it can be merged, fill in the AI review section of the PR body, and report to the user in Japanese.
+**The only write you may make is to the PR body's "## AI レビュー" section (step 4 below). Do not push, comment, merge or resolve threads; the user does those** (see AGENTS.md).
 
 ## 1. Get the status
 
@@ -41,14 +41,46 @@ For each finding:
 1. **Check it yourself before deciding.** Read the code, data or external page (such as a Commons page) that the finding refers to, and confirm whether what it claims is true.
 2. Sort it into **adopt / reject (with a reason) / needs discussion** (see CLAUDE.md). When the call could go either way, mark it "needs discussion" and let the user decide. Do not lean toward defending your own implementation.
 3. Fix adopted findings on the same branch and commit them (following CLAUDE.md). Then ask the user to push and to comment `@codex review` again.
-4. Fill in the AI review section of the PR template (effective / false positive / missed by CI).
+4. Count the results for the AI review section (effective / false positive / missed by CI). Section 4 writes them into the PR.
 
-## 4. How to report
+## 4. Fill in the PR's AI review section
+
+Once the Codex review has finished, write the AI review section of the PR body.
+
+1. Write the section to a scratch file (never inside the repository), starting at the heading and following the PR template's format:
+
+   ```markdown
+   ## AI レビュー（REVIEW.md の「1. リスクの分け方」に従う）
+
+   実施しなかった場合は、結果を ⏭️ 未実行 または ➖ 対象外 にする。
+   高リスクの変更では、自動レビューの後に、観点を指定して `@codex review` をもう一度依頼する（REVIEW.md の 4.2）。
+
+   | エージェント                  | 結果 | 有効 | 誤検知 | CI の見逃し |
+   | ----------------------------- | ---- | ---- | ------ | ----------- |
+   | Antigravity CLI（事前）       | …    |      |        |             |
+   | Codex（PR）                   | …    |      |        |             |
+   | Codex（観点を指定・高リスク） | …    |      |        |             |
+   ```
+
+   - **Antigravity CLI**: fill it from this conversation (the result the user pasted and how you handled it). If no pre-review was done, use ➖ 対象外 for a low-risk PR and ⏭️ 未実行 for a medium- or high-risk PR. Never invent a result.
+   - **Codex (PR)**: fill it from the `pnpm pr:status` output and your decision on each finding.
+   - **Focused review**: ➖ 対象外 for a low-risk PR; for a high-risk PR, use the result of the review requested with a focus.
+   - If any finding was adopted, add one line below the table per finding: what it was and the commit that fixed it.
+
+2. Run:
+
+   ```bash
+   pnpm pr:ai-review <PR番号> <ファイル>
+   ```
+
+   The script changes only that section of the PR body and leaves the rest alone. If `gh` is missing or not logged in, it fails. In that case, show the user the same table and ask them to paste it in.
+
+## 5. How to report
 
 Report in Japanese, in this order:
 
 1. **Conclusion**: "OK to merge", "not yet (reason)" or "the user needs to do something first".
 2. A table of the checked items and their results.
 3. If there are findings, a table of each one with its decision (adopt / reject / needs discussion) and the reason.
-4. Values to enter in the PR's AI review section.
+4. Whether the PR's AI review section was updated, and what it now says. If the update failed, give the table for the user to paste.
 5. Steps after merging: `git switch main` → `git pull` → `git branch -d <branch>`. **Tell the user to run these only after the merge.**

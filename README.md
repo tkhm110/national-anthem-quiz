@@ -273,6 +273,10 @@ main にマージされると、[.github/workflows/deploy.yml](.github/workflows
 
 **PR の確認**：`pnpm pr:status [PR番号]` で、CI・Codex のレビュー・指摘・手元とのずれをまとめて表示する（読み取りだけ）。
 Claude Code では `/pr-check [PR番号]` で、この結果をもとに指摘の確認と「採用／不採用／要相談」の判断、マージしてよいかの判断まで行う（[.claude/skills/pr-check/SKILL.md](.claude/skills/pr-check/SKILL.md)）。
+最後に、PR の本文の「## AI レビュー」の表を `pnpm pr:ai-review <PR番号> <ファイル>` で埋める。書き換えるのはこの節だけで、本文の他の部分は変えない。
+
+この書き換えには GitHub CLI（`gh`）を使う。`gh` には、**このリポジトリの Pull requests の読み書きだけ**を許可した Fine-grained personal access token（有効期限つき）を登録しておく。
+コードの変更・マージ・設定の変更ができるトークンは使わない。
 
 ## 技術選定の理由
 
