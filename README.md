@@ -238,6 +238,21 @@ fixture はおおまかな仕様の確認に使い、件数の境界条件はテ
 - `@types/node` だけはメジャー更新を提案させない。型定義を、実際に使う Node のメジャー版（`.node-version`）に合わせるため。
 - 脆弱性の修正（セキュリティ更新）はこの設定とは別の仕組みなので、メジャー更新でも PR が作られる。
 
+## 公開（CD）
+
+main にマージされると、[.github/workflows/deploy.yml](.github/workflows/deploy.yml) が **Cloudflare Workers の静的アセット**として `dist/` を公開する。
+設定は [wrangler.jsonc](wrangler.jsonc) にあり、Worker のスクリプトは使わず、ビルドした静的ファイルだけを配信する。
+
+- 流れ：`pnpm install --frozen-lockfile` → `validate:data` → `test` → `build` → `wrangler deploy`。
+  main の内容は PR の CI で検証済みだが、公開の直前にもう一度確かめる。
+- Cloudflare の API トークン（`CLOUDFLARE_API_TOKEN`）とアカウント ID（`CLOUDFLARE_ACCOUNT_ID`）は、GitHub の **`production` 環境のシークレット**に置く。
+  `production` 環境は main ブランチからしか使えない設定にして、PR のワークフローからはトークンを読めないようにする。
+- API トークンの権限は「Edit Cloudflare Workers」だけにし、対象は自分のアカウント1つに絞る。
+- wrangler は `package.json` で版を固定し、外部のアクション（`cloudflare/wrangler-action`）は使わない。版の管理を `pnpm-lock.yaml` と Dependabot にまとめるため。
+- 公開は1つずつ順番に行い、途中で取り消さない（`concurrency`）。Actions の画面から手動でやり直すこともできる（`workflow_dispatch`）。
+- 手元で設定を確かめるときは、`pnpm build` の後に `pnpm exec wrangler deploy --dry-run` を実行する（ログイン不要。実際にはアップロードしない）。
+- 設計書では Cloudflare Pages を予定していたが、Cloudflare が新しいプロジェクトには Workers の静的アセットを勧めているため、こちらにした。
+
 ## 開発の進め方（AI エージェントとの分担）
 
 | ファイル                                                             | 内容                                                             |
@@ -265,15 +280,16 @@ fixture はおおまかな仕様の確認に使い、件数の境界条件はテ
 - **music-metadata**：`validate:data` の第3層で、音源の実際の長さを読み取るために使う（開発時のみ。サイトには含まれない）。
 - **tsx**：`validate:data` の実行に使う。Node 24 は型を取り除くだけなら TypeScript を直接実行できるが、import に拡張子を書かない今のコードの書き方には対応していないため。
 - **ESLint + Prettier**：Lint と整形を分けて担当させる標準的な組み合わせ。
+- **wrangler**：Cloudflare への公開に使う（開発時のみ）。手元で Worker を動かす部品（`workerd`）のインストール時スクリプトは実行させていない（公開には不要なため）。
 
 ## 今後のフェーズ
 
-| フェーズ | 内容                                                                   |
-| -------- | ---------------------------------------------------------------------- |
-| 2        | GitHub リポジトリ、PR 運用、GitHub Actions CI、ブランチ保護（完了）    |
-| 3        | 最小限のUI（状態遷移を含む）、権利確認済みの音源、Cloudflare Pages、CD |
-| 4        | Playwright E2E、PRプレビュー検証                                       |
-| 5        | Sentry、Web Analytics、ライセンス一覧ページ、対象国の拡充              |
+| フェーズ | 内容                                                                                             |
+| -------- | ------------------------------------------------------------------------------------------------ |
+| 2        | GitHub リポジトリ、PR 運用、GitHub Actions CI、ブランチ保護（完了）                              |
+| 3        | 最小限のUI（状態遷移を含む）、権利確認済みの音源、Cloudflare Workers（静的アセット）への公開、CD |
+| 4        | Playwright E2E、PRプレビュー検証                                                                 |
+| 5        | Sentry、Web Analytics、ライセンス一覧ページ、対象国の拡充                                        |
 
 ## 未決事項（Phase 1 で仮に決めたものを含む）
 
