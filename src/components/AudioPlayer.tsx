@@ -33,6 +33,8 @@ export function AudioPlayer({ src, clip }: Props) {
   async function play() {
     const audio = audioRef.current;
     if (!audio) return;
+    // 読み込みに失敗した後は、要素がエラー状態のまま残るので読み込み直す（通信が戻ったときに復帰できるように）
+    if (status === "error" || audio.error) audio.load();
     // 一時停止からの再開以外は、区間の先頭から再生する
     if (status !== "paused") {
       audio.currentTime = clip.startSec;
@@ -65,7 +67,14 @@ export function AudioPlayer({ src, clip }: Props) {
   }
 
   const isPlaying = status === "playing" || status === "loading";
-  const label = status === "paused" ? "再開" : status === "ended" ? "もう一度聴く" : "再生";
+  const label =
+    status === "paused"
+      ? "再開"
+      : status === "ended"
+        ? "もう一度聴く"
+        : status === "error"
+          ? "もう一度試す"
+          : "再生";
   const message = STATUS_MESSAGES[status];
 
   return (
