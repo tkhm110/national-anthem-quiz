@@ -42,11 +42,40 @@ const repo = /github\.com[/:](.+?)(?:\.git)?$/.exec(remote)?.[1];
 if (!repo) throw new Error(`GitHub のリポジトリを特定できません: ${remote}`);
 const api = `https://api.github.com/repos/${repo}`;
 
+/**
+ * gh にログインしていれば、そのトークンで API を呼ぶ（認証なしだと1時間に60回までで、すぐ上限に達するため）。
+ * ログインしていなければ認証なしで呼ぶ。
+ */
+function ghToken(): string | null {
+  try {
+    return (
+      execFileSync("gh", ["auth", "token"], {
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "ignore"],
+      }).trim() || null
+    );
+  } catch {
+    return null;
+  }
+}
+const token = ghToken();
+
 async function get<T>(path: string): Promise<T> {
   const res = await fetch(`${api}${path}`, {
-    headers: { Accept: "application/vnd.github+json", "User-Agent": "pr-status-script" },
+    headers: {
+      Accept: "application/vnd.github+json",
+      "User-Agent": "pr-status-script",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
   });
-  if (!res.ok) throw new Error(`GitHub API ${path}: HTTP ${res.status}`);
+  if (!res.ok) {
+    const limited = res.headers.get("x-ratelimit-remaining") === "0";
+    throw new Error(
+      `GitHub API ${path}: HTTP ${res.status}${
+        limited ? "（API の利用回数の上限。gh auth login でログインすると上限が上がる）" : ""
+      }`,
+    );
+  }
   return (await res.json()) as T;
 }
 
