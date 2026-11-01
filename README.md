@@ -256,6 +256,9 @@ fixture はおおまかな仕様の確認に使い、件数の境界条件はテ
 
 どの AI レビューをいつ使うかは、変更のリスクに応じて [REVIEW.md](REVIEW.md) で決めている。AI のレビューは助言で、マージの必須条件は CI の `check` だけ。
 
+**PR の確認**：`pnpm pr:status [PR番号]` で、CI・Codex のレビュー・指摘・手元とのずれをまとめて表示する（読み取りだけ）。
+Claude Code では `/pr-check [PR番号]` で、この結果をもとに指摘の確認と「採用／不採用／要相談」の判断、マージしてよいかの判断まで行う（[.claude/skills/pr-check/SKILL.md](.claude/skills/pr-check/SKILL.md)）。
+
 ## 技術選定の理由
 
 - **Vite + React + TypeScript（strict）**：静的サイトの標準的な構成。`noUncheckedIndexedAccess` も有効にし、配列の範囲外アクセスを型で見つけやすくしている。
