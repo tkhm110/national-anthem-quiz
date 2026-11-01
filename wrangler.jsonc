@@ -1,0 +1,9 @@
+// Cloudflare Workers の静的アセットとして dist/ をそのまま配信する（Worker のスクリプトは使わない）
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "national-anthem-quiz",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+  },
+}
