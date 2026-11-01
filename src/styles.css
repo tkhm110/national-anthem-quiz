@@ -1,0 +1,320 @@
+:root {
+  --bg: #f7f7f5;
+  --surface: #ffffff;
+  --text: #1d1d1f;
+  --muted: #5f6368;
+  --border: #d9d9d6;
+  --accent: #1f5fbf;
+  --accent-text: #ffffff;
+  --correct: #1e7d3a;
+  --correct-bg: #e5f4e9;
+  --wrong: #b3261e;
+  --wrong-bg: #fbe9e7;
+  --focus: #f2a900;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17181a;
+    --surface: #222326;
+    --text: #ececec;
+    --muted: #a8abb0;
+    --border: #3a3c40;
+    --accent: #6ea2ff;
+    --accent-text: #0d1b33;
+    --correct: #7bd88f;
+    --correct-bg: #1d3324;
+    --wrong: #ff8a80;
+    --wrong-bg: #3a2220;
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    "Hiragino Sans",
+    "Noto Sans JP",
+    sans-serif;
+  line-height: 1.6;
+}
+
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+h1 {
+  margin: 8px 0 0;
+  font-size: 1.6rem;
+}
+
+h2 {
+  font-size: 1.3rem;
+}
+
+h2:focus {
+  outline: none;
+}
+
+.hint {
+  color: var(--muted);
+  margin: 4px 0 12px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ボタン */
+.button {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.button-primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.button-quiet {
+  min-height: 36px;
+  padding: 4px 12px;
+}
+
+.button-large {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 16px;
+  font-size: 1.1rem;
+}
+
+/* モード選択 */
+.mode-table-wrap {
+  overflow-x: auto;
+}
+
+.mode-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mode-table th,
+.mode-table td {
+  padding: 4px;
+  text-align: center;
+}
+
+.mode-table tbody th {
+  text-align: left;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.mode-cell {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.mode-cell[aria-pressed="true"] {
+  border: 2px solid var(--accent);
+  font-weight: 700;
+}
+
+.mode-summary {
+  margin-top: 12px;
+}
+
+.notice {
+  color: var(--wrong);
+}
+
+/* プレーヤー */
+.player {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.player-button {
+  width: 100%;
+  min-height: 52px;
+  font-size: 1.1rem;
+}
+
+.player-progress {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.player-progress progress {
+  flex: 1;
+  height: 12px;
+}
+
+.player-time {
+  min-width: 6em;
+  color: var(--muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.player-message {
+  min-height: 1.6em;
+  margin: 8px 0 0;
+  color: var(--wrong);
+}
+
+/* クイズ */
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quiz-mode {
+  color: var(--muted);
+}
+
+.choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 400px) {
+  .choices {
+    grid-template-columns: 1fr;
+  }
+}
+
+.choice {
+  width: 100%;
+  min-height: 56px;
+  padding: 8px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+
+.choice:disabled {
+  cursor: default;
+}
+
+.choice-correct {
+  border-color: var(--correct);
+  background: var(--correct-bg);
+  font-weight: 700;
+}
+
+.choice-wrong {
+  border-color: var(--wrong);
+  background: var(--wrong-bg);
+}
+
+.choice-dim {
+  opacity: 0.6;
+}
+
+.feedback {
+  min-height: 1.6em;
+  margin-top: 16px;
+}
+
+.feedback p {
+  margin: 4px 0;
+}
+
+.result-correct {
+  color: var(--correct);
+  font-weight: 700;
+}
+
+.result-wrong {
+  color: var(--wrong);
+  font-weight: 700;
+}
+
+/* 結果 */
+.score {
+  font-size: 1.4rem;
+}
+
+.score strong {
+  font-size: 2.4rem;
+}
+
+.result-list {
+  padding-left: 1.5em;
+}
+
+.result-list li {
+  margin: 4px 0;
+}
+
+.result-list .hint {
+  display: inline;
+  font-weight: 400;
+}
+
+.actions .button {
+  width: 100%;
+  margin-top: 12px;
+}
+
+/* フッター */
+.app-footer {
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.credits ul {
+  padding-left: 1.2em;
+}
+
+.credits a {
+  margin-left: 4px;
+}
