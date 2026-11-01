@@ -114,7 +114,8 @@ REVIEW.md の「3. 重大度」の基準で、次の形式で日本語で答え�
 @codex review REVIEW.md の観点表のうち「CI/CD・権限」を重点的に、minor（P2）まで報告してください
 ```
 
-- **高リスクの変更**（CI/CD・権限・シークレット・依存のメジャー更新など）では、通常のレビューに加えて `@codex security review` も実行する。
+- **高リスクの変更**（CI/CD・権限・シークレット・依存のメジャー更新など）では、自動レビューの後に、上の例のように**観点を指定して**もう一度 `@codex review` を依頼する。
+  （`@codex security review` は ChatGPT Plus プランでは使えないため、この運用では使わない）
 - **`@codex address that feedback` など、Codex に PR を修正させるコマンドは使わない。** 修正は Claude Code が行う（実装とレビューの担当を分けるため）。
 - Dependabot の PR は、リスクが低い patch・minor 更新なら Codex の結果を待たずに CI だけで判断してよい。
 
