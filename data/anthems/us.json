@@ -1,0 +1,22 @@
+{
+  "id": "us",
+  "nameJa": "アメリカ合衆国",
+  "nameEn": "United States",
+  "anthemTitle": {
+    "original": "The Star-Spangled Banner",
+    "ja": "星条旗"
+  },
+  "region": "north-america",
+  "difficulty": 1,
+  "audio": {
+    "file": "us.mp3",
+    "durationSec": 78.3
+  },
+  "composer": "John Stafford Smith",
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Star_Spangled_Banner_instrumental.ogg",
+    "note": "楽曲：18世紀作曲でパブリックドメイン／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}

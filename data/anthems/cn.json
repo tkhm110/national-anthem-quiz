@@ -1,0 +1,22 @@
+{
+  "id": "cn",
+  "nameJa": "中国",
+  "nameEn": "China",
+  "anthemTitle": {
+    "original": "义勇军进行曲",
+    "ja": "義勇軍進行曲"
+  },
+  "region": "asia",
+  "difficulty": 1,
+  "audio": {
+    "file": "cn.mp3",
+    "durationSec": 43.9
+  },
+  "composer": "聶耳",
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:March_of_the_Volunteers_instrumental.ogg",
+    "note": "楽曲：1935年作曲、作曲者は1935年没でパブリックドメイン／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}

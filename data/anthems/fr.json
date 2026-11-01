@@ -1,0 +1,22 @@
+{
+  "id": "fr",
+  "nameJa": "フランス",
+  "nameEn": "France",
+  "anthemTitle": {
+    "original": "La Marseillaise",
+    "ja": "ラ・マルセイエーズ"
+  },
+  "region": "europe",
+  "difficulty": 1,
+  "audio": {
+    "file": "fr.mp3",
+    "durationSec": 79.3
+  },
+  "composer": "Claude Joseph Rouget de Lisle",
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:La_Marseillaise.ogg",
+    "note": "楽曲：1792年作曲でパブリックドメイン／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}
