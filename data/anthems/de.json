@@ -1,0 +1,22 @@
+{
+  "id": "de",
+  "nameJa": "ドイツ",
+  "nameEn": "Germany",
+  "anthemTitle": {
+    "original": "Das Lied der Deutschen",
+    "ja": "ドイツの歌"
+  },
+  "region": "europe",
+  "difficulty": 1,
+  "audio": {
+    "file": "de.mp3",
+    "durationSec": 74.1
+  },
+  "composer": "Joseph Haydn",
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:German_national_anthem_performed_by_the_US_Navy_Band.ogg",
+    "note": "楽曲：1797年作曲でパブリックドメイン／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}

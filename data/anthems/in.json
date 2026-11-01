@@ -1,0 +1,22 @@
+{
+  "id": "in",
+  "nameJa": "インド",
+  "nameEn": "India",
+  "anthemTitle": {
+    "original": "Jana Gana Mana",
+    "ja": "ジャナ・ガナ・マナ"
+  },
+  "region": "asia",
+  "difficulty": 2,
+  "audio": {
+    "file": "in.mp3",
+    "durationSec": 63.7
+  },
+  "composer": "Rabindranath Tagore",
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jana_Gana_Mana_instrumental.ogg",
+    "note": "楽曲：作曲者は1941年没でパブリックドメイン／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "jp",
+  "nameJa": "日本",
+  "nameEn": "Japan",
+  "anthemTitle": {
+    "original": "君が代"
+  },
+  "region": "asia",
+  "difficulty": 1,
+  "audio": {
+    "file": "jp.mp3",
+    "durationSec": 58.7
+  },
+  "composer": "林廣守",
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kimi_ga_Yo_instrumental.ogg",
+    "note": "楽曲：1880年作曲でパブリックドメイン／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}
