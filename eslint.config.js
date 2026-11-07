@@ -19,7 +19,8 @@ export default defineConfig([
   },
   {
     files: ["src/**/*.{ts,tsx}"],
-    extends: [reactHooks.configs["recommended-latest"]],
+    // v7 から、新しい形式（flat config）の設定は configs.flat にある
+    extends: [reactHooks.configs.flat.recommended],
     languageOptions: { globals: globals.browser },
   },
   {
