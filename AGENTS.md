@@ -6,8 +6,10 @@ AI エージェント（Claude Code・Codex・Gemini など）が共通で守る
 ## プロジェクト
 
 - 国歌の器楽演奏を聴いて、国名を4択で当てる日本語の静的 Web アプリ。
-- 現在：Phase 1（データ検証・出題エンジン・テスト）と Phase 2（CI・Rulesets・Dependabot）が完了。
-  Phase 3（UI・音源・デプロイ）を進めている。Phase 4 以降（E2E・監視など）は**ユーザーの指示があるまで着手しない**。
+- 現在：Phase 1（データ検証・出題エンジン・テスト）、Phase 2（CI・Rulesets・Dependabot）、
+  Phase 3（UI・8か国の音源・Cloudflare Workers への自動公開）が完了。
+  Phase 4 以降（E2E・監視など）は**ユーザーの指示があるまで着手しない**。
+- main にマージすると、そのまま公開サイトに反映される（`.github/workflows/deploy.yml`）。
 - 画面の状態遷移は `src/lib/game` の reducer に置き、React の部品に埋め込まない。
 - 技術：Vite + React + TypeScript（strict）、pnpm、Zod、Vitest。Node は 24（`.node-version` で手元と CI を揃える）。
 
