@@ -36,14 +36,14 @@
     "eslint": "^9.39.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "globals": "^17.13.0",
-    "music-metadata": "12.3.2",
+    "music-metadata": "12.3.3",
     "prettier": "^3.9.10",
     "tsx": "^4.23.15",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.72.1",
     "vite": "^6.4.5",
     "vitest": "^4.1.12",
-    "wrangler": "4.153.0"
+    "wrangler": "4.156.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
