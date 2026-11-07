@@ -237,8 +237,14 @@ fixture はおおまかな仕様の確認に使い、件数の境界条件はテ
 
 - minor・patch の更新は1つの PR にまとめる。CI が通れば、内容を確認してマージする。
 - 公開されてから7日未満の版は提案させない（`cooldown`）。乗っ取られたパッケージをすぐ取り込まないため。
-- メジャー更新はまとめず、パッケージごとに別の PR になる。問題が起きたときに原因を切り分けやすくするため。
-- `@types/node` だけはメジャー更新を提案させない。型定義を、実際に使う Node のメジャー版（`.node-version`）に合わせるため。
+- メジャー更新は、原則としてパッケージごとに別の PR になる。問題が起きたときに原因を切り分けやすくするため。
+- ただし、**互いの版に依存していて同時に上げないと成り立たないもの**は、メジャー更新を1つの PR にまとめる。
+  - Vite 系（`vite`・`@vitejs/*`・`vitest`）：`@vitejs/plugin-react` 6 は Vite 8 が必須。
+  - ESLint 系（`eslint`・`@eslint/*`・`eslint-plugin-*`・`typescript-eslint`・`globals`）：`@eslint/js` 10 は ESLint 10 が必須。
+  - 別々にしていたときは、どちらも単独では上げられず、週次の更新処理全体が「Dependabot cannot update to the required version」で失敗した（2026年11月）。
+- `@types/node` はメジャー更新を提案させない。型定義を、実際に使う Node のメジャー版（`.node-version`）に合わせるため。
+- `typescript` のメジャー更新も、`typescript-eslint` が TypeScript 7 に対応するまで提案させない。
+- minimatch（ESLint 経由）の脆弱性の警告は、ESLint 側が修正版に対応するまで「Dependabot cannot update minimatch to a non-vulnerable version」と出続けるが、想定どおり。
 - 脆弱性の修正（セキュリティ更新）はこの設定とは別の仕組みなので、メジャー更新でも PR が作られる。
 
 ## 公開（CD）

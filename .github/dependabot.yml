@@ -11,14 +11,27 @@ updates:
     cooldown:
       default-days: 7
     # minor・patch の更新は1つの PR にまとめて、PR の数を抑える。
-    # メジャー更新はまとめず、パッケージごとに別の PR になる（原因を切り分けやすくするため）
+    # メジャー更新はパッケージごとに別の PR にする（原因を切り分けやすくするため）。
+    # ただし、互いの版に依存していて同時に上げないと成り立たないものは、まとめて1つの PR にする
+    # （別々だと、どちらも単独では上げられず、Dependabot の更新処理全体が失敗する）
     groups:
       npm-minor-and-patch:
         update-types: [minor, patch]
+      # @vitejs/plugin-react 6 は vite 8 が必須、vitest も vite の版に依存する
+      vite-major:
+        patterns: ["vite", "@vitejs/*", "vitest"]
+        update-types: [major]
+      # @eslint/js 10 は eslint 10 が必須。プラグインも eslint の版に依存する
+      eslint-major:
+        patterns: ["eslint", "@eslint/*", "eslint-plugin-*", "typescript-eslint", "globals"]
+        update-types: [major]
     ignore:
       # Node の型定義は、実際に使う Node のメジャー版（.node-version）に合わせる。
       # Node を上げるときに、手で一緒に上げる
       - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # typescript-eslint が TypeScript 7 に対応するまで、TypeScript のメジャー更新は止める
+      - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
     open-pull-requests-limit: 5
 
