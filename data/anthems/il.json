@@ -1,0 +1,21 @@
+{
+  "id": "il",
+  "nameJa": "イスラエル",
+  "nameEn": "Israel",
+  "anthemTitle": {
+    "original": "הַתִּקְוָה",
+    "ja": "ハティクヴァ（希望）"
+  },
+  "region": "asia",
+  "difficulty": 2,
+  "audio": {
+    "file": "il.mp3",
+    "durationSec": 74.2
+  },
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hatikvah_instrumental.ogg",
+    "note": "楽曲：1888年（編曲者 Samuel Cohen は1940年没）。米国では1931年より前に出版された作品としてパブリックドメイン／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}

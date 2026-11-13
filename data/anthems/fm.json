@@ -1,0 +1,21 @@
+{
+  "id": "fm",
+  "nameJa": "ミクロネシア連邦",
+  "nameEn": "Federated States of Micronesia",
+  "anthemTitle": {
+    "original": "Patriots of Micronesia",
+    "ja": "ミクロネシアの愛国者"
+  },
+  "region": "oceania",
+  "difficulty": 4,
+  "audio": {
+    "file": "fm.mp3",
+    "durationSec": 35.7
+  },
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Micronesia_National_Anthem.ogg",
+    "note": "楽曲：1819年のドイツの歌の旋律。米国では1931年より前に出版された作品としてパブリックドメイン／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}

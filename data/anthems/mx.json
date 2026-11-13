@@ -1,0 +1,22 @@
+{
+  "id": "mx",
+  "nameJa": "メキシコ",
+  "nameEn": "Mexico",
+  "anthemTitle": {
+    "original": "Himno Nacional Mexicano",
+    "ja": "メキシコ国歌"
+  },
+  "region": "north-america",
+  "difficulty": 2,
+  "audio": {
+    "file": "mx.mp3",
+    "durationSec": 101.8
+  },
+  "composer": "Jaime Nunó",
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Himno_Nacional_Mexicano_instrumental.ogg",
+    "note": "楽曲：1854年作曲。米国では1931年より前に出版された作品としてパブリックドメイン／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}
