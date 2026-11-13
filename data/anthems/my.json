@@ -1,0 +1,21 @@
+{
+  "id": "my",
+  "nameJa": "マレーシア",
+  "nameEn": "Malaysia",
+  "anthemTitle": {
+    "original": "Negaraku",
+    "ja": "我が国"
+  },
+  "region": "asia",
+  "difficulty": 3,
+  "audio": {
+    "file": "my.mp3",
+    "durationSec": 58.7
+  },
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Negaraku_instrumental.ogg",
+    "note": "楽曲：19世紀の旋律（1857年ごろ）。米国では1931年より前に出版された作品としてパブリックドメイン／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}
