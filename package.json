@@ -17,6 +17,7 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
     "validate:data": "tsx scripts/validate-data.ts",
+    "sync": "tsx scripts/sync-main.ts",
     "pr:status": "tsx scripts/pr-status.ts",
     "pr:ai-review": "tsx scripts/pr-update-ai-review.ts",
     "test": "vitest run",
