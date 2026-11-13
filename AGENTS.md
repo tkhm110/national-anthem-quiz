@@ -1,7 +1,8 @@
 # AGENTS.md
 
 AI エージェント（Claude Code・Codex・Gemini など）が共通で守るルール。
-仕様の正本は [README.md](README.md)。ここには詳細を書かず、破ってはいけない原則だけを置く。
+仕様の正本は [docs/development.md](docs/development.md)。ここには詳細を書かず、破ってはいけない原則だけを置く。
+[README.md](README.md) は外から見る人向けの概要なので、開発の経緯や内部の手順は書かない。
 
 ## プロジェクト
 
@@ -21,7 +22,7 @@ pnpm lint && pnpm format:check && pnpm typecheck && pnpm validate:data && pnpm t
 
 CI（`.github/workflows/ci.yml` のジョブ `check`）も同じものを実行し、成功しないと main にマージできない。
 
-## 出題ルールの原則（詳細は README「出題ルール」）
+## 出題ルールの原則（詳細は docs/development.md「出題ルール」）
 
 - 正解・誤答とも、選ばれた地域・難易度の条件内の国だけを使う。他の地域や上の難易度へ勝手に広げない。
 - 1プレイは最大10問。足りなければ成立する数だけ出し、0問なら `INSUFFICIENT_POOL`。正解国は重複させない。
@@ -36,7 +37,8 @@ CI（`.github/workflows/ci.yml` のジョブ `check`）も同じものを実行�
 
 ## 変更するときの原則
 
-- 仕様を変えたら、テストと README を同じ PR で更新する。
+- 仕様を変えたら、テストと docs/development.md を同じ PR で更新する。
+  遊ぶ人から見える内容（収録国、遊び方、モード）が変わるときは、README も更新する。
 - 不具合を直すときは、先にその不具合を再現する回帰テストを書く。
 - 依存パッケージを追加・更新するときは、理由と影響を説明する。
 - ルールをこのファイルに追加するのは、テスト・Lint・CI・スキーマで機械的に防げず、実際に問題になった（または影響が大きい）ものだけ。1〜2行で書く。
