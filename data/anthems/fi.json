@@ -1,0 +1,22 @@
+{
+  "id": "fi",
+  "nameJa": "フィンランド",
+  "nameEn": "Finland",
+  "anthemTitle": {
+    "original": "Maamme",
+    "ja": "我等の地"
+  },
+  "region": "europe",
+  "difficulty": 3,
+  "audio": {
+    "file": "fi.mp3",
+    "durationSec": 46.4
+  },
+  "composer": "Fredrik Pacius",
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:United_States_Navy_Band_-_Maamme.ogg",
+    "note": "楽曲：1848年作曲。米国では1931年より前に出版された作品としてパブリックドメイン／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}

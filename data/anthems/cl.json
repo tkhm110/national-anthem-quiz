@@ -1,0 +1,22 @@
+{
+  "id": "cl",
+  "nameJa": "チリ",
+  "nameEn": "Chile",
+  "anthemTitle": {
+    "original": "Himno Nacional de Chile",
+    "ja": "チリ国歌"
+  },
+  "region": "south-america",
+  "difficulty": 2,
+  "audio": {
+    "file": "cl.mp3",
+    "durationSec": 122.5
+  },
+  "composer": "Ramón Carnicer",
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:United_States_Navy_Band_-_National_Anthem_of_Chile.ogg",
+    "note": "楽曲：19世紀前半の作曲（作曲者は1855年没）。1908年の出版物に掲載されている（https://commons.wikimedia.org/wiki/File:Himnos_nacionales_de_Chile_y_Ecuador.jpg ）。米国では1931年より前に出版された作品としてパブリックドメイン。出典ページの楽曲の表示には米国での根拠がないため、出版の記録で補った／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "pt",
+  "nameJa": "ポルトガル",
+  "nameEn": "Portugal",
+  "anthemTitle": {
+    "original": "A Portuguesa",
+    "ja": "ポルトガルの歌"
+  },
+  "region": "europe",
+  "difficulty": 2,
+  "audio": {
+    "file": "pt.mp3",
+    "durationSec": 70.1
+  },
+  "composer": "Alfredo Keil",
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:A_Portuguesa.ogg",
+    "note": "楽曲：1890年作曲、同年に楽譜が出版された（https://commons.wikimedia.org/wiki/File:A_Portuguesa_sheet_music.jpg ）。米国では1931年より前に出版された作品としてパブリックドメイン。作曲者は1907年没。出典ページの楽曲の表示には米国での根拠がないため、出版の記録で補った／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}

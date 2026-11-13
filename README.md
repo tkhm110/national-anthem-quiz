@@ -29,23 +29,25 @@
 
 ## 収録している国歌
 
-現在は次の22か国です。順次追加していきます。
+現在は次の36か国です。順次追加していきます。
 
-| 地域       | 国                                                               |
-| ---------- | ---------------------------------------------------------------- |
-| アジア     | 日本、インド、イスラエル、フィリピン、マレーシア、バングラデシュ |
-| ヨーロッパ | イギリス、フランス、ドイツ、イタリア、オランダ                   |
-| 北アメリカ | アメリカ合衆国、カナダ、メキシコ、キューバ                       |
-| 南アメリカ | ブラジル、アルゼンチン、コロンビア、ペルー                       |
-| オセアニア | オーストラリア、ニュージーランド、ミクロネシア連邦               |
+| 地域       | 国                                                                                                                                                 |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| アジア     | 日本、中国、インド、イスラエル、フィリピン、マレーシア、バングラデシュ                                                                             |
+| ヨーロッパ | イギリス、フランス、ドイツ、イタリア、ポルトガル、オーストリア、ギリシャ、スイス、ベルギー、オランダ、ノルウェー、フィンランド、デンマーク、チェコ |
+| 北アメリカ | アメリカ合衆国、カナダ、メキシコ、キューバ                                                                                                         |
+| 南アメリカ | ブラジル、アルゼンチン、チリ、ウルグアイ、コロンビア、ペルー、エクアドル、ボリビア                                                                 |
+| オセアニア | オーストラリア、ニュージーランド、ミクロネシア連邦                                                                                                 |
 
 「全世界」のほか、アジア・ヨーロッパ・北アメリカ・南アメリカのモードが遊べます（地域のモードは、その地域の国が4か国以上そろう難易度から）。
 
 ## 音源について
 
-- 音源はすべて、**米海軍軍楽隊（United States Navy Band）の演奏**です。[Wikimedia Commons](https://commons.wikimedia.org/) で公開されているものを使っています。
-- 1曲ずつ、**楽曲と演奏の両方がパブリックドメインである**ことを確認したものだけを収録しています。
+- 音源は、[Wikimedia Commons](https://commons.wikimedia.org/) で公開されているものを使っています。
+  中国を除くすべてが、**米海軍軍楽隊（United States Navy Band）の演奏**です。
+- 米海軍軍楽隊の音源は、1曲ずつ、**楽曲と演奏の両方がパブリックドメインである**ことを確認したものだけを収録しています。
   確認しきれなかった国歌は、収録を見送っています。
+- 中国の国歌だけは、Commons の利用者 Zscout370 さんが作った演奏で、[CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) で公開されているものです（形式を MP3 に変換しています）。
 - 各音源の出典は、クイズの画面の下にある「音源の出典とライセンス」で見られます。
 - 権利について気づいた点があれば、[Issues](https://github.com/tkhm110/national-anthem-quiz/issues) でお知らせください。
 
@@ -99,10 +101,10 @@ pnpm build    # 公開用にビルド
 このリポジトリの**コード**は [MIT License](LICENSE) で公開しています。
 
 **音源ファイル**と、国データに記載している録音の出典・権利情報は、MIT License の対象外です。
-それぞれの音源には、元のライセンス（パブリックドメイン）と出典の表示が適用されます。
+それぞれの音源には、元のライセンス（パブリックドメイン。中国の国歌は CC BY-SA 3.0）と出典の表示が適用されます。
 
 ---
 
 **English:** A browser quiz where you listen to an instrumental national anthem and pick the country from four choices.
-The interface is in Japanese. Recordings are public-domain performances by the United States Navy Band, sourced from Wikimedia Commons.
+The interface is in Japanese. Recordings come from Wikimedia Commons: public-domain performances by the United States Navy Band, plus one CC BY-SA 3.0 recording (China).
 [Play it here](https://national-anthem-quiz.tkhm110.workers.dev).
