@@ -1,0 +1,22 @@
+{
+  "id": "bd",
+  "nameJa": "バングラデシュ",
+  "nameEn": "Bangladesh",
+  "anthemTitle": {
+    "original": "আমার সোনার বাংলা",
+    "ja": "我が黄金のベンガルよ"
+  },
+  "region": "asia",
+  "difficulty": 3,
+  "audio": {
+    "file": "bd.mp3",
+    "durationSec": 134.9
+  },
+  "composer": "Rabindranath Tagore",
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Amar_Sonar_Bangla_instrumental_by_US_Navy_Band.oga",
+    "note": "楽曲：1905年（Gagan Harkara の旋律を Tagore が編曲。Tagore は1941年没）。米国では1931年より前に出版された作品としてパブリックドメイン／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}

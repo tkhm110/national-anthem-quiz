@@ -1,0 +1,22 @@
+{
+  "id": "au",
+  "nameJa": "オーストラリア",
+  "nameEn": "Australia",
+  "anthemTitle": {
+    "original": "Advance Australia Fair",
+    "ja": "進め 美しのオーストラリア"
+  },
+  "region": "oceania",
+  "difficulty": 1,
+  "audio": {
+    "file": "au.mp3",
+    "durationSec": 54.4
+  },
+  "composer": "Peter Dodds McCormick",
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:U.S._Navy_Band,_Advance_Australia_Fair_(instrumental).ogg",
+    "note": "楽曲：1878年作曲、1879年に楽譜が出版された（オーストラリア国立図書館 Bib ID 632210、https://commons.wikimedia.org/wiki/File:Advance_Australia_Fair_(1878).jpg ）。米国では1931年より前に出版された作品としてパブリックドメイン。作曲者は1916年没。出典ページの楽曲の表示は PD-old-100 だけのため、出版の記録で補った／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}
