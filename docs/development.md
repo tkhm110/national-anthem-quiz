@@ -285,6 +285,15 @@ Claude Code では `/pr-check [PR番号]` で、この結果をもとに指摘�
 この書き換えには GitHub CLI（`gh`）を使う。`gh` には、**このリポジトリの Pull requests の読み書きだけ**を許可した Fine-grained personal access token（有効期限つき）を登録しておく。
 コードの変更・マージ・設定の変更ができるトークンは使わない。
 
+**マージ後の後片付け**：`pnpm sync` で、手元を最新の状態にする（`--dry-run` を付けると、何をするかの表示だけ行う）。
+
+1. main に切り替えて、GitHub の最新を取り込む（早送りだけ）。
+2. `pnpm-lock.yaml` が変わっていたら、`pnpm install --frozen-lockfile` を実行する。
+3. 手元のブランチのうち、**先頭のコミットが、マージ済みの PR の先頭のコミットと一致するもの**だけを削除する。
+   push していないコミットがあるブランチや、まだ PR がマージされていないブランチは残し、理由を表示する。
+
+コミットしていない変更があるときや、手元の main に GitHub にないコミットがあるときは、何もせずに止まる。GitHub 側は変更しない。
+
 ## 技術選定の理由
 
 - **Vite + React + TypeScript（strict）**：静的サイトの標準的な構成。`noUncheckedIndexedAccess` も有効にし、配列の範囲外アクセスを型で見つけやすくしている。

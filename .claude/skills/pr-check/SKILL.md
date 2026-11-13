@@ -83,4 +83,14 @@ Report in Japanese, in this order:
 2. A table of the checked items and their results.
 3. If there are findings, a table of each one with its decision (adopt / reject / needs discussion) and the reason.
 4. Whether the PR's AI review section was updated, and what it now says. If the update failed, give the table for the user to paste.
-5. Steps after merging: `git switch main` → `git pull` → `git branch -d <branch>`. **Tell the user to run these only after the merge.**
+5. What happens after merging: tell the user that once they have merged, they only need to say so (or run `pnpm sync` themselves).
+
+## 6. After the merge
+
+When the user says the PR is merged, or `pnpm pr:status` shows it as merged, run:
+
+```bash
+pnpm sync
+```
+
+It switches to main, fast-forwards it, runs `pnpm install` if the lockfile changed, and deletes only the local branches whose tip equals the head commit of a merged PR. It stops without changing anything if there are uncommitted changes. Report what it did; if it kept a branch, tell the user the reason it printed (for example, commits that were never pushed).

@@ -3,7 +3,6 @@
  * PR の状態（CI・Codex のレビュー・指摘・手元とのずれ）をまとめて表示する。読み取りだけで、何も変更しない。
  * PR番号を省略すると、今のブランチの PR を探す。公開リポジトリなので GitHub の認証は不要。
  */
-import { execFileSync } from "node:child_process";
 import {
   CODEX_BOT,
   isMissingEnvironmentMessage,
@@ -11,6 +10,7 @@ import {
   parseSeverity,
   type ReviewState,
 } from "./lib/codex-comments";
+import { git, githubGet, repoSlug } from "./lib/github";
 
 type Pull = {
   number: number;
@@ -30,60 +30,14 @@ type InlineComment = Comment & {
 type Review = { user: { login: string }; state: string; commit_id: string };
 type CheckRun = { name: string; status: string; conclusion: string | null };
 
-function git(...args: string[]): string {
-  return execFileSync("git", args, {
-    encoding: "utf8",
-    stdio: ["ignore", "pipe", "ignore"],
-  }).trim();
-}
-
-const remote = git("remote", "get-url", "origin");
-const repo = /github\.com[/:](.+?)(?:\.git)?$/.exec(remote)?.[1];
-if (!repo) throw new Error(`GitHub のリポジトリを特定できません: ${remote}`);
-const api = `https://api.github.com/repos/${repo}`;
-
-/**
- * gh にログインしていれば、そのトークンで API を呼ぶ（認証なしだと1時間に60回までで、すぐ上限に達するため）。
- * ログインしていなければ認証なしで呼ぶ。
- */
-function ghToken(): string | null {
-  try {
-    return (
-      execFileSync("gh", ["auth", "token"], {
-        encoding: "utf8",
-        stdio: ["ignore", "pipe", "ignore"],
-      }).trim() || null
-    );
-  } catch {
-    return null;
-  }
-}
-const token = ghToken();
-
-async function get<T>(path: string): Promise<T> {
-  const res = await fetch(`${api}${path}`, {
-    headers: {
-      Accept: "application/vnd.github+json",
-      "User-Agent": "pr-status-script",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-  });
-  if (!res.ok) {
-    const limited = res.headers.get("x-ratelimit-remaining") === "0";
-    throw new Error(
-      `GitHub API ${path}: HTTP ${res.status}${
-        limited ? "（API の利用回数の上限。gh auth login でログインすると上限が上がる）" : ""
-      }`,
-    );
-  }
-  return (await res.json()) as T;
-}
+const get = githubGet;
+const repo = repoSlug();
 
 async function findPull(): Promise<Pull> {
   const arg = process.argv[2];
   if (arg) return get<Pull>(`/pulls/${Number(arg)}`);
   const branch = git("rev-parse", "--abbrev-ref", "HEAD");
-  const owner = repo!.split("/")[0];
+  const owner = repo.split("/")[0];
   const pulls = await get<Pull[]>(`/pulls?state=all&head=${owner}:${branch}&per_page=1`);
   if (!pulls[0])
     throw new Error(`ブランチ ${branch} の PR が見つかりません。PR番号を指定してください`);
