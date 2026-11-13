@@ -1,0 +1,22 @@
+{
+  "id": "ch",
+  "nameJa": "スイス",
+  "nameEn": "Switzerland",
+  "anthemTitle": {
+    "original": "Schweizerpsalm",
+    "ja": "スイスの賛歌"
+  },
+  "region": "europe",
+  "difficulty": 2,
+  "audio": {
+    "file": "ch.mp3",
+    "durationSec": 84.3
+  },
+  "composer": "Alberich Zwyssig",
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Swiss_Psalm.ogg",
+    "note": "楽曲：1841年作曲。米国では1931年より前に出版された作品としてパブリックドメイン／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}

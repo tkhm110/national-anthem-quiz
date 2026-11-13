@@ -1,0 +1,22 @@
+{
+  "id": "cn",
+  "nameJa": "中国",
+  "nameEn": "China",
+  "anthemTitle": {
+    "original": "义勇军进行曲",
+    "ja": "義勇軍進行曲"
+  },
+  "region": "asia",
+  "difficulty": 1,
+  "audio": {
+    "file": "cn.mp3",
+    "durationSec": 42.4
+  },
+  "composer": "聶耳",
+  "license": {
+    "type": "cc-by-sa",
+    "author": "Zscout370（Wikimedia Commons）",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E5%9B%BD%E6%AD%8C.ogg",
+    "note": "ライセンス：CC BY-SA 3.0（https://creativecommons.org/licenses/by-sa/3.0/ ）。Commons の利用者が楽譜から自作した演奏で、MP3 に変換して使用している（この MP3 も CC BY-SA 3.0）。楽曲：1935年作曲、作曲者は1935年没でパブリックドメイン"
+  }
+}

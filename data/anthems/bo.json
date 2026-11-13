@@ -1,0 +1,22 @@
+{
+  "id": "bo",
+  "nameJa": "ボリビア",
+  "nameEn": "Bolivia",
+  "anthemTitle": {
+    "original": "Himno Nacional de Bolivia",
+    "ja": "ボリビア国歌"
+  },
+  "region": "south-america",
+  "difficulty": 3,
+  "audio": {
+    "file": "bo.mp3",
+    "durationSec": 100.6
+  },
+  "composer": "Leopoldo Benedetto Vincenti",
+  "license": {
+    "type": "public-domain",
+    "author": "United States Navy Band",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Himno_Nacional_de_Bolivia_instrumental.ogg",
+    "note": "楽曲：1845年作曲。米国では1931年より前に出版された作品としてパブリックドメイン／演奏：米国連邦政府（米海軍）の職務上の著作物としてパブリックドメイン（PD-USGov）（Wikimedia Commons の MP3 変換版を使用）"
+  }
+}
