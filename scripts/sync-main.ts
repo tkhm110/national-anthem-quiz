@@ -2,7 +2,7 @@
  * pnpm sync [--dry-run]
  * PR をマージした後の、手元の後片付けをまとめて行う。
  *   1. main に切り替えて、GitHub の最新を取り込む
- *   2. 依存関係が変わっていたら pnpm install を実行する
+ *   2. pnpm install を実行して、依存関係を main に合わせる（失敗したら、ブランチを削除する前に止まる）
  *   3. マージ済みの PR と同じ内容の手元のブランチを削除する（それ以外は残して理由を表示する）
  * 手元に保存していない変更があるときは、何もせずに止まる。GitHub 側は一切変更しない。
  */
@@ -46,11 +46,18 @@ if (!dryRun) {
   if (before !== latest) git("merge", "--ff-only", `origin/${MAIN}`);
 }
 
-// 2. 依存関係が変わっていたら入れ直す
-const changed = before === latest ? [] : git("diff", "--name-only", before, latest).split("\n");
-if (changed.includes("pnpm-lock.yaml")) {
-  console.log(`依存関係が変わったので pnpm install を実行する${note}`);
-  if (!dryRun) execSync("pnpm install --frozen-lockfile", { stdio: "inherit" });
+// 2. 依存関係を main の pnpm-lock.yaml に合わせる。
+// 「main が更新されたときだけ」にすると、前回の install が失敗した後のやり直しや、
+// 依存関係の違うブランチから戻ったときに実行されないので、毎回実行する（そろっていればすぐ終わる）
+console.log(`依存関係を確認する（pnpm install --frozen-lockfile）${note}`);
+if (!dryRun) {
+  try {
+    execSync("pnpm install --frozen-lockfile", { stdio: "inherit" });
+  } catch {
+    fail(
+      "pnpm install に失敗しました。原因を解消してから、もう一度 pnpm sync を実行してください（ブランチの削除はまだ行っていません）。",
+    );
+  }
 }
 
 // 3. マージ済みのブランチを削除する

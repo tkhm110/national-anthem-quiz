@@ -93,4 +93,4 @@ When the user says the PR is merged, or `pnpm pr:status` shows it as merged, run
 pnpm sync
 ```
 
-It switches to main, fast-forwards it, runs `pnpm install` if the lockfile changed, and deletes only the local branches whose tip equals the head commit of a merged PR. It stops without changing anything if there are uncommitted changes. Report what it did; if it kept a branch, tell the user the reason it printed (for example, commits that were never pushed).
+It switches to main, fast-forwards it, runs `pnpm install --frozen-lockfile` (every time; it stops before deleting branches if the install fails), and deletes only the local branches whose tip equals the head commit of a merged PR. It stops without changing anything if there are uncommitted changes. Report what it did; if it kept a branch, tell the user the reason it printed (for example, commits that were never pushed).
