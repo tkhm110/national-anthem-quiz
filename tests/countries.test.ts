@@ -39,6 +39,15 @@ describe("normalizeName（表記の揺れをそろえる）", () => {
     expect(normalizeName(input)).toBe(expected);
   });
 
+  it("ハイフンと長音符（ー）の違いを無視する（日本語入力のままハイフンを打つと「ー」になる）", () => {
+    const expected = normalizeName("Timor-Leste");
+    for (const input of ["TimorーLeste", "Timor－Leste", "Timor‐Leste"]) {
+      expect(normalizeName(input)).toBe(expected);
+    }
+    // 長音符はカタカナの国名でも無視する（入力側・国名側の両方で外れるので、一致の判定は変わらない）
+    expect(normalizeName("ニュージーランド")).toBe(normalizeName("ニュジランド"));
+  });
+
   it("濁点・半濁点は外さない", () => {
     expect(normalizeName("ブルガリア")).not.toBe(normalizeName("フルカリア"));
   });
@@ -60,6 +69,8 @@ describe("searchCountries（入力候補）", () => {
     expect(searchCountries(realCountries, "uk")[0]?.id).toBe("gb");
     expect(searchCountries(realCountries, "Japan")[0]?.id).toBe("jp");
     expect(searchCountries(realCountries, "cote")[0]?.id).toBe("ci");
+    expect(searchCountries(realCountries, "timorーleste")[0]?.id).toBe("tl");
+    expect(names("にゅーじーらんど")[0]).toBe("ニュージーランド");
   });
 
   it("収録していない国も候補に出る（答えから収録国を推測できないように）", () => {
