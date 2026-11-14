@@ -3,9 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { checkAudioFiles, type ReadDuration } from "../scripts/lib/check-audio";
-import { readDataDir } from "../scripts/lib/read-data-dir";
-import { validateDataset } from "../src/lib/data/validate";
-import { DATA_DIR, makeAnthem } from "./helpers";
+import { DATA_DIR, loadProductionDataset, makeAnthem } from "./helpers";
 
 const dirs: string[] = [];
 afterEach(() => {
@@ -72,14 +70,9 @@ describe("第3層：音源ファイルの検証", () => {
   });
 
   it("本番データの音源はすべて存在し、長さが国データと一致する", async () => {
-    const { anthemFiles, melodyGroupsFile } = readDataDir(
-      `${DATA_DIR}anthems`,
-      `${DATA_DIR}melody-groups.json`,
-    );
-    const dataset = validateDataset(anthemFiles, melodyGroupsFile, "production");
-    if (!dataset.ok) throw new Error(JSON.stringify(dataset.issues));
+    const { anthems } = loadProductionDataset();
     const publicAudio = join(DATA_DIR, "..", "public", "audio");
-    const result = await checkAudioFiles(dataset.data.anthems, publicAudio);
+    const result = await checkAudioFiles(anthems, publicAudio);
     expect(result.issues).toEqual([]);
     expect(result.unusedFiles).toEqual([]);
   });

@@ -6,8 +6,6 @@
     "original": "The Star-Spangled Banner",
     "ja": "星条旗"
   },
-  "region": "north-america",
-  "difficulty": 1,
   "audio": {
     "file": "us.mp3",
     "durationSec": 78.3

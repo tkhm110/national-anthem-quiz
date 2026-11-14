@@ -1,37 +1,29 @@
 import { describe, expect, it } from "vitest";
-import { readDataDir, readJsonFile } from "../scripts/lib/read-data-dir";
 import { normalizeName, searchCountries } from "../src/lib/countries";
-import { validateCountries } from "../src/lib/data/countries";
-import { JsonSyntaxError, validateDataset, type DataFile } from "../src/lib/data/validate";
-import type { Country } from "../src/lib/schema";
-import { DATA_DIR, makeAnthem } from "./helpers";
+import {
+  JsonSyntaxError,
+  validateDataset,
+  type DatasetMode,
+  type DatasetValidationResult,
+} from "../src/lib/data/validate";
+import { isInQuizRegion, QUIZ_REGIONS } from "../src/lib/quiz";
+import { loadProductionDataset, makeCountry } from "./helpers";
 
-function loadRealData() {
-  const { anthemFiles, melodyGroupsFile } = readDataDir(
-    `${DATA_DIR}anthems`,
-    `${DATA_DIR}melody-groups.json`,
+const production = loadProductionDataset();
+const realCountries = production.countries;
+
+function validateCountries(content: unknown, mode: DatasetMode = "fixture") {
+  return validateDataset(
+    {
+      anthemFiles: [],
+      melodyGroupsFile: { fileName: "melody-groups.json", content: [] },
+      countriesFile: { fileName: "countries.json", content },
+    },
+    mode,
   );
-  const dataset = validateDataset(anthemFiles, melodyGroupsFile, "production");
-  if (!dataset.ok) throw new Error(JSON.stringify(dataset.issues, null, 2));
-  const countries = validateCountries(
-    readJsonFile(`${DATA_DIR}countries.json`, "countries.json"),
-    dataset.data.anthems,
-  );
-  return { anthems: dataset.data.anthems, countries };
 }
 
-const real = loadRealData();
-const realCountries = real.countries.ok ? real.countries.countries : [];
-
-function country(id: string, nameJa: string, aliases: string[] = []): Country {
-  return { id, nameJa, nameEn: `Testland ${id.toUpperCase()}`, aliases };
-}
-
-function countriesFile(content: unknown): DataFile {
-  return { fileName: "countries.json", content };
-}
-
-function issueMessages(result: ReturnType<typeof validateCountries>): string[] {
+function issueMessages(result: DatasetValidationResult): string[] {
   return result.ok ? [] : result.issues.map((i) => i.message);
 }
 
@@ -83,53 +75,59 @@ describe("searchCountries（入力候補）", () => {
   });
 });
 
-describe("validateCountries（data/countries.json の検証）", () => {
-  const anthems = [makeAnthem("xa", { nameJa: "テスト国XA" })];
-
+describe("国の一覧（countries.json）の検証", () => {
   it("本番の一覧は、収録しているすべての国を含み、検証に通る", () => {
-    expect(real.anthems.length).toBeGreaterThan(0);
-    expect(issueMessages(real.countries)).toEqual([]);
+    const ids = new Set(realCountries.map((c) => c.id));
+    expect(production.anthems.every((a) => ids.has(a.id))).toBe(true);
+  });
+
+  it("本番の一覧では、まとめたどの地域にも知名度が高い国がある", () => {
+    for (const region of QUIZ_REGIONS) {
+      const famous = realCountries.filter(
+        (c) => c.famous && isInQuizRegion(region.value, c.region),
+      );
+      expect(famous.length, region.label).toBeGreaterThanOrEqual(4);
+    }
   });
 
   it("正しい一覧は受理される", () => {
-    const result = validateCountries(
-      countriesFile([country("xa", "テスト国XA"), country("xb", "テスト国XB")]),
-      anthems,
+    expect(validateCountries([makeCountry("xa", { famous: true }), makeCountry("xb")]).ok).toBe(
+      true,
     );
-    expect(result.ok).toBe(true);
   });
 
   it("JSON の構文エラーを報告する", () => {
-    const result = validateCountries(countriesFile(new JsonSyntaxError("x")), anthems);
-    expect(issueMessages(result)[0]).toContain("JSONの構文エラー");
+    expect(issueMessages(validateCountries(new JsonSyntaxError("x")))[0]).toContain(
+      "JSONの構文エラー",
+    );
   });
 
-  it("スキーマに合わない項目を報告する", () => {
-    const result = validateCountries(countriesFile([{ id: "xa", nameJa: "テスト国XA" }]), anthems);
-    expect(result.ok).toBe(false);
+  it.each([
+    ["地域がない", { region: undefined }],
+    ["存在しない地域", { region: "antarctica" }],
+    ["「全世界」は国の地域ではない", { region: "world" }],
+    ["famous: false（知名度が高い国だけ true を書く）", { famous: false }],
+    ["未定義の項目", { difficulty: 1 }],
+  ])("形式違反を拒否する：%s", (_label, overrides) => {
+    expect(validateCountries([{ ...makeCountry("xa"), ...overrides }]).ok).toBe(false);
   });
 
   it("国IDの重複を報告する", () => {
-    const result = validateCountries(
-      countriesFile([country("xa", "テスト国XA"), country("xa", "別の国")]),
-      anthems,
-    );
-    expect(issueMessages(result).join("\n")).toContain('"xa" が重複');
+    const result = validateCountries([makeCountry("xa"), makeCountry("xa", { nameJa: "別の国" })]);
+    expect(issueMessages(result).join("\n")).toContain(`"xa" が重複`);
   });
 
   it("別の国と（表記の揺れを除いて）同じ名前があると、区別できないので報告する", () => {
-    const result = validateCountries(
-      countriesFile([country("xa", "テスト国XA"), country("xb", "テスト国XB", ["てすと国ＸＡ"])]),
-      anthems,
-    );
+    const result = validateCountries([
+      makeCountry("xa"),
+      makeCountry("xb", { aliases: ["てすと国ＸＡ"] }),
+    ]);
     expect(issueMessages(result).join("\n")).toContain("区別できません");
   });
 
-  it("収録している国が一覧にない・日本語名が違うときは報告する", () => {
-    const missing = validateCountries(countriesFile([country("xb", "テスト国XB")]), anthems);
-    expect(issueMessages(missing).join("\n")).toContain('"xa"');
-
-    const mismatch = validateCountries(countriesFile([country("xa", "違う名前")]), anthems);
-    expect(issueMessages(mismatch).join("\n")).toContain("日本語名");
+  it("本番では、テスト用の予約IDを拒否する", () => {
+    expect(issueMessages(validateCountries([makeCountry("xa")], "production")).join()).toContain(
+      "予約されたID",
+    );
   });
 });

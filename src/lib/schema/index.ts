@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-/** 国データに格納する地域。「世界」はクイズ条件の特別値なのでここには含めない。 */
+/**
+ * 国の地域（countries.json に書く6地域）。クイズで選ぶ地域は、これをまとめたもの（src/lib/quiz/modes.ts）。
+ * 「全世界」はクイズ条件の特別値なのでここには含めない。
+ */
 export const RegionSchema = z.enum([
   "asia",
   "europe",
@@ -12,12 +15,6 @@ export const RegionSchema = z.enum([
 
 /** モードの難易度：1=初級 / 2=中級 / 3=上級 / 4=超級 */
 export const DifficultySchema = z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]);
-
-/**
- * 国の難易度（国データの値）：1=初級（超有名な国） / 2=中級（そこそこ有名な国） / 3=上級（マイナーな国）。
- * 超級はすべての国が対象なので、国データの値にはしない。
- */
-export const TierSchema = z.union([z.literal(1), z.literal(2), z.literal(3)]);
 
 /** 国ID。当面は ISO 3166-1 alpha-2 に沿った小文字2文字。 */
 export const CountryIdSchema = z.string().regex(/^[a-z]{2}$/, "国IDは小文字2文字にしてください");
@@ -49,9 +46,6 @@ export const AnthemSchema = z.strictObject({
     original: z.string().min(1),
     ja: z.string().optional(),
   }),
-  region: RegionSchema,
-  /** この国が出題される難易度（1=初級・2=中級・3=上級）。超級ではすべての国が出題される */
-  difficulty: TierSchema,
   audio: z.strictObject({
     file: AudioFileNameSchema,
     durationSec: z.number().positive().finite(),
@@ -72,11 +66,17 @@ export const MelodyGroupSchema = z.strictObject({
 
 export const MelodyGroupsFileSchema = z.array(MelodyGroupSchema);
 
-/** 超級の入力候補に使う国（収録していない国も含む、世界の国の一覧） */
+/**
+ * 世界の国の一覧（data/countries.json）の1件。収録していない国も含む。
+ * 地域と知名度の分類はここで管理し、4択の誤答と超級の入力候補にも使う。
+ */
 export const CountrySchema = z.strictObject({
   id: CountryIdSchema,
   nameJa: z.string().min(1),
   nameEn: z.string().min(1),
+  region: RegionSchema,
+  /** 地域の中で比較的知名度が高い国だけ true（初級の対象）。書かなければ中級の対象 */
+  famous: z.literal(true).optional(),
   /** 別名・読み（例：「米国」「USA」「にほん」）。候補を探すときに使う */
   aliases: z.array(z.string().min(1)),
 });
@@ -85,12 +85,8 @@ export const CountriesFileSchema = z.array(CountrySchema).min(1);
 
 export type Region = z.infer<typeof RegionSchema>;
 export type Difficulty = z.infer<typeof DifficultySchema>;
-export type Tier = z.infer<typeof TierSchema>;
 export type License = z.infer<typeof LicenseSchema>;
 export type Anthem = z.infer<typeof AnthemSchema>;
 export type MelodyRelationType = z.infer<typeof MelodyRelationTypeSchema>;
 export type MelodyGroup = z.infer<typeof MelodyGroupSchema>;
 export type Country = z.infer<typeof CountrySchema>;
-
-/** クイズ条件としての地域（"world" は全地域を対象にする特別値） */
-export type QuizRegion = Region | "world";

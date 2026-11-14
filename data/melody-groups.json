@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "god-save-the-king",
+    "relationType": "identical",
+    "countryIds": ["gb", "li"],
+    "description": "リヒテンシュタイン国歌「若きライン川の上に」は、イギリス国歌「国王陛下万歳」と同じ旋律"
+  },
+  {
+    "id": "pacius-maamme",
+    "relationType": "identical",
+    "countryIds": ["fi", "ee"],
+    "description": "フィンランド国歌「我らの地」とエストニア国歌「我が祖国、我が誇りと喜び」は、ともにフレドリク・パシウスの同じ旋律"
+  },
+  {
+    "id": "hymn-to-liberty",
+    "relationType": "identical",
+    "countryIds": ["gr", "cy"],
+    "description": "キプロスは、ギリシャと同じ「自由への賛歌」を国歌にしている"
+  },
+  {
+    "id": "nkosi-sikelel-iafrika",
+    "relationType": "identical",
+    "countryIds": ["tz", "zm"],
+    "description": "タンザニア国歌とザンビア国歌は、ともに「神よ、アフリカに祝福を（Nkosi Sikelel' iAfrika）」の旋律"
+  }
+]

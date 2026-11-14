@@ -5,8 +5,6 @@
   "anthemTitle": {
     "original": "Test Anthem XO"
   },
-  "region": "africa",
-  "difficulty": 2,
   "audio": {
     "file": "xo.mp3",
     "durationSec": 75

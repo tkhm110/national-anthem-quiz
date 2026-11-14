@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { countCorrect, isCorrect } from "../lib/game";
-import { DIFFICULTY_SETTINGS, QUIZ_REGIONS } from "../lib/quiz";
+import { DIFFICULTY_SETTINGS, quizRegionLabel } from "../lib/quiz";
 import type { Question, QuizCondition } from "../lib/quiz";
 import type { Anthem } from "../lib/schema";
 
@@ -9,7 +9,7 @@ type Props = {
   questions: readonly Question[];
   answers: readonly (string | null)[];
   anthemsById: ReadonlyMap<string, Anthem>;
-  /** 回答した国の名前（記述式では、収録していない国を答えることもある） */
+  /** 回答した国の名前（収録していない国を答えることもある） */
   countryName: (countryId: string) => string;
   onRetry: () => void;
   onBack: () => void;
@@ -26,7 +26,7 @@ export function ResultScreen({
 }: Props) {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const score = countCorrect(questions, answers);
-  const regionLabel = QUIZ_REGIONS.find((r) => r.value === condition.region)?.label;
+  const regionLabel = quizRegionLabel(condition.region);
 
   useEffect(() => {
     headingRef.current?.focus();

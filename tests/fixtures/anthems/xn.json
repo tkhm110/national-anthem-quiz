@@ -5,8 +5,6 @@
   "anthemTitle": {
     "original": "Test Anthem XN"
   },
-  "region": "africa",
-  "difficulty": 1,
   "audio": {
     "file": "xn.mp3",
     "durationSec": 60

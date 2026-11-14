@@ -225,6 +225,19 @@ h2:focus {
   }
 }
 
+/* 8択：狭い画面でも2列のまま、ボタンを少し低くする */
+@media (max-width: 400px) {
+  .choices-many {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+}
+
+.choices-many .choice {
+  min-height: 48px;
+  font-size: 0.95rem;
+}
+
 .choice {
   width: 100%;
   min-height: 56px;

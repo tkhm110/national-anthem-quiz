@@ -5,8 +5,6 @@
   "anthemTitle": {
     "original": "Test Anthem XD"
   },
-  "region": "europe",
-  "difficulty": 3,
   "audio": {
     "file": "xd.mp3",
     "durationSec": 48

@@ -6,8 +6,6 @@
     "original": "O Canada",
     "ja": "オー・カナダ"
   },
-  "region": "north-america",
-  "difficulty": 1,
   "audio": {
     "file": "ca.mp3",
     "durationSec": 79

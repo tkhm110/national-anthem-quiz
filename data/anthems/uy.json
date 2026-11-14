@@ -6,8 +6,6 @@
     "original": "Himno Nacional de Uruguay",
     "ja": "ウルグアイ国歌"
   },
-  "region": "south-america",
-  "difficulty": 3,
   "audio": {
     "file": "uy.mp3",
     "durationSec": 55.9

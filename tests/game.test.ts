@@ -60,7 +60,7 @@ describe("gameReducer", () => {
     const state = started(3);
     const next = gameReducer(state, {
       type: "start",
-      condition: { region: "asia", difficulty: 4 },
+      condition: { region: "asia-oceania", difficulty: 4 },
       questions: makeQuestions(5),
     });
     expect(next).toBe(state);
@@ -107,8 +107,7 @@ describe("gameReducer", () => {
   });
 
   it("generateSession の問題列で最後まで遊べる（問題数の表示と一致する）", () => {
-    const { anthems, melodyGroups } = loadFixtureDataset();
-    const session = generateSession(anthems, melodyGroups, { ...condition, rng: mulberry32(1) });
+    const session = generateSession(loadFixtureDataset(), { ...condition, rng: mulberry32(1) });
     if (!session.ok) throw new Error("insufficient");
     let state = gameReducer(initialGameState, {
       type: "start",

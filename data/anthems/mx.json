@@ -6,8 +6,6 @@
     "original": "Himno Nacional Mexicano",
     "ja": "メキシコ国歌"
   },
-  "region": "north-america",
-  "difficulty": 1,
   "audio": {
     "file": "mx.mp3",
     "durationSec": 101.8

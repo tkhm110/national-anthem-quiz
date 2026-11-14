@@ -3,1182 +3,1417 @@
     "id": "ad",
     "nameJa": "アンドラ",
     "nameEn": "Andorra",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "ae",
     "nameJa": "アラブ首長国連邦",
     "nameEn": "United Arab Emirates",
+    "region": "asia",
     "aliases": ["UAE", "あらぶしゅちょうこくれんぽう"]
   },
   {
     "id": "af",
     "nameJa": "アフガニスタン",
     "nameEn": "Afghanistan",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "ag",
     "nameJa": "アンティグア・バーブーダ",
     "nameEn": "Antigua and Barbuda",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "al",
     "nameJa": "アルバニア",
     "nameEn": "Albania",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "am",
     "nameJa": "アルメニア",
     "nameEn": "Armenia",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "ao",
     "nameJa": "アンゴラ",
     "nameEn": "Angola",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "ar",
     "nameJa": "アルゼンチン",
     "nameEn": "Argentina",
+    "region": "south-america",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "at",
     "nameJa": "オーストリア",
     "nameEn": "Austria",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "au",
     "nameJa": "オーストラリア",
     "nameEn": "Australia",
+    "region": "oceania",
+    "famous": true,
     "aliases": ["豪州", "ごうしゅう"]
   },
   {
     "id": "az",
     "nameJa": "アゼルバイジャン",
     "nameEn": "Azerbaijan",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "ba",
     "nameJa": "ボスニア・ヘルツェゴビナ",
     "nameEn": "Bosnia and Herzegovina",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "bb",
     "nameJa": "バルバドス",
     "nameEn": "Barbados",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "bd",
     "nameJa": "バングラデシュ",
     "nameEn": "Bangladesh",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "be",
     "nameJa": "ベルギー",
     "nameEn": "Belgium",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "bf",
     "nameJa": "ブルキナファソ",
     "nameEn": "Burkina Faso",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "bg",
     "nameJa": "ブルガリア",
     "nameEn": "Bulgaria",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "bh",
     "nameJa": "バーレーン",
     "nameEn": "Bahrain",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "bi",
     "nameJa": "ブルンジ",
     "nameEn": "Burundi",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "bj",
     "nameJa": "ベナン",
     "nameEn": "Benin",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "bn",
     "nameJa": "ブルネイ",
     "nameEn": "Brunei",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "bo",
     "nameJa": "ボリビア",
     "nameEn": "Bolivia",
+    "region": "south-america",
     "aliases": []
   },
   {
     "id": "br",
     "nameJa": "ブラジル",
     "nameEn": "Brazil",
+    "region": "south-america",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "bs",
     "nameJa": "バハマ",
     "nameEn": "Bahamas",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "bt",
     "nameJa": "ブータン",
     "nameEn": "Bhutan",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "bw",
     "nameJa": "ボツワナ",
     "nameEn": "Botswana",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "by",
     "nameJa": "ベラルーシ",
     "nameEn": "Belarus",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "bz",
     "nameJa": "ベリーズ",
     "nameEn": "Belize",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "ca",
     "nameJa": "カナダ",
     "nameEn": "Canada",
+    "region": "north-america",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "cd",
     "nameJa": "コンゴ民主共和国",
     "nameEn": "Democratic Republic of the Congo",
+    "region": "africa",
     "aliases": ["こんごみんしゅきょうわこく"]
   },
   {
     "id": "cf",
     "nameJa": "中央アフリカ",
     "nameEn": "Central African Republic",
+    "region": "africa",
     "aliases": ["ちゅうおうあふりか"]
   },
   {
     "id": "cg",
     "nameJa": "コンゴ共和国",
     "nameEn": "Republic of the Congo",
+    "region": "africa",
     "aliases": ["こんごきょうわこく"]
   },
   {
     "id": "ch",
     "nameJa": "スイス",
     "nameEn": "Switzerland",
+    "region": "europe",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "ci",
     "nameJa": "コートジボワール",
     "nameEn": "Côte d'Ivoire",
+    "region": "africa",
     "aliases": ["Ivory Coast"]
   },
   {
     "id": "cl",
     "nameJa": "チリ",
     "nameEn": "Chile",
+    "region": "south-america",
     "aliases": []
   },
   {
     "id": "cm",
     "nameJa": "カメルーン",
     "nameEn": "Cameroon",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "cn",
     "nameJa": "中国",
     "nameEn": "China",
+    "region": "asia",
+    "famous": true,
     "aliases": ["中華人民共和国", "ちゅうごく"]
   },
   {
     "id": "co",
     "nameJa": "コロンビア",
     "nameEn": "Colombia",
+    "region": "south-america",
     "aliases": []
   },
   {
     "id": "cr",
     "nameJa": "コスタリカ",
     "nameEn": "Costa Rica",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "cu",
     "nameJa": "キューバ",
     "nameEn": "Cuba",
+    "region": "north-america",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "cv",
     "nameJa": "カーボベルデ",
     "nameEn": "Cabo Verde",
+    "region": "africa",
     "aliases": ["Cape Verde"]
   },
   {
     "id": "cy",
     "nameJa": "キプロス",
     "nameEn": "Cyprus",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "cz",
     "nameJa": "チェコ",
     "nameEn": "Czech Republic",
+    "region": "europe",
     "aliases": ["Czechia"]
   },
   {
     "id": "de",
     "nameJa": "ドイツ",
     "nameEn": "Germany",
+    "region": "europe",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "dj",
     "nameJa": "ジブチ",
     "nameEn": "Djibouti",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "dk",
     "nameJa": "デンマーク",
     "nameEn": "Denmark",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "dm",
     "nameJa": "ドミニカ国",
     "nameEn": "Dominica",
+    "region": "north-america",
     "aliases": ["どみにかこく"]
   },
   {
     "id": "do",
     "nameJa": "ドミニカ共和国",
     "nameEn": "Dominican Republic",
+    "region": "north-america",
     "aliases": ["どみにかきょうわこく"]
   },
   {
     "id": "dz",
     "nameJa": "アルジェリア",
     "nameEn": "Algeria",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "ec",
     "nameJa": "エクアドル",
     "nameEn": "Ecuador",
+    "region": "south-america",
     "aliases": []
   },
   {
     "id": "ee",
     "nameJa": "エストニア",
     "nameEn": "Estonia",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "eg",
     "nameJa": "エジプト",
     "nameEn": "Egypt",
+    "region": "africa",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "er",
     "nameJa": "エリトリア",
     "nameEn": "Eritrea",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "es",
     "nameJa": "スペイン",
     "nameEn": "Spain",
+    "region": "europe",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "et",
     "nameJa": "エチオピア",
     "nameEn": "Ethiopia",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "fi",
     "nameJa": "フィンランド",
     "nameEn": "Finland",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "fj",
     "nameJa": "フィジー",
     "nameEn": "Fiji",
+    "region": "oceania",
     "aliases": []
   },
   {
     "id": "fm",
     "nameJa": "ミクロネシア連邦",
     "nameEn": "Federated States of Micronesia",
+    "region": "oceania",
     "aliases": ["ミクロネシア", "みくろねしあれんぽう"]
   },
   {
     "id": "fr",
     "nameJa": "フランス",
     "nameEn": "France",
+    "region": "europe",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "ga",
     "nameJa": "ガボン",
     "nameEn": "Gabon",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "gb",
     "nameJa": "イギリス",
     "nameEn": "United Kingdom",
+    "region": "europe",
+    "famous": true,
     "aliases": ["英国", "えいこく", "UK", "Great Britain"]
   },
   {
     "id": "gd",
     "nameJa": "グレナダ",
     "nameEn": "Grenada",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "ge",
     "nameJa": "ジョージア",
     "nameEn": "Georgia",
+    "region": "asia",
     "aliases": ["グルジア"]
   },
   {
     "id": "gh",
     "nameJa": "ガーナ",
     "nameEn": "Ghana",
+    "region": "africa",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "gm",
     "nameJa": "ガンビア",
     "nameEn": "Gambia",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "gn",
     "nameJa": "ギニア",
     "nameEn": "Guinea",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "gq",
     "nameJa": "赤道ギニア",
     "nameEn": "Equatorial Guinea",
+    "region": "africa",
     "aliases": ["せきどうぎにあ"]
   },
   {
     "id": "gr",
     "nameJa": "ギリシャ",
     "nameEn": "Greece",
+    "region": "europe",
+    "famous": true,
     "aliases": ["ギリシア"]
   },
   {
     "id": "gt",
     "nameJa": "グアテマラ",
     "nameEn": "Guatemala",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "gw",
     "nameJa": "ギニアビサウ",
     "nameEn": "Guinea-Bissau",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "gy",
     "nameJa": "ガイアナ",
     "nameEn": "Guyana",
+    "region": "south-america",
     "aliases": []
   },
   {
     "id": "hn",
     "nameJa": "ホンジュラス",
     "nameEn": "Honduras",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "hr",
     "nameJa": "クロアチア",
     "nameEn": "Croatia",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "ht",
     "nameJa": "ハイチ",
     "nameEn": "Haiti",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "hu",
     "nameJa": "ハンガリー",
     "nameEn": "Hungary",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "id",
     "nameJa": "インドネシア",
     "nameEn": "Indonesia",
+    "region": "asia",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "ie",
     "nameJa": "アイルランド",
     "nameEn": "Ireland",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "il",
     "nameJa": "イスラエル",
     "nameEn": "Israel",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "in",
     "nameJa": "インド",
     "nameEn": "India",
+    "region": "asia",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "iq",
     "nameJa": "イラク",
     "nameEn": "Iraq",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "ir",
     "nameJa": "イラン",
     "nameEn": "Iran",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "is",
     "nameJa": "アイスランド",
     "nameEn": "Iceland",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "it",
     "nameJa": "イタリア",
     "nameEn": "Italy",
+    "region": "europe",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "jm",
     "nameJa": "ジャマイカ",
     "nameEn": "Jamaica",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "jo",
     "nameJa": "ヨルダン",
     "nameEn": "Jordan",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "jp",
     "nameJa": "日本",
     "nameEn": "Japan",
+    "region": "asia",
+    "famous": true,
     "aliases": ["にほん", "にっぽん"]
   },
   {
     "id": "ke",
     "nameJa": "ケニア",
     "nameEn": "Kenya",
+    "region": "africa",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "kg",
     "nameJa": "キルギス",
     "nameEn": "Kyrgyzstan",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "kh",
     "nameJa": "カンボジア",
     "nameEn": "Cambodia",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "ki",
     "nameJa": "キリバス",
     "nameEn": "Kiribati",
+    "region": "oceania",
     "aliases": []
   },
   {
     "id": "km",
     "nameJa": "コモロ",
     "nameEn": "Comoros",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "kn",
     "nameJa": "セントクリストファー・ネービス",
     "nameEn": "Saint Kitts and Nevis",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "kp",
     "nameJa": "北朝鮮",
     "nameEn": "North Korea",
+    "region": "asia",
+    "famous": true,
     "aliases": ["朝鮮民主主義人民共和国", "きたちょうせん"]
   },
   {
     "id": "kr",
     "nameJa": "韓国",
     "nameEn": "South Korea",
+    "region": "asia",
+    "famous": true,
     "aliases": ["大韓民国", "かんこく"]
   },
   {
     "id": "kw",
     "nameJa": "クウェート",
     "nameEn": "Kuwait",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "kz",
     "nameJa": "カザフスタン",
     "nameEn": "Kazakhstan",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "la",
     "nameJa": "ラオス",
     "nameEn": "Laos",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "lb",
     "nameJa": "レバノン",
     "nameEn": "Lebanon",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "lc",
     "nameJa": "セントルシア",
     "nameEn": "Saint Lucia",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "li",
     "nameJa": "リヒテンシュタイン",
     "nameEn": "Liechtenstein",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "lk",
     "nameJa": "スリランカ",
     "nameEn": "Sri Lanka",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "lr",
     "nameJa": "リベリア",
     "nameEn": "Liberia",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "ls",
     "nameJa": "レソト",
     "nameEn": "Lesotho",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "lt",
     "nameJa": "リトアニア",
     "nameEn": "Lithuania",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "lu",
     "nameJa": "ルクセンブルク",
     "nameEn": "Luxembourg",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "lv",
     "nameJa": "ラトビア",
     "nameEn": "Latvia",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "ly",
     "nameJa": "リビア",
     "nameEn": "Libya",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "ma",
     "nameJa": "モロッコ",
     "nameEn": "Morocco",
+    "region": "africa",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "mc",
     "nameJa": "モナコ",
     "nameEn": "Monaco",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "md",
     "nameJa": "モルドバ",
     "nameEn": "Moldova",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "me",
     "nameJa": "モンテネグロ",
     "nameEn": "Montenegro",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "mg",
     "nameJa": "マダガスカル",
     "nameEn": "Madagascar",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "mh",
     "nameJa": "マーシャル諸島",
     "nameEn": "Marshall Islands",
+    "region": "oceania",
     "aliases": ["まーしゃるしょとう"]
   },
   {
     "id": "mk",
     "nameJa": "北マケドニア",
     "nameEn": "North Macedonia",
+    "region": "europe",
     "aliases": ["マケドニア", "きたまけどにあ"]
   },
   {
     "id": "ml",
     "nameJa": "マリ",
     "nameEn": "Mali",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "mm",
     "nameJa": "ミャンマー",
     "nameEn": "Myanmar",
+    "region": "asia",
     "aliases": ["ビルマ", "Burma"]
   },
   {
     "id": "mn",
     "nameJa": "モンゴル",
     "nameEn": "Mongolia",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "mr",
     "nameJa": "モーリタニア",
     "nameEn": "Mauritania",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "mt",
     "nameJa": "マルタ",
     "nameEn": "Malta",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "mu",
     "nameJa": "モーリシャス",
     "nameEn": "Mauritius",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "mv",
     "nameJa": "モルディブ",
     "nameEn": "Maldives",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "mw",
     "nameJa": "マラウイ",
     "nameEn": "Malawi",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "mx",
     "nameJa": "メキシコ",
     "nameEn": "Mexico",
+    "region": "north-america",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "my",
     "nameJa": "マレーシア",
     "nameEn": "Malaysia",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "mz",
     "nameJa": "モザンビーク",
     "nameEn": "Mozambique",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "na",
     "nameJa": "ナミビア",
     "nameEn": "Namibia",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "ne",
     "nameJa": "ニジェール",
     "nameEn": "Niger",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "ng",
     "nameJa": "ナイジェリア",
     "nameEn": "Nigeria",
+    "region": "africa",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "ni",
     "nameJa": "ニカラグア",
     "nameEn": "Nicaragua",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "nl",
     "nameJa": "オランダ",
     "nameEn": "Netherlands",
+    "region": "europe",
+    "famous": true,
     "aliases": ["Holland"]
   },
   {
     "id": "no",
     "nameJa": "ノルウェー",
     "nameEn": "Norway",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "np",
     "nameJa": "ネパール",
     "nameEn": "Nepal",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "nr",
     "nameJa": "ナウル",
     "nameEn": "Nauru",
+    "region": "oceania",
     "aliases": []
   },
   {
     "id": "nz",
     "nameJa": "ニュージーランド",
     "nameEn": "New Zealand",
+    "region": "oceania",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "om",
     "nameJa": "オマーン",
     "nameEn": "Oman",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "pa",
     "nameJa": "パナマ",
     "nameEn": "Panama",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "pe",
     "nameJa": "ペルー",
     "nameEn": "Peru",
+    "region": "south-america",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "pg",
     "nameJa": "パプアニューギニア",
     "nameEn": "Papua New Guinea",
+    "region": "oceania",
     "aliases": []
   },
   {
     "id": "ph",
     "nameJa": "フィリピン",
     "nameEn": "Philippines",
+    "region": "asia",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "pk",
     "nameJa": "パキスタン",
     "nameEn": "Pakistan",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "pl",
     "nameJa": "ポーランド",
     "nameEn": "Poland",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "ps",
     "nameJa": "パレスチナ",
     "nameEn": "Palestine",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "pt",
     "nameJa": "ポルトガル",
     "nameEn": "Portugal",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "pw",
     "nameJa": "パラオ",
     "nameEn": "Palau",
+    "region": "oceania",
     "aliases": []
   },
   {
     "id": "py",
     "nameJa": "パラグアイ",
     "nameEn": "Paraguay",
+    "region": "south-america",
     "aliases": []
   },
   {
     "id": "qa",
     "nameJa": "カタール",
     "nameEn": "Qatar",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "ro",
     "nameJa": "ルーマニア",
     "nameEn": "Romania",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "rs",
     "nameJa": "セルビア",
     "nameEn": "Serbia",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "ru",
     "nameJa": "ロシア",
     "nameEn": "Russia",
+    "region": "europe",
+    "famous": true,
     "aliases": ["ロシア連邦"]
   },
   {
     "id": "rw",
     "nameJa": "ルワンダ",
     "nameEn": "Rwanda",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "sa",
     "nameJa": "サウジアラビア",
     "nameEn": "Saudi Arabia",
+    "region": "asia",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "sb",
     "nameJa": "ソロモン諸島",
     "nameEn": "Solomon Islands",
+    "region": "oceania",
     "aliases": ["そろもんしょとう"]
   },
   {
     "id": "sc",
     "nameJa": "セーシェル",
     "nameEn": "Seychelles",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "sd",
     "nameJa": "スーダン",
     "nameEn": "Sudan",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "se",
     "nameJa": "スウェーデン",
     "nameEn": "Sweden",
+    "region": "europe",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "sg",
     "nameJa": "シンガポール",
     "nameEn": "Singapore",
+    "region": "asia",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "si",
     "nameJa": "スロベニア",
     "nameEn": "Slovenia",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "sk",
     "nameJa": "スロバキア",
     "nameEn": "Slovakia",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "sl",
     "nameJa": "シエラレオネ",
     "nameEn": "Sierra Leone",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "sm",
     "nameJa": "サンマリノ",
     "nameEn": "San Marino",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "sn",
     "nameJa": "セネガル",
     "nameEn": "Senegal",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "so",
     "nameJa": "ソマリア",
     "nameEn": "Somalia",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "sr",
     "nameJa": "スリナム",
     "nameEn": "Suriname",
+    "region": "south-america",
     "aliases": []
   },
   {
     "id": "ss",
     "nameJa": "南スーダン",
     "nameEn": "South Sudan",
+    "region": "africa",
     "aliases": ["みなみすーだん"]
   },
   {
     "id": "st",
     "nameJa": "サントメ・プリンシペ",
     "nameEn": "São Tomé and Príncipe",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "sv",
     "nameJa": "エルサルバドル",
     "nameEn": "El Salvador",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "sy",
     "nameJa": "シリア",
     "nameEn": "Syria",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "sz",
     "nameJa": "エスワティニ",
     "nameEn": "Eswatini",
+    "region": "africa",
     "aliases": ["スワジランド", "Swaziland"]
   },
   {
     "id": "td",
     "nameJa": "チャド",
     "nameEn": "Chad",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "tg",
     "nameJa": "トーゴ",
     "nameEn": "Togo",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "th",
     "nameJa": "タイ",
     "nameEn": "Thailand",
+    "region": "asia",
+    "famous": true,
     "aliases": []
   },
   {
     "id": "tj",
     "nameJa": "タジキスタン",
     "nameEn": "Tajikistan",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "tl",
     "nameJa": "東ティモール",
     "nameEn": "Timor-Leste",
+    "region": "asia",
     "aliases": ["East Timor", "ひがしてぃもーる"]
   },
   {
     "id": "tm",
     "nameJa": "トルクメニスタン",
     "nameEn": "Turkmenistan",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "tn",
     "nameJa": "チュニジア",
     "nameEn": "Tunisia",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "to",
     "nameJa": "トンガ",
     "nameEn": "Tonga",
+    "region": "oceania",
     "aliases": []
   },
   {
     "id": "tr",
     "nameJa": "トルコ",
     "nameEn": "Türkiye",
+    "region": "asia",
+    "famous": true,
     "aliases": ["Turkey", "トルキエ"]
   },
   {
     "id": "tt",
     "nameJa": "トリニダード・トバゴ",
     "nameEn": "Trinidad and Tobago",
+    "region": "north-america",
     "aliases": []
   },
   {
     "id": "tv",
     "nameJa": "ツバル",
     "nameEn": "Tuvalu",
+    "region": "oceania",
     "aliases": []
   },
   {
     "id": "tw",
     "nameJa": "台湾",
     "nameEn": "Taiwan",
+    "region": "asia",
+    "famous": true,
     "aliases": ["たいわん"]
   },
   {
     "id": "tz",
     "nameJa": "タンザニア",
     "nameEn": "Tanzania",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "ua",
     "nameJa": "ウクライナ",
     "nameEn": "Ukraine",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "ug",
     "nameJa": "ウガンダ",
     "nameEn": "Uganda",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "us",
     "nameJa": "アメリカ合衆国",
     "nameEn": "United States",
+    "region": "north-america",
+    "famous": true,
     "aliases": ["アメリカ", "米国", "べいこく", "USA"]
   },
   {
     "id": "uy",
     "nameJa": "ウルグアイ",
     "nameEn": "Uruguay",
+    "region": "south-america",
     "aliases": []
   },
   {
     "id": "uz",
     "nameJa": "ウズベキスタン",
     "nameEn": "Uzbekistan",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "va",
     "nameJa": "バチカン",
     "nameEn": "Vatican City",
+    "region": "europe",
     "aliases": ["バチカン市国", "Holy See"]
   },
   {
     "id": "vc",
     "nameJa": "セントビンセント及びグレナディーン諸島",
     "nameEn": "Saint Vincent and the Grenadines",
+    "region": "north-america",
     "aliases": ["セントビンセント"]
   },
   {
     "id": "ve",
     "nameJa": "ベネズエラ",
     "nameEn": "Venezuela",
+    "region": "south-america",
     "aliases": []
   },
   {
     "id": "vn",
     "nameJa": "ベトナム",
     "nameEn": "Vietnam",
+    "region": "asia",
+    "famous": true,
     "aliases": ["ヴェトナム"]
   },
   {
     "id": "vu",
     "nameJa": "バヌアツ",
     "nameEn": "Vanuatu",
+    "region": "oceania",
     "aliases": []
   },
   {
     "id": "ws",
     "nameJa": "サモア",
     "nameEn": "Samoa",
+    "region": "oceania",
     "aliases": []
   },
   {
     "id": "xk",
     "nameJa": "コソボ",
     "nameEn": "Kosovo",
+    "region": "europe",
     "aliases": []
   },
   {
     "id": "ye",
     "nameJa": "イエメン",
     "nameEn": "Yemen",
+    "region": "asia",
     "aliases": []
   },
   {
     "id": "za",
     "nameJa": "南アフリカ",
     "nameEn": "South Africa",
+    "region": "africa",
+    "famous": true,
     "aliases": ["南アフリカ共和国", "みなみあふりか"]
   },
   {
     "id": "zm",
     "nameJa": "ザンビア",
     "nameEn": "Zambia",
+    "region": "africa",
     "aliases": []
   },
   {
     "id": "zw",
     "nameJa": "ジンバブエ",
     "nameEn": "Zimbabwe",
+    "region": "africa",
     "aliases": []
   }
 ]

@@ -28,5 +28,11 @@
     "relationType": "similar",
     "countryIds": ["xh", "xd"],
     "description": "テスト用：類似旋律（xc と xd は直接の類似ではない）"
+  },
+  {
+    "id": "fixture-identical-fn",
+    "relationType": "identical",
+    "countryIds": ["xf", "qn"],
+    "description": "テスト用：収録国と未収録国の同一旋律（未収録国を誤答に入れない・記述式で正解にすることを確認する）"
   }
 ]

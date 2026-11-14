@@ -5,8 +5,6 @@
   "anthemTitle": {
     "original": "Test Anthem XS"
   },
-  "region": "north-america",
-  "difficulty": 1,
   "audio": {
     "file": "xs.mp3",
     "durationSec": 66

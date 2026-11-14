@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { isCorrect } from "../lib/game";
-import { DIFFICULTY_SETTINGS, QUIZ_REGIONS } from "../lib/quiz";
+import { DIFFICULTY_SETTINGS, quizRegionLabel } from "../lib/quiz";
 import type { Question, QuizCondition } from "../lib/quiz";
 import type { Anthem, Country } from "../lib/schema";
 import { AudioPlayer } from "./AudioPlayer";
@@ -41,7 +41,7 @@ export function QuizScreen({
   const correctAnswer = isCorrect(question, answer);
   const isTextAnswer = question.choiceIds.length === 0;
   const isLast = index + 1 === questions.length;
-  const regionLabel = QUIZ_REGIONS.find((r) => r.value === condition.region)?.label;
+  const regionLabel = quizRegionLabel(condition.region);
 
   // 問題が変わったら見出しにフォーカスを移す（スクリーンリーダーで次の問題に気づけるように）
   useEffect(() => {
@@ -73,9 +73,8 @@ export function QuizScreen({
       {isTextAnswer ? (
         !answered && <CountryAnswerInput key={index} countries={countries} onSelect={onAnswer} />
       ) : (
-        <ul className="choices">
+        <ul className={question.choiceIds.length > 4 ? "choices choices-many" : "choices"}>
           {question.choiceIds.map((id) => {
-            const anthem = anthemsById.get(id)!;
             const state = !answered
               ? ""
               : id === question.answerId
@@ -91,7 +90,7 @@ export function QuizScreen({
                   disabled={answered}
                   onClick={() => onAnswer(id)}
                 >
-                  {anthem.nameJa}
+                  {countryName(id)}
                 </button>
               </li>
             );

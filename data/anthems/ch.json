@@ -6,8 +6,6 @@
     "original": "Schweizerpsalm",
     "ja": "スイスの賛歌"
   },
-  "region": "europe",
-  "difficulty": 2,
   "audio": {
     "file": "ch.mp3",
     "durationSec": 84.3

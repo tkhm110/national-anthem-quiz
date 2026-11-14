@@ -6,8 +6,6 @@
     "original": "Das Lied der Deutschen",
     "ja": "ドイツの歌"
   },
-  "region": "europe",
-  "difficulty": 1,
   "audio": {
     "file": "de.mp3",
     "durationSec": 74.1

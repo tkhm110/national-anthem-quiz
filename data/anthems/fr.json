@@ -6,8 +6,6 @@
     "original": "La Marseillaise",
     "ja": "ラ・マルセイエーズ"
   },
-  "region": "europe",
-  "difficulty": 1,
   "audio": {
     "file": "fr.mp3",
     "durationSec": 79.3

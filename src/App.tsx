@@ -33,10 +33,7 @@ export function App() {
   }, [state.phase]);
 
   function start(condition: QuizCondition) {
-    const result = generateSession(dataset.anthems, dataset.melodyGroups, {
-      ...condition,
-      rng: Math.random,
-    });
+    const result = generateSession(dataset, { ...condition, rng: Math.random });
     if (result.ok) dispatch({ type: "start", condition, questions: result.questions });
   }
 
@@ -48,13 +45,7 @@ export function App() {
       </header>
 
       <main>
-        {state.phase === "select" && (
-          <ModeSelect
-            anthems={dataset.anthems}
-            melodyGroups={dataset.melodyGroups}
-            onStart={start}
-          />
-        )}
+        {state.phase === "select" && <ModeSelect data={dataset} onStart={start} />}
         {state.phase === "playing" && (
           <QuizScreen
             condition={state.condition}
