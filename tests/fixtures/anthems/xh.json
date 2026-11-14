@@ -5,8 +5,6 @@
   "anthemTitle": {
     "original": "Test Anthem XH"
   },
-  "region": "europe",
-  "difficulty": 3,
   "audio": {
     "file": "xh.mp3",
     "durationSec": 40

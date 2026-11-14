@@ -5,8 +5,6 @@
   "anthemTitle": {
     "original": "Test Anthem XR"
   },
-  "region": "north-america",
-  "difficulty": 1,
   "audio": {
     "file": "xr.mp3",
     "durationSec": 44

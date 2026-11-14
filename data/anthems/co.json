@@ -6,8 +6,6 @@
     "original": "Himno Nacional de la República de Colombia",
     "ja": "コロンビア国歌"
   },
-  "region": "south-america",
-  "difficulty": 3,
   "audio": {
     "file": "co.mp3",
     "durationSec": 161

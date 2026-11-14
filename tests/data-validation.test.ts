@@ -7,12 +7,34 @@ import {
   parseJsonText,
   validateDataset,
   type DataFile,
+  type DatasetMode,
   type DatasetValidationResult,
 } from "../src/lib/data/validate";
-import { AnthemSchema } from "../src/lib/schema";
-import { DATA_DIR, FIXTURES_DIR, loadFixtureDataset, makeAnthem } from "./helpers";
+import { AnthemSchema, type Country } from "../src/lib/schema";
+import { DATA_DIR, FIXTURES_DIR, loadFixtureDataset, makeAnthem, makeCountry } from "./helpers";
 
 const noGroups: DataFile = { fileName: "melody-groups.json", content: [] };
+
+/** 国の一覧の既定値：架空国 xa〜xz（xk を除く）。国歌データのテストで、一覧の不足がエラーにならないように */
+const fixtureCountries: Country[] = "abcdefghijlmnopqrstuvwxyz"
+  .split("")
+  .map((c) => makeCountry(`x${c}`));
+
+function validate(
+  anthemFiles: readonly DataFile[],
+  melodyGroupsFile: DataFile = noGroups,
+  countries: readonly Country[] = fixtureCountries,
+  mode: DatasetMode = "fixture",
+): DatasetValidationResult {
+  return validateDataset(
+    {
+      anthemFiles,
+      melodyGroupsFile,
+      countriesFile: { fileName: "countries.json", content: countries },
+    },
+    mode,
+  );
+}
 
 function anthemFile(id: string, overrides: Record<string, unknown> = {}, fileName = `${id}.json`) {
   return { fileName, content: { ...makeAnthem(id), ...overrides } };
@@ -34,9 +56,10 @@ describe("JSONの読み込み", () => {
 
 describe("第1層：スキーマ検証", () => {
   it("fixture の架空国データはすべて受理される", () => {
-    const { anthems, melodyGroups } = loadFixtureDataset();
+    const { anthems, melodyGroups, countries } = loadFixtureDataset();
     expect(anthems).toHaveLength(18);
-    expect(melodyGroups).toHaveLength(5);
+    expect(melodyGroups).toHaveLength(6);
+    expect(countries).toHaveLength(26);
   });
 
   it("正しい国データを受理する（任意項目あり）", () => {
@@ -59,32 +82,29 @@ describe("第1層：スキーマ検証", () => {
     ["syntax-error.json", /JSONの構文エラー/],
     ["missing-license.json", /^license: /],
     ["bad-audio-path.json", /^audio\.file: /],
-    ["bad-region.json", /^region: /],
+    ["bad-license.json", /^license.type: /],
   ])("不正な fixture %s を拒否する", (fileName, pattern) => {
     const file = readJsonFile(`${FIXTURES_DIR}invalid/${fileName}`, fileName);
-    const result = validateDataset([file], noGroups, "fixture");
+    const result = validate([file]);
     expect(result.ok).toBe(false);
     expect(result.ok ? [] : result.issues.map((i) => i.message)).toEqual(
       expect.arrayContaining([expect.stringMatching(pattern)]),
     );
   });
 
-  it("bad-region.json では地域・難易度・ライセンス種別・URL をすべて報告する", () => {
-    const file = readJsonFile(`${FIXTURES_DIR}invalid/bad-region.json`, "bad-region.json");
-    const result = validateDataset([file], noGroups, "fixture");
+  it("bad-license.json ではライセンス種別・URL をどちらも報告する", () => {
+    const file = readJsonFile(`${FIXTURES_DIR}invalid/bad-license.json`, "bad-license.json");
+    const result = validate([file]);
     const paths = result.ok ? [] : result.issues.map((i) => i.message.split(":")[0]);
-    expect(paths).toEqual(
-      expect.arrayContaining(["region", "difficulty", "license.type", "license.sourceUrl"]),
-    );
+    expect(paths).toEqual(expect.arrayContaining(["license.type", "license.sourceUrl"]));
   });
 
   it.each([
     ["大文字のID", { id: "XA" }],
     ["3文字のID", { id: "xab" }],
     ["空の国名", { nameJa: "" }],
-    ["難易度0", { difficulty: 0 }],
-    ["難易度4（超級はすべての国が対象で、国データの値ではない）", { difficulty: 4 }],
-    ["難易度が文字列", { difficulty: "1" }],
+    ["地域（国の一覧で管理する）", { region: "europe" }],
+    ["難易度（国の一覧の famous で管理する）", { difficulty: 1 }],
     ["音源の長さ0", { audio: { file: "xa.mp3", durationSec: 0 } }],
     ["音源の長さが負", { audio: { file: "xa.mp3", durationSec: -5 } }],
     ["音源にディレクトリを含む", { audio: { file: "sub/xa.mp3", durationSec: 60 } }],
@@ -112,18 +132,14 @@ describe("第1層：スキーマ検証", () => {
         { id: "g3", relationType: "similar", countryIds: ["xa", "xb"], description: "" },
       ],
     };
-    const result = validateDataset([anthemFile("xa"), anthemFile("xb")], groups, "fixture");
+    const result = validate([anthemFile("xa"), anthemFile("xb")], groups);
     expect(issueMessages(result)).toHaveLength(3);
   });
 });
 
 describe("第2層：横断整合性検証", () => {
   it("国IDの重複を検出する", () => {
-    const result = validateDataset(
-      [anthemFile("xa"), anthemFile("xa", {}, "xa-copy.json")],
-      noGroups,
-      "fixture",
-    );
+    const result = validate([anthemFile("xa"), anthemFile("xa", {}, "xa-copy.json")]);
     expect(issueMessages(result)).toEqual(
       expect.arrayContaining([
         expect.stringMatching(/xa-copy\.json: 国ID "xa" が xa\.json と重複/),
@@ -132,28 +148,58 @@ describe("第2層：横断整合性検証", () => {
   });
 
   it("ファイル名とIDの不一致を検出する", () => {
-    const result = validateDataset([anthemFile("xa", {}, "xb.json")], noGroups, "fixture");
+    const result = validate([anthemFile("xa", {}, "xb.json")]);
     expect(issueMessages(result)).toEqual([
       expect.stringMatching(/xb\.json: ファイル名は "xa\.json"/),
     ]);
   });
 
   it("音源ファイル名の重複を検出する", () => {
-    const result = validateDataset(
-      [anthemFile("xa"), anthemFile("xb", { audio: { file: "xa.mp3", durationSec: 60 } })],
-      noGroups,
-      "fixture",
-    );
+    const result = validate([
+      anthemFile("xa"),
+      anthemFile("xb", { audio: { file: "xa.mp3", durationSec: 60 } }),
+    ]);
     expect(issueMessages(result)).toEqual([expect.stringMatching(/音源ファイル "xa\.mp3"/)]);
   });
 
-  it("存在しない国を参照する旋律グループを検出する", () => {
+  it("国の一覧にない国を参照する旋律グループを検出する", () => {
     const groups: DataFile = {
       fileName: "melody-groups.json",
       content: [{ id: "g", relationType: "identical", countryIds: ["xa", "zz"], description: "x" }],
     };
-    const result = validateDataset([anthemFile("xa")], groups, "fixture");
-    expect(issueMessages(result)).toEqual([expect.stringMatching(/存在しない国 "zz"/)]);
+    const result = validate([anthemFile("xa")], groups);
+    expect(issueMessages(result)).toEqual([expect.stringMatching(/国の一覧にない国 "zz"/)]);
+  });
+
+  it("旋律グループは、国歌を収録していない国も参照できる", () => {
+    const groups: DataFile = {
+      fileName: "melody-groups.json",
+      content: [{ id: "g", relationType: "identical", countryIds: ["xa", "xb"], description: "x" }],
+    };
+    expect(validate([anthemFile("xa")], groups).ok).toBe(true);
+  });
+
+  it("国歌の国が国の一覧にない・国名が一覧と違うときは報告する", () => {
+    expect(issueMessages(validate([anthemFile("xa")], noGroups, [makeCountry("xb")]))).toEqual([
+      expect.stringMatching(/xa.json: 国 "xa" が国の一覧（countries.json）にありません/),
+    ]);
+    expect(issueMessages(validate([anthemFile("xa", { nameJa: "別の名前" })]))).toEqual([
+      expect.stringMatching(/xa.json: 国名が国の一覧と違います/),
+    ]);
+  });
+
+  it("国の一覧が壊れているときは、そのエラーだけを報告する（参照先のエラーを重ねない）", () => {
+    const result = validateDataset(
+      {
+        anthemFiles: [anthemFile("xa")],
+        melodyGroupsFile: noGroups,
+        countriesFile: readJsonFile(`${FIXTURES_DIR}invalid/syntax-error.json`, "countries.json"),
+      },
+      "fixture",
+    );
+    expect(issueMessages(result)).toEqual([
+      expect.stringMatching(/countries.json: JSONの構文エラー/),
+    ]);
   });
 
   it("旋律グループ内の重複とメンバー不足（重複を除くと1か国）を検出する", () => {
@@ -161,7 +207,7 @@ describe("第2層：横断整合性検証", () => {
       fileName: "melody-groups.json",
       content: [{ id: "g", relationType: "identical", countryIds: ["xa", "xa"], description: "x" }],
     };
-    const result = validateDataset([anthemFile("xa")], groups, "fixture");
+    const result = validate([anthemFile("xa")], groups);
     expect(issueMessages(result)).toEqual([
       expect.stringMatching(/国 "xa" が重複して含まれています/),
       expect.stringMatching(/異なる国が2件以上必要です/),
@@ -170,19 +216,17 @@ describe("第2層：横断整合性検証", () => {
 
   it("旋律グループIDの重複を検出する", () => {
     const group = { id: "g", relationType: "similar", countryIds: ["xa", "xb"], description: "x" };
-    const result = validateDataset(
-      [anthemFile("xa"), anthemFile("xb")],
-      { fileName: "melody-groups.json", content: [group, group] },
-      "fixture",
-    );
+    const result = validate([anthemFile("xa"), anthemFile("xb")], {
+      fileName: "melody-groups.json",
+      content: [group, group],
+    });
     expect(issueMessages(result)).toEqual([expect.stringMatching(/旋律グループID "g" が重複/)]);
   });
 
   it("旋律グループファイルの構文エラーを報告する", () => {
-    const result = validateDataset(
+    const result = validate(
       [anthemFile("xa")],
       readJsonFile(`${FIXTURES_DIR}invalid/syntax-error.json`, "melody-groups.json"),
-      "fixture",
     );
     expect(issueMessages(result)).toEqual([
       expect.stringMatching(/melody-groups\.json: JSONの構文エラー/),
@@ -197,13 +241,16 @@ describe("本番データとテスト fixture の分離", () => {
   });
 
   it("fixture のデータは本番モードでは拒否される（予約ID・ダミーURL）", () => {
-    const { anthemFiles, melodyGroupsFile } = readDataDir(
-      `${FIXTURES_DIR}anthems`,
-      `${FIXTURES_DIR}melody-groups.json`,
+    const raw = readDataDir(FIXTURES_DIR);
+    const messages = issueMessages(validateDataset(raw, "production"));
+    const reserved = messages.filter((m) => m.includes("予約されたID"));
+    const countries = loadFixtureDataset().countries;
+    // 国歌データと国の一覧の両方で報告する
+    expect(reserved.filter((m) => !m.startsWith("countries.json"))).toHaveLength(
+      raw.anthemFiles.length,
     );
-    const messages = issueMessages(validateDataset(anthemFiles, melodyGroupsFile, "production"));
-    expect(messages.filter((m) => m.includes("予約されたID"))).toHaveLength(anthemFiles.length);
-    expect(messages.filter((m) => m.includes("ダミーのURL"))).toHaveLength(anthemFiles.length);
+    expect(reserved.filter((m) => m.startsWith("countries.json"))).toHaveLength(countries.length);
+    expect(messages.filter((m) => m.includes("ダミーのURL"))).toHaveLength(raw.anthemFiles.length);
   });
 
   it("本番用の国データとして実在の国ID・実際の出典は受理される", () => {
@@ -215,19 +262,20 @@ describe("本番データとテスト fixture の分離", () => {
         sourceUrl: "https://commons.wikimedia.org/",
       },
     };
-    const result = validateDataset([{ fileName: "jp.json", content }], noGroups, "production");
+    const result = validate(
+      [{ fileName: "jp.json", content }],
+      noGroups,
+      [makeCountry("jp")],
+      "production",
+    );
     expect(result.ok).toBe(true);
   });
 
   it("本番データ（data/）は検証に通り、fixture の国が混入していない", () => {
-    const { anthemFiles, melodyGroupsFile } = readDataDir(
-      `${DATA_DIR}anthems`,
-      `${DATA_DIR}melody-groups.json`,
-    );
-    const result = validateDataset(anthemFiles, melodyGroupsFile, "production");
-    expect(issueMessages(result)).toEqual([]);
+    const raw = readDataDir(DATA_DIR);
+    expect(issueMessages(validateDataset(raw, "production"))).toEqual([]);
 
     const fixtureFileNames = new Set(readdirSync(`${FIXTURES_DIR}anthems`));
-    expect(anthemFiles.filter((f) => fixtureFileNames.has(f.fileName))).toEqual([]);
+    expect(raw.anthemFiles.filter((f) => fixtureFileNames.has(f.fileName))).toEqual([]);
   });
 });

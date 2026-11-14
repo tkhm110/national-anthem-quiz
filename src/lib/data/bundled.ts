@@ -1,7 +1,8 @@
 /**
  * アプリに同梱する本番データの読み込み（Vite 専用）。
- * data/anthems/*.json は import.meta.glob で自動収集するので、国の一覧ファイルは不要。
+ * data/anthems/*.json は import.meta.glob で自動収集するので、国歌の一覧ファイルは不要。
  */
+import countriesContent from "../../../data/countries.json";
 import melodyGroupsContent from "../../../data/melody-groups.json";
 import { validateDataset, type DataFile, type ValidatedDataset } from "./validate";
 
@@ -20,8 +21,11 @@ export function loadBundledDataset(): ValidatedDataset {
     content,
   }));
   const result = validateDataset(
-    anthemFiles,
-    { fileName: "melody-groups.json", content: melodyGroupsContent },
+    {
+      anthemFiles,
+      melodyGroupsFile: { fileName: "melody-groups.json", content: melodyGroupsContent },
+      countriesFile: { fileName: "countries.json", content: countriesContent },
+    },
     "production",
   );
   if (!result.ok) {

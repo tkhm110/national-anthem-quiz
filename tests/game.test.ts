@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { buildAudioUrl } from "../src/lib/audio";
-import { countCorrect, gameReducer, initialGameState, type GameState } from "../src/lib/game";
+import {
+  countCorrect,
+  gameReducer,
+  initialGameState,
+  isCorrect,
+  type GameState,
+} from "../src/lib/game";
 import { generateSession, type Question, type QuizCondition } from "../src/lib/quiz";
 import { mulberry32 } from "../src/lib/random";
 import { loadFixtureDataset } from "./helpers";
@@ -11,8 +17,19 @@ function makeQuestions(n: number): Question[] {
   return Array.from({ length: n }, (_, i) => ({
     answerId: `a${i}`,
     choiceIds: [`a${i}`, "w1", "w2", "w3"],
+    acceptedIds: [`a${i}`],
     clip: { startSec: 0, durationSec: 60 },
   }));
+}
+
+/** 記述式の問題（選択肢なし）。同じ旋律の国 "gb" と "li" を、どちらも正解として認める例 */
+function makeTextQuestion(): Question {
+  return {
+    answerId: "gb",
+    choiceIds: [],
+    acceptedIds: ["gb", "li"],
+    clip: { startSec: 0, durationSec: 60 },
+  };
 }
 
 function started(n = 3): Extract<GameState, { phase: "playing" }> {
@@ -43,7 +60,7 @@ describe("gameReducer", () => {
     const state = started(3);
     const next = gameReducer(state, {
       type: "start",
-      condition: { region: "asia", difficulty: 4 },
+      condition: { region: "asia-oceania", difficulty: 4 },
       questions: makeQuestions(5),
     });
     expect(next).toBe(state);
@@ -90,8 +107,7 @@ describe("gameReducer", () => {
   });
 
   it("generateSession の問題列で最後まで遊べる（問題数の表示と一致する）", () => {
-    const { anthems, melodyGroups } = loadFixtureDataset();
-    const session = generateSession(anthems, melodyGroups, { ...condition, rng: mulberry32(1) });
+    const session = generateSession(loadFixtureDataset(), { ...condition, rng: mulberry32(1) });
     if (!session.ok) throw new Error("insufficient");
     let state = gameReducer(initialGameState, {
       type: "start",
@@ -105,6 +121,35 @@ describe("gameReducer", () => {
     expect(state.phase).toBe("finished");
     if (state.phase !== "finished") return;
     expect(countCorrect(state.questions, state.answers)).toBe(session.totalQuestions);
+  });
+});
+
+describe("記述式（超級）の回答", () => {
+  const textCondition: QuizCondition = { region: "world", difficulty: 4 };
+  const startText = () =>
+    gameReducer(initialGameState, {
+      type: "start",
+      condition: textCondition,
+      questions: [makeTextQuestion()],
+    });
+
+  it("選択肢にない国（収録していない国を含む）も回答として受け付ける", () => {
+    const state = gameReducer(startText(), { type: "answer", choiceId: "fr" });
+    expect(state.phase === "playing" && state.answers[0]).toBe("fr");
+  });
+
+  it("空の回答は受け付けない", () => {
+    const state = startText();
+    expect(gameReducer(state, { type: "answer", choiceId: "" })).toBe(state);
+  });
+
+  it("同じ旋律の国を答えても正解になる。それ以外の国は不正解", () => {
+    const question = makeTextQuestion();
+    expect(isCorrect(question, "gb")).toBe(true);
+    expect(isCorrect(question, "li")).toBe(true);
+    expect(isCorrect(question, "fr")).toBe(false);
+    expect(isCorrect(question, null)).toBe(false);
+    expect(countCorrect([question, question, question], ["li", "fr", null])).toBe(1);
   });
 });
 

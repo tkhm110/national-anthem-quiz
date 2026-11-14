@@ -6,8 +6,6 @@
     "original": "Himno Nacional del Perú",
     "ja": "ペルー国歌"
   },
-  "region": "south-america",
-  "difficulty": 3,
   "audio": {
     "file": "pe.mp3",
     "durationSec": 63

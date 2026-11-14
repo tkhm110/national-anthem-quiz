@@ -1,0 +1,195 @@
+[
+  {
+    "id": "qm",
+    "nameJa": "未収録国QM",
+    "nameEn": "Unrecorded QM",
+    "region": "europe",
+    "famous": true,
+    "aliases": []
+  },
+  {
+    "id": "qn",
+    "nameJa": "未収録国QN",
+    "nameEn": "Unrecorded QN",
+    "region": "europe",
+    "aliases": []
+  },
+  {
+    "id": "qo",
+    "nameJa": "未収録国QO",
+    "nameEn": "Unrecorded QO",
+    "region": "oceania",
+    "famous": true,
+    "aliases": []
+  },
+  {
+    "id": "qp",
+    "nameJa": "未収録国QP",
+    "nameEn": "Unrecorded QP",
+    "region": "oceania",
+    "aliases": []
+  },
+  {
+    "id": "qq",
+    "nameJa": "未収録国QQ",
+    "nameEn": "Unrecorded QQ",
+    "region": "south-america",
+    "aliases": []
+  },
+  {
+    "id": "qr",
+    "nameJa": "未収録国QR",
+    "nameEn": "Unrecorded QR",
+    "region": "south-america",
+    "aliases": []
+  },
+  {
+    "id": "qs",
+    "nameJa": "未収録国QS",
+    "nameEn": "Unrecorded QS",
+    "region": "africa",
+    "aliases": []
+  },
+  {
+    "id": "qt",
+    "nameJa": "未収録国QT",
+    "nameEn": "Unrecorded QT",
+    "region": "europe",
+    "aliases": []
+  },
+  {
+    "id": "xa",
+    "nameJa": "テスト国XA",
+    "nameEn": "Testland XA",
+    "region": "europe",
+    "famous": true,
+    "aliases": []
+  },
+  {
+    "id": "xb",
+    "nameJa": "テスト国XB",
+    "nameEn": "Testland XB",
+    "region": "europe",
+    "famous": true,
+    "aliases": []
+  },
+  {
+    "id": "xc",
+    "nameJa": "テスト国XC",
+    "nameEn": "Testland XC",
+    "region": "europe",
+    "aliases": []
+  },
+  {
+    "id": "xd",
+    "nameJa": "テスト国XD",
+    "nameEn": "Testland XD",
+    "region": "europe",
+    "aliases": []
+  },
+  {
+    "id": "xe",
+    "nameJa": "テスト国XE",
+    "nameEn": "Testland XE",
+    "region": "europe",
+    "aliases": []
+  },
+  {
+    "id": "xf",
+    "nameJa": "テスト国XF",
+    "nameEn": "Testland XF",
+    "region": "europe",
+    "famous": true,
+    "aliases": []
+  },
+  {
+    "id": "xg",
+    "nameJa": "テスト国XG",
+    "nameEn": "Testland XG",
+    "region": "europe",
+    "famous": true,
+    "aliases": []
+  },
+  {
+    "id": "xh",
+    "nameJa": "テスト国XH",
+    "nameEn": "Testland XH",
+    "region": "europe",
+    "aliases": []
+  },
+  {
+    "id": "xi",
+    "nameJa": "テスト国XI",
+    "nameEn": "Testland XI",
+    "region": "asia",
+    "famous": true,
+    "aliases": []
+  },
+  {
+    "id": "xj",
+    "nameJa": "テスト国XJ",
+    "nameEn": "Testland XJ",
+    "region": "asia",
+    "aliases": []
+  },
+  {
+    "id": "xl",
+    "nameJa": "テスト国XL",
+    "nameEn": "Testland XL",
+    "region": "asia",
+    "aliases": []
+  },
+  {
+    "id": "xm",
+    "nameJa": "テスト国XM",
+    "nameEn": "Testland XM",
+    "region": "asia",
+    "aliases": []
+  },
+  {
+    "id": "xn",
+    "nameJa": "テスト国XN",
+    "nameEn": "Testland XN",
+    "region": "africa",
+    "famous": true,
+    "aliases": []
+  },
+  {
+    "id": "xo",
+    "nameJa": "テスト国XO",
+    "nameEn": "Testland XO",
+    "region": "africa",
+    "aliases": []
+  },
+  {
+    "id": "xp",
+    "nameJa": "テスト国XP",
+    "nameEn": "Testland XP",
+    "region": "north-america",
+    "famous": true,
+    "aliases": []
+  },
+  {
+    "id": "xq",
+    "nameJa": "テスト国XQ",
+    "nameEn": "Testland XQ",
+    "region": "north-america",
+    "famous": true,
+    "aliases": []
+  },
+  {
+    "id": "xr",
+    "nameJa": "テスト国XR",
+    "nameEn": "Testland XR",
+    "region": "north-america",
+    "famous": true,
+    "aliases": []
+  },
+  {
+    "id": "xs",
+    "nameJa": "テスト国XS",
+    "nameEn": "Testland XS",
+    "region": "north-america",
+    "aliases": []
+  }
+]

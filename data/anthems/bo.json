@@ -6,8 +6,6 @@
     "original": "Himno Nacional de Bolivia",
     "ja": "ボリビア国歌"
   },
-  "region": "south-america",
-  "difficulty": 3,
   "audio": {
     "file": "bo.mp3",
     "durationSec": 100.6

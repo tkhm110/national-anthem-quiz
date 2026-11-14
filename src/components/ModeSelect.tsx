@@ -4,37 +4,37 @@ import {
   DIFFICULTY_SETTINGS,
   QUIZ_REGIONS,
   countAvailableQuestions,
+  quizRegionLabel,
 } from "../lib/quiz";
-import type { QuizCondition } from "../lib/quiz";
-import type { Anthem, Difficulty, MelodyGroup, QuizRegion } from "../lib/schema";
+import type { QuizCondition, QuizData, QuizRegion } from "../lib/quiz";
+import type { Difficulty } from "../lib/schema";
 
 type Props = {
-  anthems: readonly Anthem[];
-  melodyGroups: readonly MelodyGroup[];
+  data: QuizData;
   onStart: (condition: QuizCondition) => void;
 };
 
 /**
- * 地域 × 難易度（28通り）の選択画面。4択を作れない組み合わせは選べないようにし、理由を表示する。
+ * 地域 × 難易度の選択画面。出題できない組み合わせは選べないようにし、理由を表示する。
  * 表示する問題数は generateSession と同じ判定（countAvailableQuestions）で計算する。
  */
-export function ModeSelect({ anthems, melodyGroups, onStart }: Props) {
+export function ModeSelect({ data, onStart }: Props) {
   const [region, setRegion] = useState<QuizRegion>("world");
   const [difficulty, setDifficulty] = useState<Difficulty>(1);
 
   const count = (r: QuizRegion, d: Difficulty) =>
-    countAvailableQuestions(anthems, melodyGroups, { region: r, difficulty: d });
+    countAvailableQuestions(data, { region: r, difficulty: d });
   const selectedCount = count(region, difficulty);
   const selectedAvailable = DIFFICULTY_SETTINGS[difficulty].available;
-  const regionLabel = QUIZ_REGIONS.find((r) => r.value === region)?.label ?? region;
+  const regionLabel = quizRegionLabel(region);
 
   return (
     <section aria-labelledby="mode-heading">
       <h2 id="mode-heading">モードを選ぶ</h2>
       <p className="hint">地域と難易度の組み合わせを選んでください。数字は出題される問題数です。</p>
       <p className="hint">
-        初級は超有名な国、中級はそこそこ有名な国、上級はマイナーな国から4択で出題します。
-        超級はすべての国から、国名を入力して答える形式です（準備中）。
+        初級はよく知られた国、中級はそれ以外の国から4択で出題します。
+        上級はすべての国から8択、超級はすべての国から出題し、国名を入力して、表示される候補から選んで答えます。
       </p>
 
       <div className="mode-table-wrap">
@@ -97,9 +97,7 @@ export function ModeSelect({ anthems, melodyGroups, onStart }: Props) {
           </p>
         )}
         {selectedAvailable && selectedCount === 0 && (
-          <p className="notice">
-            この地域・難易度ではまだ4択を作れません（互いに聴き分けられる国が4か国に足りません）。
-          </p>
+          <p className="notice">この地域・難易度で出題できる国歌は、まだ収録していません。</p>
         )}
       </div>
 

@@ -6,8 +6,6 @@
     "original": "Land der Berge, Land am Strome",
     "ja": "山岳の国、大河の国"
   },
-  "region": "europe",
-  "difficulty": 2,
   "audio": {
     "file": "at.mp3",
     "durationSec": 89.5

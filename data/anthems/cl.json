@@ -6,8 +6,6 @@
     "original": "Himno Nacional de Chile",
     "ja": "チリ国歌"
   },
-  "region": "south-america",
-  "difficulty": 3,
   "audio": {
     "file": "cl.mp3",
     "durationSec": 122.5

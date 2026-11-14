@@ -5,8 +5,6 @@
   "anthemTitle": {
     "original": "Test Anthem XA"
   },
-  "region": "europe",
-  "difficulty": 1,
   "audio": {
     "file": "xa.mp3",
     "durationSec": 60

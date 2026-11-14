@@ -1,11 +1,19 @@
 /**
- * 国データ・旋律グループの検証（第1層：スキーマ、第2層：横断整合性）。
+ * 国歌データ・旋律グループ・国の一覧の検証（第1層：スキーマ、第2層：横断整合性）。
  *
  * ファイルの読み込み方法（Vite の import.meta.glob / Node の fs）には依存せず、
  * 「ファイル名と中身」を受け取るだけにして、アプリと検証スクリプトの両方から共有する。
  */
 import type { z } from "zod";
-import { AnthemSchema, MelodyGroupsFileSchema, type Anthem, type MelodyGroup } from "../schema";
+import { searchKeys } from "../countries";
+import {
+  AnthemSchema,
+  CountriesFileSchema,
+  MelodyGroupsFileSchema,
+  type Anthem,
+  type Country,
+  type MelodyGroup,
+} from "../schema";
 
 export type DataFile = {
   /** 表示・照合用のファイル名（例: "jp.json"）。ディレクトリは含めない。 */
@@ -21,9 +29,18 @@ export type ValidationIssue = {
 
 export type DatasetMode = "production" | "fixture";
 
+/** 検証前のデータ（ファイル名と中身） */
+export type RawDataset = {
+  anthemFiles: readonly DataFile[];
+  melodyGroupsFile: DataFile;
+  countriesFile: DataFile;
+};
+
 export type ValidatedDataset = {
   anthems: Anthem[];
   melodyGroups: MelodyGroup[];
+  /** 世界の国の一覧（収録していない国も含む） */
+  countries: Country[];
 };
 
 export type DatasetValidationResult =
@@ -68,12 +85,56 @@ function formatZodError(error: z.ZodError): string[] {
   });
 }
 
+/**
+ * 国の一覧（countries.json）の検証：形式、ID の重複、本番での予約ID、
+ * 別の国と（表記の揺れを除いて）同じ名前がないか（超級の候補で区別できなくなるため）
+ */
+function validateCountries(
+  file: DataFile,
+  mode: DatasetMode,
+  issues: ValidationIssue[],
+): Country[] {
+  const issue = (message: string) => issues.push({ file: file.fileName, message });
+  if (file.content instanceof JsonSyntaxError) {
+    issue(`JSONの構文エラー: ${file.content.detail}`);
+    return [];
+  }
+  const parsed = CountriesFileSchema.safeParse(file.content);
+  if (!parsed.success) {
+    for (const message of formatZodError(parsed.error)) issue(message);
+    return [];
+  }
+
+  const countries = parsed.data;
+  const ids = new Set<string>();
+  const ownerOfKey = new Map<string, string>();
+  for (const country of countries) {
+    if (ids.has(country.id)) issue(`国ID "${country.id}" が重複しています`);
+    ids.add(country.id);
+    if (mode === "production" && isReservedFixtureId(country.id)) {
+      issue(`国ID "${country.id}" はテスト用の架空国に予約されたIDです。本番データには使えません`);
+    }
+    for (const key of new Set(searchKeys(country))) {
+      const owner = ownerOfKey.get(key);
+      if (owner !== undefined && owner !== country.id) {
+        issue(`名前 "${key}" が国 "${owner}" と "${country.id}" の両方にあり、区別できません`);
+      } else {
+        ownerOfKey.set(key, country.id);
+      }
+    }
+  }
+  return countries;
+}
+
 export function validateDataset(
-  anthemFiles: readonly DataFile[],
-  melodyGroupsFile: DataFile,
+  { anthemFiles, melodyGroupsFile, countriesFile }: RawDataset,
   mode: DatasetMode,
 ): DatasetValidationResult {
   const issues: ValidationIssue[] = [];
+  const countries = validateCountries(countriesFile, mode, issues);
+  const countryById = new Map(countries.map((c) => [c.id, c]));
+  // 国の一覧そのものが壊れているときは、参照先の検査をしない（同じ原因のエラーが大量に出るため）
+  const countriesUsable = countries.length > 0;
   const anthems: Anthem[] = [];
 
   // ---- 第1層：スキーマ検証 ----
@@ -139,6 +200,20 @@ export function validateDataset(
 
   for (const anthem of anthems) {
     const fileName = fileById.get(anthem.id) ?? `${anthem.id}.json`;
+    // 地域と知名度は国の一覧で管理する。国歌データの国名は一覧と同じにする（答えの表示がずれないように）
+    const country = countryById.get(anthem.id);
+    if (countriesUsable && !country) {
+      issues.push({
+        file: fileName,
+        message: `国 "${anthem.id}" が国の一覧（${countriesFile.fileName}）にありません`,
+      });
+    } else if (country && (country.nameJa !== anthem.nameJa || country.nameEn !== anthem.nameEn)) {
+      issues.push({
+        file: fileName,
+        message: `国名が国の一覧と違います（一覧：${country.nameJa} / ${country.nameEn}）`,
+      });
+    }
+
     const otherId = idByAudioFile.get(anthem.audio.file);
     if (otherId !== undefined && otherId !== anthem.id) {
       issues.push({
@@ -182,10 +257,11 @@ export function validateDataset(
         });
       }
       members.add(countryId);
-      if (!fileById.has(countryId)) {
+      // 収録していない国も参照できる（誤答や超級の答えに使うため）
+      if (countriesUsable && !countryById.has(countryId)) {
         issues.push({
           file,
-          message: `旋律グループ "${group.id}" が存在しない国 "${countryId}" を参照しています`,
+          message: `旋律グループ "${group.id}" が国の一覧にない国 "${countryId}" を参照しています`,
         });
       }
     }
@@ -198,5 +274,5 @@ export function validateDataset(
   }
 
   if (issues.length > 0) return { ok: false, issues };
-  return { ok: true, data: { anthems, melodyGroups } };
+  return { ok: true, data: { anthems, melodyGroups, countries } };
 }
