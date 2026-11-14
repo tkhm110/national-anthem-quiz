@@ -257,6 +257,63 @@ h2:focus {
   opacity: 0.6;
 }
 
+/* 超級の回答欄（入力＋候補） */
+.country-answer {
+  margin-top: 16px;
+}
+
+.country-answer-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.country-answer-input {
+  width: 100%;
+  min-height: 52px;
+  padding: 8px 12px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.1rem;
+}
+
+.country-answer-input:focus {
+  border-color: var(--accent);
+}
+
+.country-answer-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.country-answer-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-top: 6px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.country-answer-option[aria-selected="true"] {
+  border: 2px solid var(--accent);
+  font-weight: 700;
+}
+
+.country-answer-option .hint {
+  margin: 0;
+  font-weight: 400;
+  font-size: 0.9rem;
+}
+
 .feedback {
   min-height: 1.6em;
   margin-top: 16px;

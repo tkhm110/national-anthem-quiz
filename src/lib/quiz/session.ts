@@ -19,14 +19,19 @@ export type QuizOptions = QuizCondition & {
 
 export type Question = {
   answerId: string;
-  /** 正解を含む、互いに異なる国ID（表示順） */
+  /** 4択の選択肢：正解を含む、互いに異なる国ID（表示順）。記述式の問題では空 */
   choiceIds: string[];
+  /**
+   * 正解として認める国ID。4択では正解の国だけ。
+   * 記述式では、正解の国と同じ旋律（identical）の国も含む（音だけでは区別できないため）。
+   */
+  acceptedIds: string[];
   clip: Clip;
 };
 
 export type QuizSessionResult =
   | { ok: true; questions: Question[]; totalQuestions: number }
-  /** INSUFFICIENT_POOL：4択を作れる国が足りない / MODE_UNAVAILABLE：まだ遊べないモード（準備中） */
+  /** INSUFFICIENT_POOL：出題できる国が足りない / MODE_UNAVAILABLE：まだ遊べないモード（準備中） */
   | { ok: false; reason: "INSUFFICIENT_POOL" | "MODE_UNAVAILABLE" };
 
 type Limits = { maxQuestions: number; choiceCount: number };
@@ -63,22 +68,26 @@ export function filterByCondition(pool: readonly Anthem[], condition: QuizCondit
 }
 
 /**
- * 正解にしたとき、同じ候補集合から「互いに同一旋律でない」誤答を choiceCount-1 件選べる国だけを返す。
- * 選択肢全体で同一旋律クラスが重複しないことが条件なので、
- * 「自分以外の同一旋律クラスが choiceCount-1 個以上あるか」で判定できる。
- * 正解自身も候補集合のどれかのクラスに属するため、これは「候補集合のクラス数 >= choiceCount」と同値であり、
- * 結果は「候補全員」か「0件」のどちらかになる。
+ * 正解にできる国を返す。
+ * - 記述式：条件に合う国すべて（選択肢を作らないので、国の数の条件はない）
+ * - 4択：同じ候補集合から「互いに同一旋律でない」誤答を choiceCount-1 件選べる国だけ。
+ *   選択肢全体で同一旋律クラスが重複しないことが条件なので、
+ *   「自分以外の同一旋律クラスが choiceCount-1 個以上あるか」で判定できる。
+ *   正解自身も候補集合のどれかのクラスに属するため、これは「候補集合のクラス数 >= choiceCount」と同値であり、
+ *   結果は「候補全員」か「0件」のどちらかになる。
  */
 function eligibleAnswersFrom(
   candidates: readonly Anthem[],
   relations: MelodyRelations,
   choiceCount: number,
+  answerFormat: "choice" | "text",
 ): Anthem[] {
+  if (answerFormat === "text") return [...candidates];
   const classes = new Set(candidates.map((a) => relations.identicalClassOf(a.id)));
   return classes.size >= choiceCount ? [...candidates] : [];
 }
 
-/** 有効な正解候補（4択を構成できる正解国）の一覧 */
+/** 有効な正解候補（その条件で正解にできる国）の一覧 */
 export function findEligibleAnswers(
   pool: readonly Anthem[],
   melodyGroups: readonly MelodyGroup[],
@@ -90,6 +99,7 @@ export function findEligibleAnswers(
     filterByCondition(pool, condition),
     buildMelodyRelations(melodyGroups),
     count,
+    DIFFICULTY_SETTINGS[condition.difficulty].answerFormat,
   );
 }
 
@@ -151,8 +161,9 @@ function pickDistractors(
  * 1プレイ分の問題列を生成して固定する。
  * - 正解・誤答とも指定された地域・難易度の範囲だけから選ぶ（自動拡張しない）
  * - 最大 maxQuestions 問。足りなければ成立する問題数だけ。0 問なら INSUFFICIENT_POOL
- * - 準備中のモード（超級）は MODE_UNAVAILABLE
+ * - 準備中のモードは MODE_UNAVAILABLE
  * - 正解国はセッション内で重複しない（誤答としての再登場は許可）
+ * - 記述式（超級）は選択肢を作らず、同じ旋律の国も正解として認める
  * - 同じデータ・条件・乱数列なら同じ結果になる
  */
 export function generateSession(
@@ -161,18 +172,26 @@ export function generateSession(
   options: QuizOptions,
 ): QuizSessionResult {
   const { maxQuestions, choiceCount } = resolveLimits(options);
-  if (!DIFFICULTY_SETTINGS[options.difficulty].available) {
-    return { ok: false, reason: "MODE_UNAVAILABLE" };
-  }
+  const setting = DIFFICULTY_SETTINGS[options.difficulty];
+  if (!setting.available) return { ok: false, reason: "MODE_UNAVAILABLE" };
   const { rng } = options;
   const relations = buildMelodyRelations(melodyGroups);
   const candidates = filterByCondition(pool, options);
-  const eligible = eligibleAnswersFrom(candidates, relations, choiceCount);
+  const eligible = eligibleAnswersFrom(candidates, relations, choiceCount, setting.answerFormat);
   if (eligible.length === 0) return { ok: false, reason: "INSUFFICIENT_POOL" };
 
-  const setting = DIFFICULTY_SETTINGS[options.difficulty];
   const answers = shuffle(eligible, rng).slice(0, maxQuestions);
   const questions = answers.map((answer): Question => {
+    if (setting.answerFormat === "text") {
+      // 同じ旋律の国は、地域や難易度によらず正解として認める（音だけでは区別できないため）
+      const answerClass = relations.identicalClassOf(answer.id);
+      const acceptedIds = pool
+        .filter((a) => relations.identicalClassOf(a.id) === answerClass)
+        .map((a) => a.id)
+        .sort();
+      const clip = computeClip(answer.audio.durationSec, setting.clip, rng);
+      return { answerId: answer.id, choiceIds: [], acceptedIds, clip };
+    }
     const distractors = pickDistractors(
       answer,
       candidates,
@@ -183,7 +202,7 @@ export function generateSession(
     );
     const choiceIds = shuffle([answer.id, ...distractors.map((d) => d.id)], rng);
     const clip = computeClip(answer.audio.durationSec, setting.clip, rng);
-    return { answerId: answer.id, choiceIds, clip };
+    return { answerId: answer.id, choiceIds, acceptedIds: [answer.id], clip };
   });
   return { ok: true, questions, totalQuestions: questions.length };
 }

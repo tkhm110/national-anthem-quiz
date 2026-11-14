@@ -1,6 +1,7 @@
 /**
  * pnpm validate:data
- * 本番データ（data/）に対して、第1層（スキーマ）・第2層（横断整合性）・第3層（音源ファイル）の検証を行う。
+ * 本番データ（data/）に対して、第1層（スキーマ）・第2層（横断整合性）・第3層（音源ファイル）の検証と、
+ * 超級の入力候補に使う国名の一覧（data/countries.json）の検証を行う。
  * 失敗時は終了コード 1。
  */
 import { fileURLToPath } from "node:url";
@@ -10,9 +11,10 @@ import {
   QUIZ_REGIONS,
   countAvailableQuestions,
 } from "../src/lib/quiz";
+import { validateCountries } from "../src/lib/data/countries";
 import { validateDataset } from "../src/lib/data/validate";
 import { checkAudioFiles } from "./lib/check-audio";
-import { readDataDir } from "./lib/read-data-dir";
+import { readDataDir, readJsonFile } from "./lib/read-data-dir";
 
 const dataDir = fileURLToPath(new URL("../data/", import.meta.url));
 const audioDir = fileURLToPath(new URL("../public/audio/", import.meta.url));
@@ -45,6 +47,22 @@ if (audio.issues.length > 0) {
   process.exit(1);
 }
 console.log(`[OK] 音源ファイルの検証に成功しました（${anthems.length}件、長さの誤差は0.5秒以内）`);
+
+// 超級の入力候補に使う国名の一覧
+const countries = validateCountries(
+  readJsonFile(`${dataDir}countries.json`, "countries.json"),
+  anthems,
+);
+if (!countries.ok) {
+  console.error(
+    `[ERROR] 国名の一覧（data/countries.json）の検証に失敗しました（${countries.issues.length}件）`,
+  );
+  for (const issue of countries.issues) console.error(`  - ${issue.file}: ${issue.message}`);
+  process.exit(1);
+}
+console.log(
+  `[OK] 国名の一覧の検証に成功しました（${countries.countries.length}か国。収録している国はすべて含まれている）`,
+);
 
 if (anthems.length === 0) {
   console.warn("[WARN] 本番の国データは0件です。出題できるモードはありません。");

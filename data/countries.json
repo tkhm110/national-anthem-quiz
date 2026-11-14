@@ -1,0 +1,1184 @@
+[
+  {
+    "id": "ad",
+    "nameJa": "アンドラ",
+    "nameEn": "Andorra",
+    "aliases": []
+  },
+  {
+    "id": "ae",
+    "nameJa": "アラブ首長国連邦",
+    "nameEn": "United Arab Emirates",
+    "aliases": ["UAE", "あらぶしゅちょうこくれんぽう"]
+  },
+  {
+    "id": "af",
+    "nameJa": "アフガニスタン",
+    "nameEn": "Afghanistan",
+    "aliases": []
+  },
+  {
+    "id": "ag",
+    "nameJa": "アンティグア・バーブーダ",
+    "nameEn": "Antigua and Barbuda",
+    "aliases": []
+  },
+  {
+    "id": "al",
+    "nameJa": "アルバニア",
+    "nameEn": "Albania",
+    "aliases": []
+  },
+  {
+    "id": "am",
+    "nameJa": "アルメニア",
+    "nameEn": "Armenia",
+    "aliases": []
+  },
+  {
+    "id": "ao",
+    "nameJa": "アンゴラ",
+    "nameEn": "Angola",
+    "aliases": []
+  },
+  {
+    "id": "ar",
+    "nameJa": "アルゼンチン",
+    "nameEn": "Argentina",
+    "aliases": []
+  },
+  {
+    "id": "at",
+    "nameJa": "オーストリア",
+    "nameEn": "Austria",
+    "aliases": []
+  },
+  {
+    "id": "au",
+    "nameJa": "オーストラリア",
+    "nameEn": "Australia",
+    "aliases": ["豪州", "ごうしゅう"]
+  },
+  {
+    "id": "az",
+    "nameJa": "アゼルバイジャン",
+    "nameEn": "Azerbaijan",
+    "aliases": []
+  },
+  {
+    "id": "ba",
+    "nameJa": "ボスニア・ヘルツェゴビナ",
+    "nameEn": "Bosnia and Herzegovina",
+    "aliases": []
+  },
+  {
+    "id": "bb",
+    "nameJa": "バルバドス",
+    "nameEn": "Barbados",
+    "aliases": []
+  },
+  {
+    "id": "bd",
+    "nameJa": "バングラデシュ",
+    "nameEn": "Bangladesh",
+    "aliases": []
+  },
+  {
+    "id": "be",
+    "nameJa": "ベルギー",
+    "nameEn": "Belgium",
+    "aliases": []
+  },
+  {
+    "id": "bf",
+    "nameJa": "ブルキナファソ",
+    "nameEn": "Burkina Faso",
+    "aliases": []
+  },
+  {
+    "id": "bg",
+    "nameJa": "ブルガリア",
+    "nameEn": "Bulgaria",
+    "aliases": []
+  },
+  {
+    "id": "bh",
+    "nameJa": "バーレーン",
+    "nameEn": "Bahrain",
+    "aliases": []
+  },
+  {
+    "id": "bi",
+    "nameJa": "ブルンジ",
+    "nameEn": "Burundi",
+    "aliases": []
+  },
+  {
+    "id": "bj",
+    "nameJa": "ベナン",
+    "nameEn": "Benin",
+    "aliases": []
+  },
+  {
+    "id": "bn",
+    "nameJa": "ブルネイ",
+    "nameEn": "Brunei",
+    "aliases": []
+  },
+  {
+    "id": "bo",
+    "nameJa": "ボリビア",
+    "nameEn": "Bolivia",
+    "aliases": []
+  },
+  {
+    "id": "br",
+    "nameJa": "ブラジル",
+    "nameEn": "Brazil",
+    "aliases": []
+  },
+  {
+    "id": "bs",
+    "nameJa": "バハマ",
+    "nameEn": "Bahamas",
+    "aliases": []
+  },
+  {
+    "id": "bt",
+    "nameJa": "ブータン",
+    "nameEn": "Bhutan",
+    "aliases": []
+  },
+  {
+    "id": "bw",
+    "nameJa": "ボツワナ",
+    "nameEn": "Botswana",
+    "aliases": []
+  },
+  {
+    "id": "by",
+    "nameJa": "ベラルーシ",
+    "nameEn": "Belarus",
+    "aliases": []
+  },
+  {
+    "id": "bz",
+    "nameJa": "ベリーズ",
+    "nameEn": "Belize",
+    "aliases": []
+  },
+  {
+    "id": "ca",
+    "nameJa": "カナダ",
+    "nameEn": "Canada",
+    "aliases": []
+  },
+  {
+    "id": "cd",
+    "nameJa": "コンゴ民主共和国",
+    "nameEn": "Democratic Republic of the Congo",
+    "aliases": ["こんごみんしゅきょうわこく"]
+  },
+  {
+    "id": "cf",
+    "nameJa": "中央アフリカ",
+    "nameEn": "Central African Republic",
+    "aliases": ["ちゅうおうあふりか"]
+  },
+  {
+    "id": "cg",
+    "nameJa": "コンゴ共和国",
+    "nameEn": "Republic of the Congo",
+    "aliases": ["こんごきょうわこく"]
+  },
+  {
+    "id": "ch",
+    "nameJa": "スイス",
+    "nameEn": "Switzerland",
+    "aliases": []
+  },
+  {
+    "id": "ci",
+    "nameJa": "コートジボワール",
+    "nameEn": "Côte d'Ivoire",
+    "aliases": ["Ivory Coast"]
+  },
+  {
+    "id": "cl",
+    "nameJa": "チリ",
+    "nameEn": "Chile",
+    "aliases": []
+  },
+  {
+    "id": "cm",
+    "nameJa": "カメルーン",
+    "nameEn": "Cameroon",
+    "aliases": []
+  },
+  {
+    "id": "cn",
+    "nameJa": "中国",
+    "nameEn": "China",
+    "aliases": ["中華人民共和国", "ちゅうごく"]
+  },
+  {
+    "id": "co",
+    "nameJa": "コロンビア",
+    "nameEn": "Colombia",
+    "aliases": []
+  },
+  {
+    "id": "cr",
+    "nameJa": "コスタリカ",
+    "nameEn": "Costa Rica",
+    "aliases": []
+  },
+  {
+    "id": "cu",
+    "nameJa": "キューバ",
+    "nameEn": "Cuba",
+    "aliases": []
+  },
+  {
+    "id": "cv",
+    "nameJa": "カーボベルデ",
+    "nameEn": "Cabo Verde",
+    "aliases": ["Cape Verde"]
+  },
+  {
+    "id": "cy",
+    "nameJa": "キプロス",
+    "nameEn": "Cyprus",
+    "aliases": []
+  },
+  {
+    "id": "cz",
+    "nameJa": "チェコ",
+    "nameEn": "Czech Republic",
+    "aliases": ["Czechia"]
+  },
+  {
+    "id": "de",
+    "nameJa": "ドイツ",
+    "nameEn": "Germany",
+    "aliases": []
+  },
+  {
+    "id": "dj",
+    "nameJa": "ジブチ",
+    "nameEn": "Djibouti",
+    "aliases": []
+  },
+  {
+    "id": "dk",
+    "nameJa": "デンマーク",
+    "nameEn": "Denmark",
+    "aliases": []
+  },
+  {
+    "id": "dm",
+    "nameJa": "ドミニカ国",
+    "nameEn": "Dominica",
+    "aliases": ["どみにかこく"]
+  },
+  {
+    "id": "do",
+    "nameJa": "ドミニカ共和国",
+    "nameEn": "Dominican Republic",
+    "aliases": ["どみにかきょうわこく"]
+  },
+  {
+    "id": "dz",
+    "nameJa": "アルジェリア",
+    "nameEn": "Algeria",
+    "aliases": []
+  },
+  {
+    "id": "ec",
+    "nameJa": "エクアドル",
+    "nameEn": "Ecuador",
+    "aliases": []
+  },
+  {
+    "id": "ee",
+    "nameJa": "エストニア",
+    "nameEn": "Estonia",
+    "aliases": []
+  },
+  {
+    "id": "eg",
+    "nameJa": "エジプト",
+    "nameEn": "Egypt",
+    "aliases": []
+  },
+  {
+    "id": "er",
+    "nameJa": "エリトリア",
+    "nameEn": "Eritrea",
+    "aliases": []
+  },
+  {
+    "id": "es",
+    "nameJa": "スペイン",
+    "nameEn": "Spain",
+    "aliases": []
+  },
+  {
+    "id": "et",
+    "nameJa": "エチオピア",
+    "nameEn": "Ethiopia",
+    "aliases": []
+  },
+  {
+    "id": "fi",
+    "nameJa": "フィンランド",
+    "nameEn": "Finland",
+    "aliases": []
+  },
+  {
+    "id": "fj",
+    "nameJa": "フィジー",
+    "nameEn": "Fiji",
+    "aliases": []
+  },
+  {
+    "id": "fm",
+    "nameJa": "ミクロネシア連邦",
+    "nameEn": "Federated States of Micronesia",
+    "aliases": ["ミクロネシア", "みくろねしあれんぽう"]
+  },
+  {
+    "id": "fr",
+    "nameJa": "フランス",
+    "nameEn": "France",
+    "aliases": []
+  },
+  {
+    "id": "ga",
+    "nameJa": "ガボン",
+    "nameEn": "Gabon",
+    "aliases": []
+  },
+  {
+    "id": "gb",
+    "nameJa": "イギリス",
+    "nameEn": "United Kingdom",
+    "aliases": ["英国", "えいこく", "UK", "Great Britain"]
+  },
+  {
+    "id": "gd",
+    "nameJa": "グレナダ",
+    "nameEn": "Grenada",
+    "aliases": []
+  },
+  {
+    "id": "ge",
+    "nameJa": "ジョージア",
+    "nameEn": "Georgia",
+    "aliases": ["グルジア"]
+  },
+  {
+    "id": "gh",
+    "nameJa": "ガーナ",
+    "nameEn": "Ghana",
+    "aliases": []
+  },
+  {
+    "id": "gm",
+    "nameJa": "ガンビア",
+    "nameEn": "Gambia",
+    "aliases": []
+  },
+  {
+    "id": "gn",
+    "nameJa": "ギニア",
+    "nameEn": "Guinea",
+    "aliases": []
+  },
+  {
+    "id": "gq",
+    "nameJa": "赤道ギニア",
+    "nameEn": "Equatorial Guinea",
+    "aliases": ["せきどうぎにあ"]
+  },
+  {
+    "id": "gr",
+    "nameJa": "ギリシャ",
+    "nameEn": "Greece",
+    "aliases": ["ギリシア"]
+  },
+  {
+    "id": "gt",
+    "nameJa": "グアテマラ",
+    "nameEn": "Guatemala",
+    "aliases": []
+  },
+  {
+    "id": "gw",
+    "nameJa": "ギニアビサウ",
+    "nameEn": "Guinea-Bissau",
+    "aliases": []
+  },
+  {
+    "id": "gy",
+    "nameJa": "ガイアナ",
+    "nameEn": "Guyana",
+    "aliases": []
+  },
+  {
+    "id": "hn",
+    "nameJa": "ホンジュラス",
+    "nameEn": "Honduras",
+    "aliases": []
+  },
+  {
+    "id": "hr",
+    "nameJa": "クロアチア",
+    "nameEn": "Croatia",
+    "aliases": []
+  },
+  {
+    "id": "ht",
+    "nameJa": "ハイチ",
+    "nameEn": "Haiti",
+    "aliases": []
+  },
+  {
+    "id": "hu",
+    "nameJa": "ハンガリー",
+    "nameEn": "Hungary",
+    "aliases": []
+  },
+  {
+    "id": "id",
+    "nameJa": "インドネシア",
+    "nameEn": "Indonesia",
+    "aliases": []
+  },
+  {
+    "id": "ie",
+    "nameJa": "アイルランド",
+    "nameEn": "Ireland",
+    "aliases": []
+  },
+  {
+    "id": "il",
+    "nameJa": "イスラエル",
+    "nameEn": "Israel",
+    "aliases": []
+  },
+  {
+    "id": "in",
+    "nameJa": "インド",
+    "nameEn": "India",
+    "aliases": []
+  },
+  {
+    "id": "iq",
+    "nameJa": "イラク",
+    "nameEn": "Iraq",
+    "aliases": []
+  },
+  {
+    "id": "ir",
+    "nameJa": "イラン",
+    "nameEn": "Iran",
+    "aliases": []
+  },
+  {
+    "id": "is",
+    "nameJa": "アイスランド",
+    "nameEn": "Iceland",
+    "aliases": []
+  },
+  {
+    "id": "it",
+    "nameJa": "イタリア",
+    "nameEn": "Italy",
+    "aliases": []
+  },
+  {
+    "id": "jm",
+    "nameJa": "ジャマイカ",
+    "nameEn": "Jamaica",
+    "aliases": []
+  },
+  {
+    "id": "jo",
+    "nameJa": "ヨルダン",
+    "nameEn": "Jordan",
+    "aliases": []
+  },
+  {
+    "id": "jp",
+    "nameJa": "日本",
+    "nameEn": "Japan",
+    "aliases": ["にほん", "にっぽん"]
+  },
+  {
+    "id": "ke",
+    "nameJa": "ケニア",
+    "nameEn": "Kenya",
+    "aliases": []
+  },
+  {
+    "id": "kg",
+    "nameJa": "キルギス",
+    "nameEn": "Kyrgyzstan",
+    "aliases": []
+  },
+  {
+    "id": "kh",
+    "nameJa": "カンボジア",
+    "nameEn": "Cambodia",
+    "aliases": []
+  },
+  {
+    "id": "ki",
+    "nameJa": "キリバス",
+    "nameEn": "Kiribati",
+    "aliases": []
+  },
+  {
+    "id": "km",
+    "nameJa": "コモロ",
+    "nameEn": "Comoros",
+    "aliases": []
+  },
+  {
+    "id": "kn",
+    "nameJa": "セントクリストファー・ネービス",
+    "nameEn": "Saint Kitts and Nevis",
+    "aliases": []
+  },
+  {
+    "id": "kp",
+    "nameJa": "北朝鮮",
+    "nameEn": "North Korea",
+    "aliases": ["朝鮮民主主義人民共和国", "きたちょうせん"]
+  },
+  {
+    "id": "kr",
+    "nameJa": "韓国",
+    "nameEn": "South Korea",
+    "aliases": ["大韓民国", "かんこく"]
+  },
+  {
+    "id": "kw",
+    "nameJa": "クウェート",
+    "nameEn": "Kuwait",
+    "aliases": []
+  },
+  {
+    "id": "kz",
+    "nameJa": "カザフスタン",
+    "nameEn": "Kazakhstan",
+    "aliases": []
+  },
+  {
+    "id": "la",
+    "nameJa": "ラオス",
+    "nameEn": "Laos",
+    "aliases": []
+  },
+  {
+    "id": "lb",
+    "nameJa": "レバノン",
+    "nameEn": "Lebanon",
+    "aliases": []
+  },
+  {
+    "id": "lc",
+    "nameJa": "セントルシア",
+    "nameEn": "Saint Lucia",
+    "aliases": []
+  },
+  {
+    "id": "li",
+    "nameJa": "リヒテンシュタイン",
+    "nameEn": "Liechtenstein",
+    "aliases": []
+  },
+  {
+    "id": "lk",
+    "nameJa": "スリランカ",
+    "nameEn": "Sri Lanka",
+    "aliases": []
+  },
+  {
+    "id": "lr",
+    "nameJa": "リベリア",
+    "nameEn": "Liberia",
+    "aliases": []
+  },
+  {
+    "id": "ls",
+    "nameJa": "レソト",
+    "nameEn": "Lesotho",
+    "aliases": []
+  },
+  {
+    "id": "lt",
+    "nameJa": "リトアニア",
+    "nameEn": "Lithuania",
+    "aliases": []
+  },
+  {
+    "id": "lu",
+    "nameJa": "ルクセンブルク",
+    "nameEn": "Luxembourg",
+    "aliases": []
+  },
+  {
+    "id": "lv",
+    "nameJa": "ラトビア",
+    "nameEn": "Latvia",
+    "aliases": []
+  },
+  {
+    "id": "ly",
+    "nameJa": "リビア",
+    "nameEn": "Libya",
+    "aliases": []
+  },
+  {
+    "id": "ma",
+    "nameJa": "モロッコ",
+    "nameEn": "Morocco",
+    "aliases": []
+  },
+  {
+    "id": "mc",
+    "nameJa": "モナコ",
+    "nameEn": "Monaco",
+    "aliases": []
+  },
+  {
+    "id": "md",
+    "nameJa": "モルドバ",
+    "nameEn": "Moldova",
+    "aliases": []
+  },
+  {
+    "id": "me",
+    "nameJa": "モンテネグロ",
+    "nameEn": "Montenegro",
+    "aliases": []
+  },
+  {
+    "id": "mg",
+    "nameJa": "マダガスカル",
+    "nameEn": "Madagascar",
+    "aliases": []
+  },
+  {
+    "id": "mh",
+    "nameJa": "マーシャル諸島",
+    "nameEn": "Marshall Islands",
+    "aliases": ["まーしゃるしょとう"]
+  },
+  {
+    "id": "mk",
+    "nameJa": "北マケドニア",
+    "nameEn": "North Macedonia",
+    "aliases": ["マケドニア", "きたまけどにあ"]
+  },
+  {
+    "id": "ml",
+    "nameJa": "マリ",
+    "nameEn": "Mali",
+    "aliases": []
+  },
+  {
+    "id": "mm",
+    "nameJa": "ミャンマー",
+    "nameEn": "Myanmar",
+    "aliases": ["ビルマ", "Burma"]
+  },
+  {
+    "id": "mn",
+    "nameJa": "モンゴル",
+    "nameEn": "Mongolia",
+    "aliases": []
+  },
+  {
+    "id": "mr",
+    "nameJa": "モーリタニア",
+    "nameEn": "Mauritania",
+    "aliases": []
+  },
+  {
+    "id": "mt",
+    "nameJa": "マルタ",
+    "nameEn": "Malta",
+    "aliases": []
+  },
+  {
+    "id": "mu",
+    "nameJa": "モーリシャス",
+    "nameEn": "Mauritius",
+    "aliases": []
+  },
+  {
+    "id": "mv",
+    "nameJa": "モルディブ",
+    "nameEn": "Maldives",
+    "aliases": []
+  },
+  {
+    "id": "mw",
+    "nameJa": "マラウイ",
+    "nameEn": "Malawi",
+    "aliases": []
+  },
+  {
+    "id": "mx",
+    "nameJa": "メキシコ",
+    "nameEn": "Mexico",
+    "aliases": []
+  },
+  {
+    "id": "my",
+    "nameJa": "マレーシア",
+    "nameEn": "Malaysia",
+    "aliases": []
+  },
+  {
+    "id": "mz",
+    "nameJa": "モザンビーク",
+    "nameEn": "Mozambique",
+    "aliases": []
+  },
+  {
+    "id": "na",
+    "nameJa": "ナミビア",
+    "nameEn": "Namibia",
+    "aliases": []
+  },
+  {
+    "id": "ne",
+    "nameJa": "ニジェール",
+    "nameEn": "Niger",
+    "aliases": []
+  },
+  {
+    "id": "ng",
+    "nameJa": "ナイジェリア",
+    "nameEn": "Nigeria",
+    "aliases": []
+  },
+  {
+    "id": "ni",
+    "nameJa": "ニカラグア",
+    "nameEn": "Nicaragua",
+    "aliases": []
+  },
+  {
+    "id": "nl",
+    "nameJa": "オランダ",
+    "nameEn": "Netherlands",
+    "aliases": ["Holland"]
+  },
+  {
+    "id": "no",
+    "nameJa": "ノルウェー",
+    "nameEn": "Norway",
+    "aliases": []
+  },
+  {
+    "id": "np",
+    "nameJa": "ネパール",
+    "nameEn": "Nepal",
+    "aliases": []
+  },
+  {
+    "id": "nr",
+    "nameJa": "ナウル",
+    "nameEn": "Nauru",
+    "aliases": []
+  },
+  {
+    "id": "nz",
+    "nameJa": "ニュージーランド",
+    "nameEn": "New Zealand",
+    "aliases": []
+  },
+  {
+    "id": "om",
+    "nameJa": "オマーン",
+    "nameEn": "Oman",
+    "aliases": []
+  },
+  {
+    "id": "pa",
+    "nameJa": "パナマ",
+    "nameEn": "Panama",
+    "aliases": []
+  },
+  {
+    "id": "pe",
+    "nameJa": "ペルー",
+    "nameEn": "Peru",
+    "aliases": []
+  },
+  {
+    "id": "pg",
+    "nameJa": "パプアニューギニア",
+    "nameEn": "Papua New Guinea",
+    "aliases": []
+  },
+  {
+    "id": "ph",
+    "nameJa": "フィリピン",
+    "nameEn": "Philippines",
+    "aliases": []
+  },
+  {
+    "id": "pk",
+    "nameJa": "パキスタン",
+    "nameEn": "Pakistan",
+    "aliases": []
+  },
+  {
+    "id": "pl",
+    "nameJa": "ポーランド",
+    "nameEn": "Poland",
+    "aliases": []
+  },
+  {
+    "id": "ps",
+    "nameJa": "パレスチナ",
+    "nameEn": "Palestine",
+    "aliases": []
+  },
+  {
+    "id": "pt",
+    "nameJa": "ポルトガル",
+    "nameEn": "Portugal",
+    "aliases": []
+  },
+  {
+    "id": "pw",
+    "nameJa": "パラオ",
+    "nameEn": "Palau",
+    "aliases": []
+  },
+  {
+    "id": "py",
+    "nameJa": "パラグアイ",
+    "nameEn": "Paraguay",
+    "aliases": []
+  },
+  {
+    "id": "qa",
+    "nameJa": "カタール",
+    "nameEn": "Qatar",
+    "aliases": []
+  },
+  {
+    "id": "ro",
+    "nameJa": "ルーマニア",
+    "nameEn": "Romania",
+    "aliases": []
+  },
+  {
+    "id": "rs",
+    "nameJa": "セルビア",
+    "nameEn": "Serbia",
+    "aliases": []
+  },
+  {
+    "id": "ru",
+    "nameJa": "ロシア",
+    "nameEn": "Russia",
+    "aliases": ["ロシア連邦"]
+  },
+  {
+    "id": "rw",
+    "nameJa": "ルワンダ",
+    "nameEn": "Rwanda",
+    "aliases": []
+  },
+  {
+    "id": "sa",
+    "nameJa": "サウジアラビア",
+    "nameEn": "Saudi Arabia",
+    "aliases": []
+  },
+  {
+    "id": "sb",
+    "nameJa": "ソロモン諸島",
+    "nameEn": "Solomon Islands",
+    "aliases": ["そろもんしょとう"]
+  },
+  {
+    "id": "sc",
+    "nameJa": "セーシェル",
+    "nameEn": "Seychelles",
+    "aliases": []
+  },
+  {
+    "id": "sd",
+    "nameJa": "スーダン",
+    "nameEn": "Sudan",
+    "aliases": []
+  },
+  {
+    "id": "se",
+    "nameJa": "スウェーデン",
+    "nameEn": "Sweden",
+    "aliases": []
+  },
+  {
+    "id": "sg",
+    "nameJa": "シンガポール",
+    "nameEn": "Singapore",
+    "aliases": []
+  },
+  {
+    "id": "si",
+    "nameJa": "スロベニア",
+    "nameEn": "Slovenia",
+    "aliases": []
+  },
+  {
+    "id": "sk",
+    "nameJa": "スロバキア",
+    "nameEn": "Slovakia",
+    "aliases": []
+  },
+  {
+    "id": "sl",
+    "nameJa": "シエラレオネ",
+    "nameEn": "Sierra Leone",
+    "aliases": []
+  },
+  {
+    "id": "sm",
+    "nameJa": "サンマリノ",
+    "nameEn": "San Marino",
+    "aliases": []
+  },
+  {
+    "id": "sn",
+    "nameJa": "セネガル",
+    "nameEn": "Senegal",
+    "aliases": []
+  },
+  {
+    "id": "so",
+    "nameJa": "ソマリア",
+    "nameEn": "Somalia",
+    "aliases": []
+  },
+  {
+    "id": "sr",
+    "nameJa": "スリナム",
+    "nameEn": "Suriname",
+    "aliases": []
+  },
+  {
+    "id": "ss",
+    "nameJa": "南スーダン",
+    "nameEn": "South Sudan",
+    "aliases": ["みなみすーだん"]
+  },
+  {
+    "id": "st",
+    "nameJa": "サントメ・プリンシペ",
+    "nameEn": "São Tomé and Príncipe",
+    "aliases": []
+  },
+  {
+    "id": "sv",
+    "nameJa": "エルサルバドル",
+    "nameEn": "El Salvador",
+    "aliases": []
+  },
+  {
+    "id": "sy",
+    "nameJa": "シリア",
+    "nameEn": "Syria",
+    "aliases": []
+  },
+  {
+    "id": "sz",
+    "nameJa": "エスワティニ",
+    "nameEn": "Eswatini",
+    "aliases": ["スワジランド", "Swaziland"]
+  },
+  {
+    "id": "td",
+    "nameJa": "チャド",
+    "nameEn": "Chad",
+    "aliases": []
+  },
+  {
+    "id": "tg",
+    "nameJa": "トーゴ",
+    "nameEn": "Togo",
+    "aliases": []
+  },
+  {
+    "id": "th",
+    "nameJa": "タイ",
+    "nameEn": "Thailand",
+    "aliases": []
+  },
+  {
+    "id": "tj",
+    "nameJa": "タジキスタン",
+    "nameEn": "Tajikistan",
+    "aliases": []
+  },
+  {
+    "id": "tl",
+    "nameJa": "東ティモール",
+    "nameEn": "Timor-Leste",
+    "aliases": ["East Timor", "ひがしてぃもーる"]
+  },
+  {
+    "id": "tm",
+    "nameJa": "トルクメニスタン",
+    "nameEn": "Turkmenistan",
+    "aliases": []
+  },
+  {
+    "id": "tn",
+    "nameJa": "チュニジア",
+    "nameEn": "Tunisia",
+    "aliases": []
+  },
+  {
+    "id": "to",
+    "nameJa": "トンガ",
+    "nameEn": "Tonga",
+    "aliases": []
+  },
+  {
+    "id": "tr",
+    "nameJa": "トルコ",
+    "nameEn": "Türkiye",
+    "aliases": ["Turkey", "トルキエ"]
+  },
+  {
+    "id": "tt",
+    "nameJa": "トリニダード・トバゴ",
+    "nameEn": "Trinidad and Tobago",
+    "aliases": []
+  },
+  {
+    "id": "tv",
+    "nameJa": "ツバル",
+    "nameEn": "Tuvalu",
+    "aliases": []
+  },
+  {
+    "id": "tw",
+    "nameJa": "台湾",
+    "nameEn": "Taiwan",
+    "aliases": ["たいわん"]
+  },
+  {
+    "id": "tz",
+    "nameJa": "タンザニア",
+    "nameEn": "Tanzania",
+    "aliases": []
+  },
+  {
+    "id": "ua",
+    "nameJa": "ウクライナ",
+    "nameEn": "Ukraine",
+    "aliases": []
+  },
+  {
+    "id": "ug",
+    "nameJa": "ウガンダ",
+    "nameEn": "Uganda",
+    "aliases": []
+  },
+  {
+    "id": "us",
+    "nameJa": "アメリカ合衆国",
+    "nameEn": "United States",
+    "aliases": ["アメリカ", "米国", "べいこく", "USA"]
+  },
+  {
+    "id": "uy",
+    "nameJa": "ウルグアイ",
+    "nameEn": "Uruguay",
+    "aliases": []
+  },
+  {
+    "id": "uz",
+    "nameJa": "ウズベキスタン",
+    "nameEn": "Uzbekistan",
+    "aliases": []
+  },
+  {
+    "id": "va",
+    "nameJa": "バチカン",
+    "nameEn": "Vatican City",
+    "aliases": ["バチカン市国", "Holy See"]
+  },
+  {
+    "id": "vc",
+    "nameJa": "セントビンセント及びグレナディーン諸島",
+    "nameEn": "Saint Vincent and the Grenadines",
+    "aliases": ["セントビンセント"]
+  },
+  {
+    "id": "ve",
+    "nameJa": "ベネズエラ",
+    "nameEn": "Venezuela",
+    "aliases": []
+  },
+  {
+    "id": "vn",
+    "nameJa": "ベトナム",
+    "nameEn": "Vietnam",
+    "aliases": ["ヴェトナム"]
+  },
+  {
+    "id": "vu",
+    "nameJa": "バヌアツ",
+    "nameEn": "Vanuatu",
+    "aliases": []
+  },
+  {
+    "id": "ws",
+    "nameJa": "サモア",
+    "nameEn": "Samoa",
+    "aliases": []
+  },
+  {
+    "id": "xk",
+    "nameJa": "コソボ",
+    "nameEn": "Kosovo",
+    "aliases": []
+  },
+  {
+    "id": "ye",
+    "nameJa": "イエメン",
+    "nameEn": "Yemen",
+    "aliases": []
+  },
+  {
+    "id": "za",
+    "nameJa": "南アフリカ",
+    "nameEn": "South Africa",
+    "aliases": ["南アフリカ共和国", "みなみあふりか"]
+  },
+  {
+    "id": "zm",
+    "nameJa": "ザンビア",
+    "nameEn": "Zambia",
+    "aliases": []
+  },
+  {
+    "id": "zw",
+    "nameJa": "ジンバブエ",
+    "nameEn": "Zimbabwe",
+    "aliases": []
+  }
+]

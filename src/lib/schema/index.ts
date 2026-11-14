@@ -72,6 +72,17 @@ export const MelodyGroupSchema = z.strictObject({
 
 export const MelodyGroupsFileSchema = z.array(MelodyGroupSchema);
 
+/** 超級の入力候補に使う国（収録していない国も含む、世界の国の一覧） */
+export const CountrySchema = z.strictObject({
+  id: CountryIdSchema,
+  nameJa: z.string().min(1),
+  nameEn: z.string().min(1),
+  /** 別名・読み（例：「米国」「USA」「にほん」）。候補を探すときに使う */
+  aliases: z.array(z.string().min(1)),
+});
+
+export const CountriesFileSchema = z.array(CountrySchema).min(1);
+
 export type Region = z.infer<typeof RegionSchema>;
 export type Difficulty = z.infer<typeof DifficultySchema>;
 export type Tier = z.infer<typeof TierSchema>;
@@ -79,6 +90,7 @@ export type License = z.infer<typeof LicenseSchema>;
 export type Anthem = z.infer<typeof AnthemSchema>;
 export type MelodyRelationType = z.infer<typeof MelodyRelationTypeSchema>;
 export type MelodyGroup = z.infer<typeof MelodyGroupSchema>;
+export type Country = z.infer<typeof CountrySchema>;
 
 /** クイズ条件としての地域（"world" は全地域を対象にする特別値） */
 export type QuizRegion = Region | "world";

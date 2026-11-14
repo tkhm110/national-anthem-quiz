@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { countCorrect } from "../lib/game";
+import { countCorrect, isCorrect } from "../lib/game";
 import { DIFFICULTY_SETTINGS, QUIZ_REGIONS } from "../lib/quiz";
 import type { Question, QuizCondition } from "../lib/quiz";
 import type { Anthem } from "../lib/schema";
@@ -9,6 +9,8 @@ type Props = {
   questions: readonly Question[];
   answers: readonly (string | null)[];
   anthemsById: ReadonlyMap<string, Anthem>;
+  /** 回答した国の名前（記述式では、収録していない国を答えることもある） */
+  countryName: (countryId: string) => string;
   onRetry: () => void;
   onBack: () => void;
 };
@@ -18,6 +20,7 @@ export function ResultScreen({
   questions,
   answers,
   anthemsById,
+  countryName,
   onRetry,
   onBack,
 }: Props) {
@@ -44,12 +47,14 @@ export function ResultScreen({
       <ol className="result-list">
         {questions.map((q, i) => {
           const correct = anthemsById.get(q.answerId)!;
-          const chosen = answers[i] ? anthemsById.get(answers[i]) : undefined;
-          const ok = answers[i] === q.answerId;
+          const chosen = answers[i] ?? null;
+          const ok = isCorrect(q, chosen);
           return (
             <li key={q.answerId} className={ok ? "result-correct" : "result-wrong"}>
               <span aria-hidden="true">{ok ? "○" : "×"}</span> {correct.nameJa}
-              {!ok && chosen && <span className="hint">（あなたの回答：{chosen.nameJa}）</span>}
+              {chosen !== null && chosen !== q.answerId && (
+                <span className="hint">（あなたの回答：{countryName(chosen)}）</span>
+              )}
             </li>
           );
         })}

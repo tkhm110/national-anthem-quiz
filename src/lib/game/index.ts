@@ -50,7 +50,11 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       if (state.phase !== "playing") return state;
       const question = state.questions[state.index];
       if (!question || state.answers[state.index] !== null) return state;
-      if (!question.choiceIds.includes(action.choiceId)) return state;
+      // 4択は選択肢の中から、記述式は入力欄の候補（世界の国の一覧）から選んだ国IDを受け付ける
+      const isChoice = question.choiceIds.length > 0;
+      if (isChoice ? !question.choiceIds.includes(action.choiceId) : action.choiceId === "") {
+        return state;
+      }
       const answers = [...state.answers];
       answers[state.index] = action.choiceId;
       return { ...state, answers };
@@ -71,7 +75,12 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
   }
 }
 
+/** その回答が正解か（記述式では、同じ旋律の国も正解として認める） */
+export function isCorrect(question: Question, answer: string | null): boolean {
+  return answer !== null && question.acceptedIds.includes(answer);
+}
+
 /** 正答数 */
 export function countCorrect(questions: readonly Question[], answers: readonly (string | null)[]) {
-  return questions.filter((q, i) => answers[i] === q.answerId).length;
+  return questions.filter((q, i) => isCorrect(q, answers[i] ?? null)).length;
 }

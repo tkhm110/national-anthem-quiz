@@ -14,6 +14,10 @@ import type { Anthem } from "./lib/schema";
 
 const dataset = loadBundledDataset();
 const anthemsById: ReadonlyMap<string, Anthem> = new Map(dataset.anthems.map((a) => [a.id, a]));
+const countryNames: ReadonlyMap<string, string> = new Map(
+  dataset.countries.map((c) => [c.id, c.nameJa]),
+);
+const countryName = (id: string) => countryNames.get(id) ?? id;
 const audioBaseUrl = import.meta.env.VITE_AUDIO_BASE_URL || `${import.meta.env.BASE_URL}audio/`;
 const audioUrl = (anthem: Anthem) => buildAudioUrl(anthem.audio.file, audioBaseUrl);
 
@@ -40,7 +44,7 @@ export function App() {
     <div className="app">
       <header className="app-header">
         <h1>国歌クイズ</h1>
-        <p className="hint">国歌の演奏を聴いて、どの国の国歌かを4択で当てよう</p>
+        <p className="hint">国歌の演奏を聴いて、どの国の国歌かを当てよう</p>
       </header>
 
       <main>
@@ -58,6 +62,8 @@ export function App() {
             index={state.index}
             answer={state.answers[state.index] ?? null}
             anthemsById={anthemsById}
+            countries={dataset.countries}
+            countryName={countryName}
             audioUrl={audioUrl}
             onAnswer={(choiceId) => dispatch({ type: "answer", choiceId })}
             onNext={() => dispatch({ type: "next" })}
@@ -70,6 +76,7 @@ export function App() {
             questions={state.questions}
             answers={state.answers}
             anthemsById={anthemsById}
+            countryName={countryName}
             onRetry={() => start(state.condition)}
             onBack={() => dispatch({ type: "quit" })}
           />

@@ -3,6 +3,7 @@ import { expect } from "vitest";
 import { readDataDir } from "../scripts/lib/read-data-dir";
 import { validateDataset, type ValidatedDataset } from "../src/lib/data/validate";
 import {
+  DIFFICULTY_SETTINGS,
   buildMelodyRelations,
   filterByCondition,
   type QuizCondition,
@@ -73,20 +74,38 @@ export function expectValidSession(
   const answerIds = result.questions.map((q) => q.answerId);
   expect(new Set(answerIds).size).toBe(answerIds.length);
 
+  const textFormat = DIFFICULTY_SETTINGS[condition.difficulty].answerFormat === "text";
+
   for (const question of result.questions) {
-    expect(question.choiceIds).toHaveLength(choiceCount);
-    expect(new Set(question.choiceIds).size).toBe(choiceCount);
-    expect(question.choiceIds).toContain(question.answerId);
+    // 正解は条件（地域・難易度）を満たす国
+    expect(candidates.has(question.answerId), `${question.answerId} は条件外の国`).toBe(true);
+    expect(question.acceptedIds).toContain(question.answerId);
 
-    for (const id of question.choiceIds) {
-      // 正解・誤答とも条件（地域・難易度）を満たす国だけ
-      expect(candidates.has(id), `${id} は条件外の国`).toBe(true);
+    if (textFormat) {
+      // 記述式：選択肢なし。同じ旋律の国（だけ）を正解として認める
+      expect(question.choiceIds).toEqual([]);
+      const answerClass = relations.identicalClassOf(question.answerId);
+      const sameClass = pool
+        .filter((a) => relations.identicalClassOf(a.id) === answerClass)
+        .map((a) => a.id)
+        .sort();
+      expect(question.acceptedIds).toEqual(sameClass);
+    } else {
+      expect(question.acceptedIds).toEqual([question.answerId]);
+      expect(question.choiceIds).toHaveLength(choiceCount);
+      expect(new Set(question.choiceIds).size).toBe(choiceCount);
+      expect(question.choiceIds).toContain(question.answerId);
+
+      for (const id of question.choiceIds) {
+        // 正解・誤答とも条件（地域・難易度）を満たす国だけ
+        expect(candidates.has(id), `${id} は条件外の国`).toBe(true);
+      }
+
+      const classes = question.choiceIds.map((id) => relations.identicalClassOf(id));
+      expect(new Set(classes).size, `同一旋律の衝突: ${question.choiceIds.join(",")}`).toBe(
+        choiceCount,
+      );
     }
-
-    const classes = question.choiceIds.map((id) => relations.identicalClassOf(id));
-    expect(new Set(classes).size, `同一旋律の衝突: ${question.choiceIds.join(",")}`).toBe(
-      choiceCount,
-    );
 
     const audio = candidates.get(question.answerId)!.audio;
     const { startSec, durationSec } = question.clip;

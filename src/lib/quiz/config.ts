@@ -34,7 +34,8 @@ const DEFAULT_CLIP: ClipSetting = { start: "beginning", durationSec: 60 };
 /**
  * 難易度ごとの出題ルール。秒数などの調整はここだけを変更すればよい。
  * 初級・中級・上級は、その難易度の国だけから4択で出題する。
- * 超級はすべての国から記述式で出題する予定で、記述式の画面ができるまでは準備中（available: false）にしている。
+ * 超級はすべての国から記述式で出題する（国名を入力し、世界の国の一覧から出る候補を選ぶ）。
+ * 新しいモードを作りかけのときは available: false にすると、画面に「準備中」と表示され、開始できなくなる。
  */
 export const DIFFICULTY_SETTINGS: Record<Difficulty, DifficultySetting> = {
   1: {
@@ -61,7 +62,7 @@ export const DIFFICULTY_SETTINGS: Record<Difficulty, DifficultySetting> = {
   4: {
     label: "超級",
     answerFormat: "text",
-    available: false,
+    available: true,
     clip: DEFAULT_CLIP,
     preferSimilarDistractors: false,
   },

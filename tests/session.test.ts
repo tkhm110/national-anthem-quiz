@@ -104,8 +104,9 @@ describe("出題可能数（fixture の代表ケース）", () => {
     ["world", 1, 10, "10か国・7クラス"],
     ["world", 2, 0, "中級は全体でも3か国"],
     ["world", 3, 5, "上級は5か国"],
-    ["world", 4, 0, "超級は準備中"],
-    ["europe", 4, 0, "超級は準備中"],
+    ["world", 4, 10, "超級は全18か国。上限の10問"],
+    ["europe", 4, 8, "記述式は4か国を必要としない。同じ旋律の国も出題できる"],
+    ["africa", 4, 2, "記述式なら2か国でも遊べる"],
   ] as const)("%s × 難易度%s → %s問（%s）", (region, difficulty, expected, _reason) => {
     expect(count(region, difficulty)).toBe(expected);
   });
@@ -117,22 +118,53 @@ describe("出題可能数（fixture の代表ケース）", () => {
   });
 });
 
-describe("超級（記述式・準備中）", () => {
-  it("設定上、超級は記述式で、まだ遊べない", () => {
-    expect(DIFFICULTY_SETTINGS[4]).toMatchObject({ answerFormat: "text", available: false });
+describe("超級（記述式）", () => {
+  it("設定上、超級は記述式で、初級〜上級は4択", () => {
+    expect(DIFFICULTY_SETTINGS[4]).toMatchObject({ answerFormat: "text", available: true });
     for (const d of [1, 2, 3] as const) {
       expect(DIFFICULTY_SETTINGS[d]).toMatchObject({ answerFormat: "choice", available: true });
     }
   });
 
-  it("国が十分にあっても、超級は開始できない（MODE_UNAVAILABLE）", () => {
+  it("選択肢を作らず、同じ旋律の国を地域・難易度をまたいで正解として認める", () => {
+    // xa（ヨーロッパ・初級）と xb（アジア・上級）は同一旋律。アジアに絞っても、正解の判定には全体の同一旋律を使う
+    const pool = [
+      makeAnthem("xa", { region: "europe", difficulty: 1 }),
+      makeAnthem("xb", { region: "asia", difficulty: 3 }),
+      makeAnthem("xc", { region: "asia", difficulty: 2 }),
+    ];
+    const groups = [identical("xa", "xb")];
+    const condition = { region: "asia", difficulty: 4 } as const;
+    for (const seed of SEEDS) {
+      const result = generateSession(pool, groups, { ...condition, rng: mulberry32(seed) });
+      expectValidSession(result, pool, groups, condition);
+      expect(result.totalQuestions).toBe(2);
+      const xb = result.questions.find((q) => q.answerId === "xb");
+      expect(xb?.acceptedIds).toEqual(["xa", "xb"]);
+      const xc = result.questions.find((q) => q.answerId === "xc");
+      expect(xc?.acceptedIds).toEqual(["xc"]);
+    }
+  });
+
+  it("1か国だけでも出題できる", () => {
+    const pool = syntheticPool(1);
+    const condition = { region: "world", difficulty: 4 } as const;
+    expect(countAvailableQuestions(pool, [], condition)).toBe(1);
+  });
+
+  it("準備中（available: false）のモードは開始できない（MODE_UNAVAILABLE）", () => {
     const pool = syntheticPool(10);
     const condition = { region: "world", difficulty: 4 } as const;
-    expect(countAvailableQuestions(pool, [], condition)).toBe(0);
-    expect(generateSession(pool, [], { ...condition, rng: mulberry32(1) })).toEqual({
-      ok: false,
-      reason: "MODE_UNAVAILABLE",
-    });
+    DIFFICULTY_SETTINGS[4].available = false;
+    try {
+      expect(countAvailableQuestions(pool, [], condition)).toBe(0);
+      expect(generateSession(pool, [], { ...condition, rng: mulberry32(1) })).toEqual({
+        ok: false,
+        reason: "MODE_UNAVAILABLE",
+      });
+    } finally {
+      DIFFICULTY_SETTINGS[4].available = true;
+    }
   });
 });
 

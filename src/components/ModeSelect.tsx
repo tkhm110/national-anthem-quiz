@@ -15,7 +15,7 @@ type Props = {
 };
 
 /**
- * 地域 × 難易度（28通り）の選択画面。4択を作れない組み合わせは選べないようにし、理由を表示する。
+ * 地域 × 難易度（28通り）の選択画面。出題できない組み合わせは選べないようにし、理由を表示する。
  * 表示する問題数は generateSession と同じ判定（countAvailableQuestions）で計算する。
  */
 export function ModeSelect({ anthems, melodyGroups, onStart }: Props) {
@@ -34,7 +34,7 @@ export function ModeSelect({ anthems, melodyGroups, onStart }: Props) {
       <p className="hint">地域と難易度の組み合わせを選んでください。数字は出題される問題数です。</p>
       <p className="hint">
         初級は超有名な国、中級はそこそこ有名な国、上級はマイナーな国から4択で出題します。
-        超級はすべての国から、国名を入力して答える形式です（準備中）。
+        超級はすべての国から出題し、国名を入力して、表示される候補から選んで答えます。
       </p>
 
       <div className="mode-table-wrap">
@@ -98,7 +98,9 @@ export function ModeSelect({ anthems, melodyGroups, onStart }: Props) {
         )}
         {selectedAvailable && selectedCount === 0 && (
           <p className="notice">
-            この地域・難易度ではまだ4択を作れません（互いに聴き分けられる国が4か国に足りません）。
+            {DIFFICULTY_SETTINGS[difficulty].answerFormat === "text"
+              ? "この地域の国歌はまだ収録していません。"
+              : "この地域・難易度ではまだ4択を作れません（互いに聴き分けられる国が4か国に足りません）。"}
           </p>
         )}
       </div>
