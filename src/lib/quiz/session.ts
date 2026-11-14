@@ -26,7 +26,8 @@ export type Question = {
 
 export type QuizSessionResult =
   | { ok: true; questions: Question[]; totalQuestions: number }
-  | { ok: false; reason: "INSUFFICIENT_POOL" };
+  /** INSUFFICIENT_POOL：4択を作れる国が足りない / MODE_UNAVAILABLE：まだ遊べないモード（準備中） */
+  | { ok: false; reason: "INSUFFICIENT_POOL" | "MODE_UNAVAILABLE" };
 
 type Limits = { maxQuestions: number; choiceCount: number };
 
@@ -46,7 +47,7 @@ function resolveLimits(options: { maxQuestions?: number; choiceCount?: number })
 
 /**
  * 地域・難易度の条件に合う国（正解候補にも誤答候補にもなる集合）。
- * 難易度は累積方式：difficulty 以下の国がすべて対象。
+ * 初級・中級・上級は、その難易度の国だけが対象（重ならない）。超級（4）はすべての難易度の国が対象。
  * 入力順に結果が左右されないよう ID 順に並べる。
  */
 export function filterByCondition(pool: readonly Anthem[], condition: QuizCondition): Anthem[] {
@@ -57,7 +58,7 @@ export function filterByCondition(pool: readonly Anthem[], condition: QuizCondit
   }
   return pool
     .filter((a) => condition.region === "world" || a.region === condition.region)
-    .filter((a) => a.difficulty <= condition.difficulty)
+    .filter((a) => condition.difficulty === 4 || a.difficulty === condition.difficulty)
     .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 }
 
@@ -93,7 +94,7 @@ export function findEligibleAnswers(
 }
 
 /**
- * その条件で出題される問題数（0 なら開始不可）。
+ * その条件で出題される問題数（0 なら開始不可）。準備中のモードは 0。
  * generateSession と同じ判定を使うので、表示する問題数と実際の問題数は必ず一致する。
  */
 export function countAvailableQuestions(
@@ -102,6 +103,7 @@ export function countAvailableQuestions(
   condition: QuizCondition & { maxQuestions?: number; choiceCount?: number },
 ): number {
   const { maxQuestions, choiceCount } = resolveLimits(condition);
+  if (!DIFFICULTY_SETTINGS[condition.difficulty].available) return 0;
   return Math.min(
     findEligibleAnswers(pool, melodyGroups, condition, choiceCount).length,
     maxQuestions,
@@ -120,7 +122,7 @@ function pickDistractors(
     candidates.filter((c) => c.id !== answer.id),
     rng,
   );
-  // 超級：正解と類似旋律グループを直接共有する国を先に検討する（足りなければ残りから補充）
+  // 上級：正解と類似旋律グループを直接共有する国を先に検討する（足りなければ残りから補充）
   const ordered = preferSimilar
     ? [
         ...shuffled.filter((c) => relations.isSimilar(answer.id, c.id)),
@@ -149,6 +151,7 @@ function pickDistractors(
  * 1プレイ分の問題列を生成して固定する。
  * - 正解・誤答とも指定された地域・難易度の範囲だけから選ぶ（自動拡張しない）
  * - 最大 maxQuestions 問。足りなければ成立する問題数だけ。0 問なら INSUFFICIENT_POOL
+ * - 準備中のモード（超級）は MODE_UNAVAILABLE
  * - 正解国はセッション内で重複しない（誤答としての再登場は許可）
  * - 同じデータ・条件・乱数列なら同じ結果になる
  */
@@ -158,6 +161,9 @@ export function generateSession(
   options: QuizOptions,
 ): QuizSessionResult {
   const { maxQuestions, choiceCount } = resolveLimits(options);
+  if (!DIFFICULTY_SETTINGS[options.difficulty].available) {
+    return { ok: false, reason: "MODE_UNAVAILABLE" };
+  }
   const { rng } = options;
   const relations = buildMelodyRelations(melodyGroups);
   const candidates = filterByCondition(pool, options);

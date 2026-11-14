@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { mulberry32 } from "../src/lib/random";
 import {
   DIFFICULTIES,
+  DIFFICULTY_SETTINGS,
   QUIZ_REGIONS,
   countAvailableQuestions,
   filterByCondition,
@@ -41,24 +42,35 @@ function similar(...countryIds: string[]): MelodyGroup {
   };
 }
 
-describe("条件フィルター（地域・累積難易度）", () => {
-  it("難易度は累積方式：初級の国は上位難易度でも候補になる", () => {
-    const europe = (difficulty: 1 | 2 | 3 | 4) =>
+describe("条件フィルター（地域・難易度）", () => {
+  it("初級・中級・上級は、その難易度の国だけが対象（重ならない）", () => {
+    const europe = (difficulty: 1 | 2 | 3) =>
       ids(filterByCondition(anthems, { region: "europe", difficulty }));
-    expect(europe(1)).toEqual(["xa", "xb", "xc", "xd", "xe"]);
-    expect(europe(2)).toEqual(["xa", "xb", "xc", "xd", "xe", "xf"]);
-    expect(europe(3)).toEqual(["xa", "xb", "xc", "xd", "xe", "xf", "xg"]);
-    expect(europe(4)).toEqual(["xa", "xb", "xc", "xd", "xe", "xf", "xg", "xh"]);
+    expect(europe(1)).toEqual(["xa", "xb", "xf", "xg"]);
+    expect(europe(2)).toEqual([]);
+    expect(europe(3)).toEqual(["xc", "xd", "xe", "xh"]);
   });
 
-  it("世界モードは地域を問わない", () => {
-    expect(filterByCondition(anthems, { region: "world", difficulty: 4 })).toHaveLength(18);
-    expect(ids(filterByCondition(anthems, { region: "world", difficulty: 1 }))).toEqual([
+  it("超級は、すべての難易度の国が対象", () => {
+    expect(ids(filterByCondition(anthems, { region: "europe", difficulty: 4 }))).toEqual([
       "xa",
       "xb",
       "xc",
       "xd",
       "xe",
+      "xf",
+      "xg",
+      "xh",
+    ]);
+    expect(filterByCondition(anthems, { region: "world", difficulty: 4 })).toHaveLength(18);
+  });
+
+  it("世界モードは地域を問わない", () => {
+    expect(ids(filterByCondition(anthems, { region: "world", difficulty: 1 }))).toEqual([
+      "xa",
+      "xb",
+      "xf",
+      "xg",
       "xi",
       "xn",
       "xp",
@@ -81,20 +93,19 @@ describe("出題可能数（fixture の代表ケース）", () => {
 
   it.each([
     // [地域, 難易度, 期待する問題数, 理由]
-    ["europe", 1, 5, "5か国・4旋律クラス（xa=xb）"],
-    ["europe", 2, 6, "6か国・5クラス"],
-    ["europe", 3, 7, "xg は xa=xb と同一クラス"],
-    ["europe", 4, 8, "8か国すべて"],
-    ["asia", 1, 0, "1か国のみ"],
-    ["asia", 3, 0, "3か国のみ"],
-    ["asia", 4, 4, "ちょうど4か国"],
-    ["africa", 4, 0, "2か国しかない（他地域へ拡張しない）"],
+    ["europe", 1, 0, "4か国あるが xa=xb=xg で2クラスしかない"],
+    ["europe", 2, 0, "中級の国がない"],
+    ["europe", 3, 4, "ちょうど4か国・4クラス"],
+    ["asia", 1, 0, "初級は1か国のみ（ほかの難易度の国では補わない）"],
+    ["asia", 2, 0, "中級は2か国のみ"],
+    ["africa", 1, 0, "1か国しかない（他地域へ拡張しない）"],
     ["north-america", 1, 0, "4か国あるが xp=xq で3クラスしかない"],
-    ["north-america", 4, 0, "同上"],
-    ["south-america", 4, 0, "0か国"],
-    ["oceania", 1, 0, "0か国"],
-    ["world", 1, 10, "11か国が成立するが上限10問"],
-    ["world", 4, 10, "18か国 → 上限10問"],
+    ["south-america", 1, 0, "0か国"],
+    ["world", 1, 10, "10か国・7クラス"],
+    ["world", 2, 0, "中級は全体でも3か国"],
+    ["world", 3, 5, "上級は5か国"],
+    ["world", 4, 0, "超級は準備中"],
+    ["europe", 4, 0, "超級は準備中"],
   ] as const)("%s × 難易度%s → %s問（%s）", (region, difficulty, expected, _reason) => {
     expect(count(region, difficulty)).toBe(expected);
   });
@@ -106,19 +117,41 @@ describe("出題可能数（fixture の代表ケース）", () => {
   });
 });
 
+describe("超級（記述式・準備中）", () => {
+  it("設定上、超級は記述式で、まだ遊べない", () => {
+    expect(DIFFICULTY_SETTINGS[4]).toMatchObject({ answerFormat: "text", available: false });
+    for (const d of [1, 2, 3] as const) {
+      expect(DIFFICULTY_SETTINGS[d]).toMatchObject({ answerFormat: "choice", available: true });
+    }
+  });
+
+  it("国が十分にあっても、超級は開始できない（MODE_UNAVAILABLE）", () => {
+    const pool = syntheticPool(10);
+    const condition = { region: "world", difficulty: 4 } as const;
+    expect(countAvailableQuestions(pool, [], condition)).toBe(0);
+    expect(generateSession(pool, [], { ...condition, rng: mulberry32(1) })).toEqual({
+      ok: false,
+      reason: "MODE_UNAVAILABLE",
+    });
+  });
+});
+
 describe("generateSession：全28モード × 複数シード", () => {
   for (const region of QUIZ_REGIONS) {
     for (const difficulty of DIFFICULTIES) {
       const condition: QuizCondition = { region: region.value, difficulty };
       it(`${region.label} × 難易度${difficulty}`, () => {
         const expected = countAvailableQuestions(anthems, melodyGroups, condition);
+        const unavailableReason = DIFFICULTY_SETTINGS[difficulty].available
+          ? "INSUFFICIENT_POOL"
+          : "MODE_UNAVAILABLE";
         for (const seed of SEEDS) {
           const result = generateSession(anthems, melodyGroups, {
             ...condition,
             rng: mulberry32(seed),
           });
           if (expected === 0) {
-            expect(result).toEqual({ ok: false, reason: "INSUFFICIENT_POOL" });
+            expect(result).toEqual({ ok: false, reason: unavailableReason });
           } else {
             expectValidSession(result, anthems, melodyGroups, condition);
             // 表示する問題数と実際に生成される問題数が一致する
@@ -131,8 +164,9 @@ describe("generateSession：全28モード × 複数シード", () => {
 });
 
 describe("generateSession：問題の公正さ", () => {
+  const condition = { region: "world", difficulty: 1 } as const;
+
   it("同一旋律の国（xa, xb, xg）は同じ4択に2件以上並ばない", () => {
-    const condition = { region: "europe", difficulty: 3 } as const;
     for (const seed of SEEDS) {
       const result = generateSession(anthems, melodyGroups, {
         ...condition,
@@ -148,12 +182,8 @@ describe("generateSession：問題の公正さ", () => {
   });
 
   it("同一旋律の国も、別の問題では正解になれる", () => {
-    const result = generateSession(anthems, melodyGroups, {
-      region: "europe",
-      difficulty: 3,
-      rng: mulberry32(1),
-    });
-    expectValidSession(result, anthems, melodyGroups, { region: "europe", difficulty: 3 });
+    const result = generateSession(anthems, melodyGroups, { ...condition, rng: mulberry32(1) });
+    expectValidSession(result, anthems, melodyGroups, condition);
     expect(result.questions.map((q) => q.answerId)).toEqual(
       expect.arrayContaining(["xa", "xb", "xg"]),
     );
@@ -163,8 +193,7 @@ describe("generateSession：問題の公正さ", () => {
     const positions = new Set<number>();
     for (const seed of SEEDS) {
       const result = generateSession(anthems, melodyGroups, {
-        region: "world",
-        difficulty: 4,
+        ...condition,
         rng: mulberry32(seed),
       });
       if (!result.ok) throw new Error("unexpected");
@@ -174,8 +203,8 @@ describe("generateSession：問題の公正さ", () => {
   });
 });
 
-describe("generateSession：超級の類似旋律優先", () => {
-  const condition = { region: "europe", difficulty: 4 } as const;
+describe("generateSession：上級の類似旋律優先", () => {
+  const condition = { region: "world", difficulty: 3 } as const;
 
   it("正解と類似グループを直接共有する国は必ず誤答に入る", () => {
     for (const seed of SEEDS) {
@@ -192,35 +221,54 @@ describe("generateSession：超級の類似旋律優先", () => {
     }
   });
 
+  it("初級・中級では類似旋律を優先しない（類似の国が誤答に入らない問題もある）", () => {
+    const pool = syntheticPool(6, { difficulty: 1 });
+    const groups = [similar("aa", "ab")];
+    const cond = { region: "europe", difficulty: 1 } as const;
+    const withoutPartner = SEEDS.some((seed) => {
+      const result = generateSession(pool, groups, { ...cond, rng: mulberry32(seed) });
+      if (!result.ok) throw new Error("unexpected");
+      const q = result.questions.find((x) => x.answerId === "aa")!;
+      return !q.choiceIds.includes("ab");
+    });
+    expect(withoutPartner).toBe(true);
+  });
+
   it("類似候補どうしが同一旋律なら、同一旋律の除外を優先して1件だけ入れる", () => {
-    const pool = syntheticPool(6, { difficulty: 4 }); // aa..af
+    const pool = syntheticPool(6, { difficulty: 3 }); // aa..af
     const groups = [similar("aa", "ab", "ac"), identical("ab", "ac")];
+    const cond = { region: "europe", difficulty: 3 } as const;
     for (const seed of SEEDS) {
-      const result = generateSession(pool, groups, { ...condition, rng: mulberry32(seed) });
-      expectValidSession(result, pool, groups, condition);
+      const result = generateSession(pool, groups, { ...cond, rng: mulberry32(seed) });
+      expectValidSession(result, pool, groups, cond);
       const q = result.questions.find((x) => x.answerId === "aa")!;
       expect(q.choiceIds.filter((id) => id === "ab" || id === "ac")).toHaveLength(1);
     }
   });
 
   it("類似候補が足りなければ同じ条件内の国で補充する", () => {
-    const pool = syntheticPool(5, { difficulty: 4 });
+    const pool = syntheticPool(5, { difficulty: 3 });
     const groups = [similar("aa", "ab")];
-    const result = generateSession(pool, groups, { ...condition, rng: mulberry32(3) });
-    expectValidSession(result, pool, groups, condition);
+    const cond = { region: "europe", difficulty: 3 } as const;
+    const result = generateSession(pool, groups, { ...cond, rng: mulberry32(3) });
+    expectValidSession(result, pool, groups, cond);
     const q = result.questions.find((x) => x.answerId === "aa")!;
     expect(q.choiceIds).toContain("ab");
   });
 
-  it("類似候補が条件外（別地域）なら誤答に入れない", () => {
+  it("類似候補が条件外（別の地域・別の難易度）なら誤答に入れない", () => {
     const pool = [
-      ...syntheticPool(4, { difficulty: 4 }),
-      makeAnthem("zz", { region: "asia", difficulty: 1 }),
+      ...syntheticPool(4, { difficulty: 3 }),
+      makeAnthem("zy", { region: "asia", difficulty: 3 }),
+      makeAnthem("zz", { region: "europe", difficulty: 1 }),
     ];
-    const groups = [similar("aa", "zz")];
-    const result = generateSession(pool, groups, { ...condition, rng: mulberry32(3) });
-    expectValidSession(result, pool, groups, condition);
-    expect(result.questions.flatMap((q) => q.choiceIds)).not.toContain("zz");
+    const groups = [similar("aa", "zy", "zz")];
+    const cond = { region: "europe", difficulty: 3 } as const;
+    const result = generateSession(pool, groups, { ...cond, rng: mulberry32(3) });
+    expectValidSession(result, pool, groups, cond);
+    const all = result.questions.flatMap((q) => q.choiceIds);
+    expect(all).not.toContain("zy");
+    expect(all).not.toContain("zz");
   });
 });
 
@@ -288,17 +336,17 @@ describe("generateSession：問題数と境界条件", () => {
       makeAnthem("zy", { region: "oceania" }),
       makeAnthem("zz", { region: "oceania" }),
     ];
-    const oceania = { region: "oceania", difficulty: 4 } as const;
+    const oceania = { region: "oceania", difficulty: 1 } as const;
     expect(generateSession(pool, [], { ...oceania, rng: mulberry32(1) })).toEqual({
       ok: false,
       reason: "INSUFFICIENT_POOL",
     });
     expect(countAvailableQuestions(pool, [], oceania)).toBe(0);
     // 世界モードなら全地域が対象
-    expect(countAvailableQuestions(pool, [], { region: "world", difficulty: 4 })).toBe(10);
+    expect(countAvailableQuestions(pool, [], { region: "world", difficulty: 1 })).toBe(10);
   });
 
-  it("上位難易度の国を自動混入しない（初級で3か国＋中級の国が多数 → 開始不可）", () => {
+  it("ほかの難易度の国は混ぜない（初級3か国＋中級7か国 → 初級は開始不可、中級は7問）", () => {
     const pool = [
       ...syntheticPool(3),
       ...makeIds(10)
@@ -306,7 +354,13 @@ describe("generateSession：問題数と境界条件", () => {
         .map((id) => makeAnthem(id, { difficulty: 2 })),
     ];
     expect(run(pool)).toEqual({ ok: false, reason: "INSUFFICIENT_POOL" });
-    expect(countAvailableQuestions(pool, [], { region: "europe", difficulty: 2 })).toBe(10);
+    const middle = { region: "europe", difficulty: 2 } as const;
+    expect(countAvailableQuestions(pool, [], middle)).toBe(7);
+    const result = generateSession(pool, [], { ...middle, rng: mulberry32(1) });
+    expectValidSession(result, pool, [], middle);
+    for (const q of result.questions) {
+      for (const id of q.choiceIds) expect(pool.find((a) => a.id === id)?.difficulty).toBe(2);
+    }
   });
 
   it("maxQuestions を指定すればその数まで、10 を超える値は RangeError で拒否する", () => {
@@ -325,9 +379,9 @@ describe("generateSession：問題数と境界条件", () => {
   });
 
   it("短い音源（2秒）でも再生区間は音源内に収まる", () => {
-    for (const difficulty of DIFFICULTIES) {
+    for (const difficulty of [1, 2, 3] as const) {
       const pool = syntheticPool(4, {
-        difficulty: 1,
+        difficulty,
         audio: { file: "x.mp3", durationSec: 2 },
       }).map((a) => ({ ...a, audio: { ...a.audio, file: `${a.id}.mp3` } }));
       const cond = { region: "europe", difficulty } as const;
@@ -339,7 +393,7 @@ describe("generateSession：問題数と境界条件", () => {
 });
 
 describe("generateSession：決定性", () => {
-  const condition = { region: "world", difficulty: 4 } as const;
+  const condition = { region: "world", difficulty: 1 } as const;
 
   it("同じデータ・条件・シードなら同じセッション", () => {
     const a = generateSession(anthems, melodyGroups, { ...condition, rng: mulberry32(123) });

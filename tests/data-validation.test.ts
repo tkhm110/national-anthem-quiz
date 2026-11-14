@@ -83,6 +83,7 @@ describe("第1層：スキーマ検証", () => {
     ["3文字のID", { id: "xab" }],
     ["空の国名", { nameJa: "" }],
     ["難易度0", { difficulty: 0 }],
+    ["難易度4（超級はすべての国が対象で、国データの値ではない）", { difficulty: 4 }],
     ["難易度が文字列", { difficulty: "1" }],
     ["音源の長さ0", { audio: { file: "xa.mp3", durationSec: 0 } }],
     ["音源の長さが負", { audio: { file: "xa.mp3", durationSec: -5 } }],

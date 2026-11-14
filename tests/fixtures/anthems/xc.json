@@ -6,7 +6,7 @@
     "original": "Test Anthem XC"
   },
   "region": "europe",
-  "difficulty": 1,
+  "difficulty": 3,
   "audio": {
     "file": "xc.mp3",
     "durationSec": 70

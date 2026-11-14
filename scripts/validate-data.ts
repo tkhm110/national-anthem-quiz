@@ -4,7 +4,12 @@
  * 失敗時は終了コード 1。
  */
 import { fileURLToPath } from "node:url";
-import { DIFFICULTIES, QUIZ_REGIONS, countAvailableQuestions } from "../src/lib/quiz";
+import {
+  DIFFICULTIES,
+  DIFFICULTY_SETTINGS,
+  QUIZ_REGIONS,
+  countAvailableQuestions,
+} from "../src/lib/quiz";
 import { validateDataset } from "../src/lib/data/validate";
 import { checkAudioFiles } from "./lib/check-audio";
 import { readDataDir } from "./lib/read-data-dir";
@@ -46,12 +51,23 @@ if (anthems.length === 0) {
   process.exit(0);
 }
 
+// 難易度ごとの国の数
+console.log("\n難易度ごとの国の数");
+for (const tier of [1, 2, 3] as const) {
+  const n = anthems.filter((a) => a.difficulty === tier).length;
+  console.log(`  ${DIFFICULTY_SETTINGS[tier].label}：${n}か国`);
+}
+
 // 28モードそれぞれの出題数（0 は開始不可）
 console.log("\n出題可能数（最大10問）");
-console.log(["地域".padEnd(8), ...DIFFICULTIES.map((d) => `難易度${d}`)].join("\t"));
+console.log(
+  ["地域".padEnd(8), ...DIFFICULTIES.map((d) => DIFFICULTY_SETTINGS[d].label)].join("\t"),
+);
 for (const region of QUIZ_REGIONS) {
   const counts = DIFFICULTIES.map((difficulty) =>
-    countAvailableQuestions(anthems, melodyGroups, { region: region.value, difficulty }),
+    DIFFICULTY_SETTINGS[difficulty].available
+      ? String(countAvailableQuestions(anthems, melodyGroups, { region: region.value, difficulty }))
+      : "準備中",
   );
-  console.log([region.label.padEnd(8), ...counts.map(String)].join("\t"));
+  console.log([region.label.padEnd(8), ...counts].join("\t"));
 }

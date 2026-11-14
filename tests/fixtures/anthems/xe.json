@@ -6,7 +6,7 @@
     "original": "Test Anthem XE"
   },
   "region": "europe",
-  "difficulty": 1,
+  "difficulty": 3,
   "audio": {
     "file": "xe.mp3",
     "durationSec": 2
