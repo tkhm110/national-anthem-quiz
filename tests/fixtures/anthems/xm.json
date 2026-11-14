@@ -6,7 +6,7 @@
     "original": "Test Anthem XM"
   },
   "region": "asia",
-  "difficulty": 4,
+  "difficulty": 3,
   "audio": {
     "file": "xm.mp3",
     "durationSec": 30

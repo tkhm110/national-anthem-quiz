@@ -6,7 +6,7 @@
     "original": "Test Anthem XF"
   },
   "region": "europe",
-  "difficulty": 2,
+  "difficulty": 1,
   "audio": {
     "file": "xf.mp3",
     "durationSec": 65

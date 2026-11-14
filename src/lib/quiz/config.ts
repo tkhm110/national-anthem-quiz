@@ -15,8 +15,12 @@ export type ClipSetting = {
 
 export type DifficultySetting = {
   label: string;
+  /** "choice"：4択 / "text"：記述式（国名を入力し、表示される候補から選ぶ） */
+  answerFormat: "choice" | "text";
+  /** false なら、このモードはまだ遊べない（準備中） */
+  available: boolean;
   clip: ClipSetting;
-  /** 誤答に「類似旋律」の国を優先するか（超級のみ） */
+  /** 誤答に「類似旋律」の国を優先するか（上級のみ） */
   preferSimilarDistractors: boolean;
 };
 
@@ -27,10 +31,38 @@ export type DifficultySetting = {
  */
 const DEFAULT_CLIP: ClipSetting = { start: "beginning", durationSec: 60 };
 
-/** 難易度ごとの出題ルール。秒数などの調整はここだけを変更すればよい。 */
+/**
+ * 難易度ごとの出題ルール。秒数などの調整はここだけを変更すればよい。
+ * 初級・中級・上級は、その難易度の国だけから4択で出題する。
+ * 超級はすべての国から記述式で出題する予定で、記述式の画面ができるまでは準備中（available: false）にしている。
+ */
 export const DIFFICULTY_SETTINGS: Record<Difficulty, DifficultySetting> = {
-  1: { label: "初級", clip: DEFAULT_CLIP, preferSimilarDistractors: false },
-  2: { label: "中級", clip: DEFAULT_CLIP, preferSimilarDistractors: false },
-  3: { label: "上級", clip: DEFAULT_CLIP, preferSimilarDistractors: false },
-  4: { label: "超級", clip: DEFAULT_CLIP, preferSimilarDistractors: true },
+  1: {
+    label: "初級",
+    answerFormat: "choice",
+    available: true,
+    clip: DEFAULT_CLIP,
+    preferSimilarDistractors: false,
+  },
+  2: {
+    label: "中級",
+    answerFormat: "choice",
+    available: true,
+    clip: DEFAULT_CLIP,
+    preferSimilarDistractors: false,
+  },
+  3: {
+    label: "上級",
+    answerFormat: "choice",
+    available: true,
+    clip: DEFAULT_CLIP,
+    preferSimilarDistractors: true,
+  },
+  4: {
+    label: "超級",
+    answerFormat: "text",
+    available: false,
+    clip: DEFAULT_CLIP,
+    preferSimilarDistractors: false,
+  },
 };

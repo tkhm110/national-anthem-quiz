@@ -5,7 +5,7 @@ import { generateSession, type Question, type QuizCondition } from "../src/lib/q
 import { mulberry32 } from "../src/lib/random";
 import { loadFixtureDataset } from "./helpers";
 
-const condition: QuizCondition = { region: "europe", difficulty: 1 };
+const condition: QuizCondition = { region: "world", difficulty: 1 };
 
 function makeQuestions(n: number): Question[] {
   return Array.from({ length: n }, (_, i) => ({

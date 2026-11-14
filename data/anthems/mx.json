@@ -7,7 +7,7 @@
     "ja": "メキシコ国歌"
   },
   "region": "north-america",
-  "difficulty": 2,
+  "difficulty": 1,
   "audio": {
     "file": "mx.mp3",
     "durationSec": 101.8

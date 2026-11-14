@@ -25,12 +25,17 @@ export function ModeSelect({ anthems, melodyGroups, onStart }: Props) {
   const count = (r: QuizRegion, d: Difficulty) =>
     countAvailableQuestions(anthems, melodyGroups, { region: r, difficulty: d });
   const selectedCount = count(region, difficulty);
+  const selectedAvailable = DIFFICULTY_SETTINGS[difficulty].available;
   const regionLabel = QUIZ_REGIONS.find((r) => r.value === region)?.label ?? region;
 
   return (
     <section aria-labelledby="mode-heading">
       <h2 id="mode-heading">モードを選ぶ</h2>
       <p className="hint">地域と難易度の組み合わせを選んでください。数字は出題される問題数です。</p>
+      <p className="hint">
+        初級は超有名な国、中級はそこそこ有名な国、上級はマイナーな国から4択で出題します。
+        超級はすべての国から、国名を入力して答える形式です（準備中）。
+      </p>
 
       <div className="mode-table-wrap">
         <table className="mode-table">
@@ -51,19 +56,24 @@ export function ModeSelect({ anthems, melodyGroups, onStart }: Props) {
                 {DIFFICULTIES.map((d) => {
                   const n = count(r.value, d);
                   const selected = r.value === region && d === difficulty;
+                  const status = !DIFFICULTY_SETTINGS[d].available
+                    ? "準備中"
+                    : n > 0
+                      ? `${n}問`
+                      : "まだ遊べません";
                   return (
                     <td key={d}>
                       <button
                         type="button"
                         className="mode-cell"
                         aria-pressed={selected}
-                        aria-label={`${r.label}・${DIFFICULTY_SETTINGS[d].label}：${n > 0 ? `${n}問` : "まだ遊べません"}`}
+                        aria-label={`${r.label}・${DIFFICULTY_SETTINGS[d].label}：${status}`}
                         onClick={() => {
                           setRegion(r.value);
                           setDifficulty(d);
                         }}
                       >
-                        {n > 0 ? `${n}問` : "—"}
+                        {status === "まだ遊べません" ? "—" : status}
                       </button>
                     </td>
                   );
@@ -80,7 +90,13 @@ export function ModeSelect({ anthems, melodyGroups, onStart }: Props) {
           <strong>{DIFFICULTY_SETTINGS[difficulty].label}</strong>
           {selectedCount > 0 ? `（${selectedCount}問）` : ""}
         </p>
-        {selectedCount === 0 && (
+        {!selectedAvailable && (
+          <p className="notice">
+            {DIFFICULTY_SETTINGS[difficulty].label}
+            （国名を入力して答える形式）は準備中です。
+          </p>
+        )}
+        {selectedAvailable && selectedCount === 0 && (
           <p className="notice">
             この地域・難易度ではまだ4択を作れません（互いに聴き分けられる国が4か国に足りません）。
           </p>
