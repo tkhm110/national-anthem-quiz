@@ -1,0 +1,13 @@
+// 全曲入りの非公開版（私的利用専用）。CI からは使わず、pnpm deploy:private で手元から上げる。
+// workers.dev には Cloudflare Access でログインをかけてから音源を上げる（docs/development.md「全曲入りの非公開版」）。
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "national-anthem-quiz-private",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": true,
+  // プレビュー用の URL は Access の対象外になりうるので作らない
+  "preview_urls": false,
+  "assets": {
+    "directory": "./dist-private",
+  },
+}

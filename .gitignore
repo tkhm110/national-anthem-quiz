@@ -9,3 +9,7 @@ coverage
 !.env.example
 anthem-quiz-plan-*.md
 claude-code-review-workflow-assessment.md
+
+# 全曲入りの非公開版（私的利用専用。docs/development.md「全曲入りの非公開版」）
+local
+dist-private
