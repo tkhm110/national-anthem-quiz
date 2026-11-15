@@ -19,6 +19,7 @@ import {
   isFormerAnthem,
   matchCountry,
   readLocalAnthemFiles,
+  writeFileCreatingDir,
 } from "./lib/local-anthems";
 import { EXTRA_SOURCES, type ExtraSource } from "./lib/local-extra-sources";
 
@@ -207,7 +208,8 @@ async function listWaybackFiles(): Promise<Map<string, Snapshot>> {
       if (!body) throw new Error(`取得できませんでした：${url}`);
       rows.push(...(JSON.parse(body.toString("utf8")) as string[][]).slice(1));
     }
-    writeFileSync(waybackCacheFile, JSON.stringify(rows));
+    // --dry-run では何も書かない
+    if (!dryRun) writeFileCreatingDir(waybackCacheFile, JSON.stringify(rows));
   } catch (error) {
     if (!existsSync(waybackCacheFile)) throw error;
     console.warn("[WARN] ウェイバックマシンの一覧を取得できないため、前回保存した一覧を使う");
@@ -438,9 +440,13 @@ for (const source of [...sources.values()].sort((a, b) => a.id.localeCompare(b.i
   console.log(`  ${id}  ${anthem.anthemTitle.original}`);
 }
 
-// 公開版と合わせて検証する（ビルド時と同じ条件）
+// 公開版と合わせて検証する（ビルド時と同じ条件。公開版にある国は local/ の方を使わない）
+const publicNames = new Set(raw.anthemFiles.map((f) => f.fileName));
 const merged = validateDataset(
-  { ...raw, anthemFiles: [...raw.anthemFiles, ...readLocalAnthemFiles(anthemsDir)] },
+  {
+    ...raw,
+    anthemFiles: [...raw.anthemFiles, ...readLocalAnthemFiles(anthemsDir, publicNames)],
+  },
   "production",
 );
 if (!merged.ok) {

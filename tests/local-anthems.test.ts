@@ -1,9 +1,19 @@
-import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { isFormerAnthem, matchCountry } from "../scripts/lib/local-anthems";
-import { PRIVATE_MODE, localAnthemsModuleSource } from "../scripts/lib/vite-local-anthems";
+import {
+  isFormerAnthem,
+  matchCountry,
+  readLocalAnthemFiles,
+  writeFileCreatingDir,
+} from "../scripts/lib/local-anthems";
+import {
+  PRIVATE_MODE,
+  localAnthemsModuleSource,
+  localAnthemsPlugin,
+  localAudioFile,
+} from "../scripts/lib/vite-local-anthems";
 import {
   checkAccessProtected,
   findWorkersDevUrl,
@@ -42,6 +52,53 @@ describe("localAnthemsModuleSource（全曲入りの非公開版の国データ�
     const source = localAnthemsModuleSource(PRIVATE_MODE, root);
     const files = JSON.parse(source.replace(/^export default /, "").replace(/;$/, ""));
     expect(files.map((f: { fileName: string }) => f.fileName)).toEqual(["qb.json"]);
+  });
+});
+
+/** public/audio と local/audio に音源（中身はどちらの音源かを表す文字列）を置いた一時的なプロジェクトを作る */
+function makeAudioRoot(publicAudio: string[], localAudio: string[]): string {
+  const root = mkdtempSync(join(tmpdir(), "local-audio-"));
+  mkdirSync(join(root, "public", "audio"), { recursive: true });
+  mkdirSync(join(root, "local", "audio"), { recursive: true });
+  for (const name of publicAudio) writeFileSync(join(root, "public", "audio", name), "public");
+  for (const name of localAudio) writeFileSync(join(root, "local", "audio", name), "local");
+  return root;
+}
+
+describe("非公開版の音源（公開版と同じ名前なら公開版を使う）", () => {
+  it("local/audio の音源のうち、公開版にない名前のものだけを返す", () => {
+    const root = makeAudioRoot(["qa.mp3"], ["qa.mp3", "qb.mp3"]);
+    expect(localAudioFile(root, "qa.mp3")).toBeUndefined();
+    expect(localAudioFile(root, "qb.mp3")).toBe(join(root, "local", "audio", "qb.mp3"));
+    expect(localAudioFile(root, "qc.mp3")).toBeUndefined();
+    expect(localAudioFile(root, "../anthems/qa.json")).toBeUndefined();
+  });
+
+  it("ビルドでは、公開版の音源を local/audio で上書きしない", () => {
+    const root = makeAudioRoot(["qa.mp3"], ["qa.mp3", "qb.mp3"]);
+    const outDir = join(root, "dist-private");
+    // Vite が public/ をコピーした後の状態
+    mkdirSync(join(outDir, "audio"), { recursive: true });
+    writeFileSync(join(outDir, "audio", "qa.mp3"), "public");
+    const plugin = localAnthemsPlugin(PRIVATE_MODE, root);
+    (plugin.configResolved as (c: unknown) => void)({ build: { outDir } });
+    (plugin.writeBundle as () => void)();
+    expect(readFileSync(join(outDir, "audio", "qa.mp3"), "utf8")).toBe("public");
+    expect(readFileSync(join(outDir, "audio", "qb.mp3"), "utf8")).toBe("local");
+  });
+});
+
+describe("readLocalAnthemFiles・writeFileCreatingDir（pnpm fetch:local）", () => {
+  it("公開版にある国を除いて読める（公開版に移した国があっても検証で重複しない）", () => {
+    const root = makeRoot(["qa.json"], ["qa.json", "qb.json"]);
+    const files = readLocalAnthemFiles(join(root, "local", "anthems"), new Set(["qa.json"]));
+    expect(files.map((f) => f.fileName)).toEqual(["qb.json"]);
+  });
+
+  it("保存先のフォルダがまだなくても書ける（初回の実行で local/ がない場合）", () => {
+    const path = join(mkdtempSync(join(tmpdir(), "write-")), "local", "wayback-index.json");
+    writeFileCreatingDir(path, "[]");
+    expect(readFileSync(path, "utf8")).toBe("[]");
   });
 });
 

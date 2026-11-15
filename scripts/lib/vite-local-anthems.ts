@@ -29,6 +29,17 @@ const AUDIO_FILE_NAME = /^[a-z0-9][a-z0-9._-]*\.(mp3|ogg)$/;
 const isAudioFileName = (name: string) => AUDIO_FILE_NAME.test(name) && !name.includes("..");
 
 /**
+ * 非公開版で local/audio から出す音源のパス。名前が不正なとき、ファイルがないとき、
+ * 公開版（public/audio）に同じ名前の音源があるとき（国データも公開版を使うので）は undefined
+ */
+export function localAudioFile(rootDir: string, name: string): string | undefined {
+  if (!isAudioFileName(name) || existsSync(join(rootDir, "public", "audio", name)))
+    return undefined;
+  const path = join(rootDir, LOCAL_AUDIO_DIR, name);
+  return existsSync(path) ? path : undefined;
+}
+
+/**
  * 非公開版で同梱する国データのモジュールの中身。private モード以外は常に空（local/ を読まない）。
  * 公開版（data/anthems）に同じ国があれば、公開版を優先して local/ の方は使わない。
  * 中身の検証は、アプリが公開版と合わせて validateDataset で行う。
@@ -64,8 +75,8 @@ export function localAnthemsPlugin(mode: string, rootDir: string): Plugin {
       if (!enabled) return;
       server.middlewares.use("/audio/", (req, res, next) => {
         const name = decodeURIComponent((req.url ?? "").split("?")[0]!.replace(/^\//, ""));
-        const path = join(audioDir, name);
-        if (!isAudioFileName(name) || !existsSync(path)) return next();
+        const path = localAudioFile(rootDir, name);
+        if (!path) return next();
         const size = statSync(path).size;
         const range = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range ?? "");
         res.setHeader("Content-Type", "audio/mpeg");
@@ -83,13 +94,14 @@ export function localAnthemsPlugin(mode: string, rootDir: string): Plugin {
         createReadStream(path, { start, end }).pipe(res);
       });
     },
-    // ビルドしたとき：local/audio を出力先の audio/ にコピーする
+    // ビルドしたとき：local/audio を出力先の audio/ にコピーする（公開版と同じ名前のものは公開版のまま）
     writeBundle() {
       if (!enabled || !existsSync(audioDir)) return;
       const target = join(outDir, "audio");
       mkdirSync(target, { recursive: true });
       for (const name of readdirSync(audioDir)) {
-        if (isAudioFileName(name)) copyFileSync(join(audioDir, name), join(target, name));
+        const path = localAudioFile(rootDir, name);
+        if (path) copyFileSync(path, join(target, name));
       }
     },
   };

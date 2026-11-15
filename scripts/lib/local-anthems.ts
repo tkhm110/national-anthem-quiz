@@ -2,20 +2,33 @@
  * 全曲入りの非公開版（私的利用専用）で、Commons のファイルから国データを作るための部品（pnpm fetch:local）。
  * Vite のプラグインは vite-local-anthems.ts にある。
  */
-import { existsSync, readdirSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import type { Country } from "../../src/lib/schema";
 import type { DataFile } from "../../src/lib/data/validate";
 import { readJsonFile } from "./read-data-dir";
 
 export { LOCAL_ANTHEMS_DIR, LOCAL_AUDIO_DIR } from "./vite-local-anthems";
 
-export function readLocalAnthemFiles(anthemsDir: string): DataFile[] {
+/**
+ * local/anthems の国データを読む。excludeNames（公開版の国データのファイル名）は除く。
+ * 公開版に移した国が local/ に残っていても、アプリと同じく公開版を使い、検証で重複させない
+ */
+export function readLocalAnthemFiles(
+  anthemsDir: string,
+  excludeNames: ReadonlySet<string> = new Set(),
+): DataFile[] {
   if (!existsSync(anthemsDir)) return [];
   return readdirSync(anthemsDir)
-    .filter((name) => name.endsWith(".json"))
+    .filter((name) => name.endsWith(".json") && !excludeNames.has(name))
     .sort()
     .map((name) => readJsonFile(join(anthemsDir, name), name));
+}
+
+/** 保存先のフォルダがなければ作ってから書く */
+export function writeFileCreatingDir(path: string, content: string): void {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, content);
 }
 
 /** 比較用に、アクセント・記号を除いた小文字の単語列にする（"Côte d'Ivoire" → "cote d ivoire"） */
