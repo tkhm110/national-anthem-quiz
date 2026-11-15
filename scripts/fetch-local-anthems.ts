@@ -5,8 +5,9 @@
  * local/ は git の管理外で、公開サイトのビルドには入らない（docs/development.md「全曲入りの非公開版」）。
  * 権利の確認はしていないので、公開してはいけない。
  */
-import { copyFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { execFileSync } from "node:child_process";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { validateDataset } from "../src/lib/data/validate";
 import type { Anthem, Country } from "../src/lib/schema";
@@ -19,6 +20,7 @@ import {
   matchCountry,
   readLocalAnthemFiles,
 } from "./lib/local-anthems";
+import { EXTRA_SOURCES, type ExtraSource } from "./lib/local-extra-sources";
 
 const API = "https://commons.wikimedia.org/w/api.php";
 const UA = "national-anthem-quiz-local-fetch/1.0 (https://github.com/tkhm110/national-anthem-quiz)";
@@ -29,6 +31,8 @@ const rootDir = fileURLToPath(new URL("../", import.meta.url));
 const dataDir = join(rootDir, "data");
 const anthemsDir = join(rootDir, LOCAL_ANTHEMS_DIR);
 const audioDir = join(rootDir, LOCAL_AUDIO_DIR);
+/** 米海軍以外の音源の、変換前のファイル */
+const rawDir = join(rootDir, "local", "raw");
 const dryRun = process.argv.includes("--dry-run");
 
 /** カテゴリやファイル名から国を決められないファイル（曲名だけのもの）の対応表 */
@@ -182,21 +186,34 @@ const SAME_ANTHEM_COPIES: Record<string, string> = { cy: "gr" };
 
 type Snapshot = { original: string; timestamp: string };
 
+/** ウェイバックマシンの一覧の API は不安定なので、取れた一覧を保存しておき、取れないときはそれを使う */
+const waybackCacheFile = join(rootDir, "local", "wayback-index.json");
+
 /** ウェイバックマシンに保存されている、米海軍軍楽隊のサイトの国歌の MP3（小文字のファイル名 → 最新の保存） */
 async function listWaybackFiles(): Promise<Map<string, Snapshot>> {
   const files = new Map<string, Snapshot>();
-  for (const path of ["navyband.navy.mil/music/anthems/*", "navyband.navy.mil/anthems/*"]) {
-    const url = `https://web.archive.org/cdx/search/cdx?${new URLSearchParams({
-      url: path,
-      output: "json",
-      fl: "original,timestamp",
-      filter: "statuscode:200",
-      collapse: "urlkey",
-      limit: "5000",
-    })}`;
-    const body = await download(url);
-    if (!body) throw new Error(`ウェイバックマシンの一覧を取得できませんでした：${url}`);
-    const rows = (JSON.parse(body.toString("utf8")) as string[][]).slice(1);
+  let rows: string[][] = [];
+  try {
+    for (const path of ["navyband.navy.mil/music/anthems/*", "navyband.navy.mil/anthems/*"]) {
+      const url = `https://web.archive.org/cdx/search/cdx?${new URLSearchParams({
+        url: path,
+        output: "json",
+        fl: "original,timestamp",
+        filter: "statuscode:200",
+        collapse: "urlkey",
+        limit: "5000",
+      })}`;
+      const body = await download(url);
+      if (!body) throw new Error(`取得できませんでした：${url}`);
+      rows.push(...(JSON.parse(body.toString("utf8")) as string[][]).slice(1));
+    }
+    writeFileSync(waybackCacheFile, JSON.stringify(rows));
+  } catch (error) {
+    if (!existsSync(waybackCacheFile)) throw error;
+    console.warn("[WARN] ウェイバックマシンの一覧を取得できないため、前回保存した一覧を使う");
+    rows = JSON.parse(readFileSync(waybackCacheFile, "utf8")) as string[][];
+  }
+  {
     for (const [original, timestamp] of rows) {
       if (!original || !timestamp || !/\.mp3$/i.test(original)) continue;
       const name = decodeURIComponent(original.slice(original.lastIndexOf("/") + 1)).toLowerCase();
@@ -207,14 +224,52 @@ async function listWaybackFiles(): Promise<Map<string, Snapshot>> {
   return files;
 }
 
+/**
+ * 米海軍以外の音源を、前後の無音を除き、音量を米海軍の録音（おおむね -13〜-16 LUFS）に合わせて
+ * -15 LUFS にそろえ、192kbps の MP3 にする。成功すれば true
+ */
+function convertToMp3(input: string, output: string): boolean {
+  const trim = "silenceremove=start_periods=1:start_threshold=-50dB:start_silence=0.2";
+  const filters = `${trim},areverse,${trim},areverse,loudnorm=I=-15:TP=-1.5:LRA=11`;
+  try {
+    execFileSync(
+      "ffmpeg",
+      [
+        "-y",
+        "-v",
+        "error",
+        "-i",
+        input,
+        "-map_metadata",
+        "-1",
+        "-af",
+        filters,
+        "-ar",
+        "44100",
+      ].concat(["-codec:a", "libmp3lame", "-b:a", "192k", output]),
+      { stdio: "pipe" },
+    );
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-/** 相手の負荷を避けるため、1件ごとに間を空け、429・503 のときは待ってやり直す */
+/** 相手の負荷を避けるため、1件ごとに間を空け、429・503 や接続の切断のときは待ってやり直す */
 async function download(url: string): Promise<Buffer | undefined> {
   for (let attempt = 0; attempt < 5; attempt++) {
     await sleep(2000);
-    const res = await fetch(url, { headers: { "User-Agent": UA } });
-    if (res.ok) return Buffer.from(await res.arrayBuffer());
+    let res: Response;
+    try {
+      res = await fetch(url, { headers: { "User-Agent": UA } });
+      if (res.ok) return Buffer.from(await res.arrayBuffer());
+    } catch (error) {
+      console.warn(`[INFO] 接続のエラー（${String(error)}）のため 30秒待つ`);
+      await sleep(30_000);
+      continue;
+    }
     if (res.status !== 429 && res.status !== 503) return undefined;
     const wait = Number(res.headers.get("retry-after")) || 30;
     console.warn(`[INFO] ${res.status} のため ${wait}秒待つ`);
@@ -259,8 +314,18 @@ for (const page of pages) {
 
 for (const title of unmatched) console.warn(`[WARN] 国を特定できない：${title}`);
 
-/** 1か国分の取得元。音源の URL（copyFrom のときはコピー元のファイル）と、国データに書く曲名・出典 */
-type Source = { id: string; title: string; sourceUrl: string; mp3Url?: string; copyFrom?: string };
+/**
+ * 1か国分の取得元。音源の URL（copyFrom のときはコピー元のファイル）と、国データに書く曲名・出典。
+ * extra は米海軍以外の音源（ffmpeg で無音を除き、音量をそろえて MP3 にする）
+ */
+type Source = {
+  id: string;
+  title: string;
+  sourceUrl: string;
+  mp3Url?: string;
+  copyFrom?: string;
+  extra?: ExtraSource;
+};
 const sources = new Map<string, Source>();
 for (const [id, page] of chosen) {
   sources.set(id, {
@@ -302,6 +367,12 @@ for (const [id, fromId] of Object.entries(SAME_ANTHEM_COPIES)) {
   });
 }
 
+// 米海軍の録音がどこにもない国は、ほかの器楽の音源を使う（scripts/lib/local-extra-sources.ts）
+for (const [id, extra] of Object.entries(EXTRA_SOURCES)) {
+  if (publicIds.has(id) || sources.has(id)) continue;
+  sources.set(id, { id, title: extra.original, sourceUrl: extra.page, mp3Url: extra.url, extra });
+}
+
 console.log(`[INFO] 公開版にない国 ${sources.size}か国`);
 if (dryRun) {
   for (const s of [...sources.values()].sort((a, b) => a.id.localeCompare(b.id))) {
@@ -319,6 +390,19 @@ for (const source of [...sources.values()].sort((a, b) => a.id.localeCompare(b.i
   if (!existsSync(audioPath)) {
     if (source.copyFrom) {
       copyFileSync(source.copyFrom, audioPath);
+    } else if (source.extra) {
+      const body = await download(source.mp3Url!);
+      if (!body) {
+        console.warn(`[WARN] ${id}: ダウンロードに失敗`);
+        continue;
+      }
+      const rawPath = join(rawDir, `${id}${extname(new URL(source.mp3Url!).pathname)}`);
+      mkdirSync(rawDir, { recursive: true });
+      writeFileSync(rawPath, body);
+      if (!convertToMp3(rawPath, audioPath)) {
+        console.warn(`[WARN] ${id}: ffmpeg での変換に失敗（ffmpeg が必要）`);
+        continue;
+      }
     } else {
       const body = await download(source.mp3Url!);
       if (!body) {
@@ -338,13 +422,16 @@ for (const source of [...sources.values()].sort((a, b) => a.id.localeCompare(b.i
     id,
     nameJa: country.nameJa,
     nameEn: country.nameEn,
-    anthemTitle: { original: source.title },
+    anthemTitle: source.extra
+      ? { original: source.title, ja: source.extra.ja }
+      : { original: source.title },
     audio: { file, durationSec: Math.round(duration * 100) / 100 },
     license: {
-      type: "public-domain",
-      author: "United States Navy Band",
+      ...(source.extra?.license ?? { type: "public-domain", author: "United States Navy Band" }),
       sourceUrl: source.sourceUrl,
-      note: "私的利用専用（全曲入りの非公開版）。楽曲・編曲の権利は確認していないので、公開しない",
+      note: `私的利用専用（全曲入りの非公開版）。楽曲・編曲の権利は確認していないので、公開しない${
+        source.extra ? `。${source.extra.note}。取得元：${source.mp3Url}` : ""
+      }`,
     },
   };
   writeFileSync(join(anthemsDir, `${id}.json`), `${JSON.stringify(anthem, null, 2)}\n`);

@@ -368,8 +368,12 @@ main にマージされると、[.github/workflows/deploy.yml](../.github/workfl
   国はファイルのカテゴリから決め、決められないもの（曲名だけのファイル）はスクリプトの対応表で決める。旧国歌は除く。`--dry-run` で対応の一覧だけを表示する。
   Commons にない国は、米海軍軍楽隊の公式サイトにあった MP3 を、ウェイバックマシン（Internet Archive）の保存から取る（スクリプトのファイル名の対応表）。
   同じ国歌を使う国（キプロスとギリシャ）は、公開版の録音をコピーする。
-  2026年11月の時点で、公開版と合わせて180か国。どこにも録音が見つからない国（アンドラ・台湾・トンガなど）と、
-  旧国歌しかないナイジェリアは入れていない。
+  米海軍の録音がどこにもない17か国は、`scripts/lib/local-extra-sources.ts` の対応表にある器楽の音源
+  （nationalanthems.info の音源の多くは Sibelius で楽譜から作ったもの。ニジェールとナイジェリアは Commons の軍楽隊の録音）を使う。
+  これらは ffmpeg（PATH に必要）で前後の無音を除き、音量を米海軍の録音に合わせて -15 LUFS にそろえ、192kbps の MP3 にする（変換前のファイルは `local/raw/`）。
+  公開前に確かめることは、各国データの `license.note` に書く。
+  ウェイバックマシンの一覧の API は不安定なので、取れた一覧を `local/wayback-index.json` に保存し、取れないときはそれを使う。
+  2026年11月の時点で、`countries.json` の197か国すべてを収録している。
 - `pnpm dev:private`：全曲入りで手元で起動する。
 - 非公開のサイト：Cloudflare Workers の別の Worker（[wrangler.private.jsonc](../wrangler.private.jsonc)）に、**Cloudflare Access で本人だけがログインできる状態**にして上げる。CI からは上げない。
   1. `pnpm exec wrangler login`（初回だけ）。
