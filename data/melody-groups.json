@@ -20,7 +20,7 @@
   {
     "id": "nkosi-sikelel-iafrika",
     "relationType": "identical",
-    "countryIds": ["tz", "zm"],
-    "description": "タンザニア国歌とザンビア国歌は、ともに「神よ、アフリカに祝福を（Nkosi Sikelel' iAfrika）」の旋律"
+    "countryIds": ["tz", "zm", "za"],
+    "description": "タンザニア国歌とザンビア国歌は、ともに「神よ、アフリカに祝福を（Nkosi Sikelel’ iAfrika）」の旋律。南アフリカ国歌も冒頭がこの旋律のため、冒頭から再生すると聴き分けられない"
   }
 ]
