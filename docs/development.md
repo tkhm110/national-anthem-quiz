@@ -22,15 +22,16 @@ pnpm install
 
 ## 主要コマンド
 
-| コマンド             | 内容                                               |
-| -------------------- | -------------------------------------------------- |
-| `pnpm dev`           | 開発サーバーを起動                                 |
-| `pnpm lint`          | ESLint                                             |
-| `pnpm format`        | Prettier で整形（`format:check` は確認のみ）       |
-| `pnpm typecheck`     | TypeScript の型チェック（アプリ用・Node用の2設定） |
-| `pnpm validate:data` | 本番データ（`data/`）の検証。失敗時は終了コード 1  |
-| `pnpm test`          | Vitest でテストを実行（`test:watch` で監視モード） |
-| `pnpm build`         | 型チェック後に本番ビルド（`dist/`）                |
+| コマンド                | 内容                                               |
+| ----------------------- | -------------------------------------------------- |
+| `pnpm dev`              | 開発サーバーを起動                                 |
+| `pnpm lint`             | ESLint                                             |
+| `pnpm format`           | Prettier で整形（`format:check` は確認のみ）       |
+| `pnpm typecheck`        | TypeScript の型チェック（アプリ用・Node用の2設定） |
+| `pnpm validate:data`    | 本番データ（`data/`）の検証。失敗時は終了コード 1  |
+| `pnpm test`             | Vitest でテストを実行（`test:watch` で監視モード） |
+| `pnpm build`            | 型チェック後に本番ビルド（`dist/`）                |
+| `pnpm dev:private` ほか | 全曲入りの非公開版（下の「全曲入りの非公開版」）   |
 
 ## ディレクトリ構成
 
@@ -41,9 +42,13 @@ data/
   countries.json           世界の国の一覧（地域・知名度の分類。誤答と超級の候補にも使う。収録していない国も含む）
 public/
   audio/<id>.mp3           音源（権利を確認したものだけ。ビルド時にそのまま配信される）
+local/                     全曲入りの非公開版のデータと音源（git の管理外。私的利用専用）
 scripts/
   validate-data.ts         pnpm validate:data の本体
   lib/read-data-dir.ts     Node(fs) でデータを読み込む（スクリプトとテストで共有）
+  fetch-local-anthems.ts   全曲入りの非公開版の音源を local/ に集める
+  deploy-private.ts        全曲入りの非公開版を、Access の保護を確かめてから上げる
+  lib/vite-local-anthems.ts  local/ を private モードのときだけ読み込む Vite のプラグイン
 src/
   lib/schema/              Zod スキーマと、z.infer で導出した型
   lib/data/validate.ts     検証の本体（スキーマ＋横断整合性）。読み込み方法に依存しない
@@ -153,6 +158,9 @@ tests/
 - `famous`：その地域の中で比較的知名度が高い国だけ `true` を書く（初級の対象）。書かない国は中級の対象。
   `false` は書かない（検証でエラーになる）。全世界の初級は、各地域の初級を合わせたもの。
   分類を見直すときは、この値を書き換えるだけでよい。
+  クイズで選ぶ4地域（アジア・オセアニア、ヨーロッパ、アメリカ、アフリカ）は、それぞれ `famous` の国をちょうど10か国にする（テストで確認）。
+  2026年11月に運営者が決めた（アジアのシンガポール・フィリピン・ベトナム・台湾・北朝鮮を中級へ、
+  アメリカのウルグアイ・コロンビア・パラグアイとアフリカのアルジェリア・エチオピア・カメルーン・セネガルを初級へ）。
 - `aliases`：別名・読み（「米国」「USA」「にほん」など）。超級の候補を探すときに使う。
   別の国の名前・別名と（表記の揺れを除いて）同じになってはいけない（候補で区別できなくなるため。検証でエラーになる）。
 
@@ -350,6 +358,37 @@ main にマージされると、[.github/workflows/deploy.yml](../.github/workfl
 - 公開は1つずつ順番に行い、途中で取り消さない（`concurrency`）。Actions の画面から手動でやり直すこともできる（`workflow_dispatch`）。
 - 手元で設定を確かめるときは、`pnpm build` の後に `pnpm exec wrangler deploy --dry-run` を実行する（ログイン不要。実際にはアップロードしない）。
 - 設計書では Cloudflare Pages を予定していたが、Cloudflare が新しいプロジェクトには Workers の静的アセットを勧めているため、こちらにした。
+
+## 全曲入りの非公開版（私的利用専用）
+
+公開版に入れていない国歌（権利を確認しきれなかったものを含む）も、運営者が自分の機器でだけ遊べるようにした版。
+**権利を確認していないので、公開してはいけない。**データと音源は git の管理外の `local/` に置き、公開サイトのビルドと CI には入らない。
+
+- 仕組み：Vite の `private` モードのときだけ、プラグイン（`scripts/lib/vite-local-anthems.ts`）が `local/anthems/*.json` を国データに加え、
+  `local/audio/` の音源を配信する（ビルドでは `dist-private/audio/` にコピーする）。それ以外のモードでは `local/` を読まない（テストで確認）。
+  公開版と同じ国が `local/` にあれば、公開版を使う。
+- `pnpm fetch:local`：Commons の「米海軍軍楽隊が演奏した国歌」のカテゴリから、公開版にない国の音源（MP3 の変換版）を `local/` に集め、国データを作る。
+  国はファイルのカテゴリから決め、決められないもの（曲名だけのファイル）はスクリプトの対応表で決める。旧国歌は除く。`--dry-run` で対応の一覧だけを表示する。
+  Commons にない国は、米海軍軍楽隊の公式サイトにあった MP3 を、ウェイバックマシン（Internet Archive）の保存から取る（スクリプトのファイル名の対応表）。
+  同じ国歌を使う国（キプロスとギリシャ）は、公開版の録音をコピーする。
+  米海軍の録音がどこにもない17か国は、`scripts/lib/local-extra-sources.ts` の対応表にある器楽の音源
+  （nationalanthems.info の音源の多くは Sibelius で楽譜から作ったもの。ニジェールとナイジェリアは Commons の軍楽隊の録音）を使う。
+  これらは ffmpeg（PATH に必要）で前後の無音を除き、音量を米海軍の録音に合わせて -15 LUFS にそろえ、192kbps の MP3 にする（変換前のファイルは `local/raw/`）。
+  公開前に確かめることは、各国データの `license.note` に書く。
+  ウェイバックマシンの一覧の API は不安定なので、取れた一覧を `local/wayback-index.json` に保存し、取れないときはそれを使う。
+  2026年11月の時点で、`countries.json` の197か国すべてを収録している。
+- `pnpm dev:private`：全曲入りで手元で起動する。
+- 非公開のサイト：Cloudflare Workers の別の Worker（[wrangler.private.jsonc](../wrangler.private.jsonc)）に、**Cloudflare Access で本人だけがログインできる状態**にして上げる。CI からは上げない。
+  1. `pnpm exec wrangler login`（初回だけ）。
+  2. `pnpm deploy:private --placeholder`：音源の入っていない空のページを上げて Worker を作り、その URL を表示する。
+  3. ダッシュボードの Workers & Pages → その Worker → Settings → Domains & Routes で、workers.dev の Cloudflare Access を有効にし、
+     作られた Access のアプリケーションのポリシーを、本人のメールアドレスだけを許可するものにする（ログインはメールに届く One-time PIN）。
+     プレビュー用の URL は設定ファイル（`preview_urls: false`）で作らない。
+  4. `pnpm deploy:private`：まず空のページを上げて**実際の上げ先**の URL を知り、そのページと音源の URL が Access のログイン画面に移ることを確かめてから、
+     全曲入りをビルドして上げる。上げた後も同じ URL と保護を確かめ、違えばすぐに空のページに戻す。
+     ログインがかかっていなければ、空のページのまま止まる（保存した URL ではなく毎回の上げ先で確かめるので、
+     Worker の名前やアカウントを変えても、保護されていない先に音源を上げない）。
+- 許可するのは本人だけにする。ほかの人にも見せると、公衆への送信に近づく。
 
 ## 開発の進め方（AI エージェントとの分担）
 

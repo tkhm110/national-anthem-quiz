@@ -92,12 +92,12 @@ describe("国の一覧（countries.json）の検証", () => {
     expect(production.anthems.every((a) => ids.has(a.id))).toBe(true);
   });
 
-  it("本番の一覧では、まとめたどの地域にも知名度が高い国がある", () => {
-    for (const region of QUIZ_REGIONS) {
+  it("本番の一覧では、まとめたどの地域も知名度が高い国（初級）がちょうど10か国", () => {
+    for (const region of QUIZ_REGIONS.filter((r) => r.value !== "world")) {
       const famous = realCountries.filter(
         (c) => c.famous && isInQuizRegion(region.value, c.region),
       );
-      expect(famous.length, region.label).toBeGreaterThanOrEqual(4);
+      expect(famous.length, region.label).toBe(10);
     }
   });
 

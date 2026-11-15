@@ -7,6 +7,8 @@
     "moduleResolution": "bundler",
     "types": ["node"],
     "resolveJsonModule": true,
+    // vite.config.ts から拡張子付きで読み込むため（Vite の設定の読み込み方に合わせる）
+    "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,

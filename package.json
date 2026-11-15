@@ -10,7 +10,11 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:private": "vite --mode private",
     "build": "tsc -p tsconfig.app.json --noEmit && vite build",
+    "build:private": "tsc -p tsconfig.app.json --noEmit && vite build --mode private",
+    "fetch:local": "tsx scripts/fetch-local-anthems.ts",
+    "deploy:private": "tsx scripts/deploy-private.ts",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",

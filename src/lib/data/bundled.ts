@@ -4,6 +4,8 @@
  */
 import countriesContent from "../../../data/countries.json";
 import melodyGroupsContent from "../../../data/melody-groups.json";
+// 全曲入りの非公開版（private モード）のときだけ local/anthems の国データが入る。公開版では常に空
+import localAnthemFiles from "virtual:local-anthems";
 import { validateDataset, type DataFile, type ValidatedDataset } from "./validate";
 
 const anthemModules = import.meta.glob<unknown>("../../../data/anthems/*.json", {
@@ -16,10 +18,13 @@ function toFileName(path: string): string {
 }
 
 export function loadBundledDataset(): ValidatedDataset {
-  const anthemFiles: DataFile[] = Object.entries(anthemModules).map(([path, content]) => ({
-    fileName: toFileName(path),
-    content,
-  }));
+  const anthemFiles: DataFile[] = [
+    ...Object.entries(anthemModules).map(([path, content]) => ({
+      fileName: toFileName(path),
+      content,
+    })),
+    ...localAnthemFiles,
+  ];
   const result = validateDataset(
     {
       anthemFiles,

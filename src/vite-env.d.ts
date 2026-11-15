@@ -8,3 +8,9 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+/** 全曲入りの非公開版の国データ（scripts/lib/local-anthems.ts のプラグインが作る）。公開版では常に空 */
+declare module "virtual:local-anthems" {
+  const files: { fileName: string; content: unknown }[];
+  export default files;
+}
