@@ -254,6 +254,7 @@
     "nameJa": "カメルーン",
     "nameEn": "Cameroon",
     "region": "africa",
+    "famous": true,
     "aliases": []
   },
   {
@@ -269,6 +270,7 @@
     "nameJa": "コロンビア",
     "nameEn": "Colombia",
     "region": "south-america",
+    "famous": true,
     "aliases": []
   },
   {
@@ -348,6 +350,7 @@
     "nameJa": "アルジェリア",
     "nameEn": "Algeria",
     "region": "africa",
+    "famous": true,
     "aliases": []
   },
   {
@@ -392,6 +395,7 @@
     "nameJa": "エチオピア",
     "nameEn": "Ethiopia",
     "region": "africa",
+    "famous": true,
     "aliases": []
   },
   {
@@ -667,7 +671,6 @@
     "nameJa": "北朝鮮",
     "nameEn": "North Korea",
     "region": "asia",
-    "famous": true,
     "aliases": ["朝鮮民主主義人民共和国", "きたちょうせん"]
   },
   {
@@ -997,7 +1000,6 @@
     "nameJa": "フィリピン",
     "nameEn": "Philippines",
     "region": "asia",
-    "famous": true,
     "aliases": []
   },
   {
@@ -1040,6 +1042,7 @@
     "nameJa": "パラグアイ",
     "nameEn": "Paraguay",
     "region": "south-america",
+    "famous": true,
     "aliases": []
   },
   {
@@ -1120,7 +1123,6 @@
     "nameJa": "シンガポール",
     "nameEn": "Singapore",
     "region": "asia",
-    "famous": true,
     "aliases": []
   },
   {
@@ -1156,6 +1158,7 @@
     "nameJa": "セネガル",
     "nameEn": "Senegal",
     "region": "africa",
+    "famous": true,
     "aliases": []
   },
   {
@@ -1291,7 +1294,6 @@
     "nameJa": "台湾",
     "nameEn": "Taiwan",
     "region": "asia",
-    "famous": true,
     "aliases": ["たいわん"]
   },
   {
@@ -1328,6 +1330,7 @@
     "nameJa": "ウルグアイ",
     "nameEn": "Uruguay",
     "region": "south-america",
+    "famous": true,
     "aliases": []
   },
   {
@@ -1363,7 +1366,6 @@
     "nameJa": "ベトナム",
     "nameEn": "Vietnam",
     "region": "asia",
-    "famous": true,
     "aliases": ["ヴェトナム"]
   },
   {
