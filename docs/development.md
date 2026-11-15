@@ -366,6 +366,10 @@ main にマージされると、[.github/workflows/deploy.yml](../.github/workfl
   公開版と同じ国が `local/` にあれば、公開版を使う。
 - `pnpm fetch:local`：Commons の「米海軍軍楽隊が演奏した国歌」のカテゴリから、公開版にない国の音源（MP3 の変換版）を `local/` に集め、国データを作る。
   国はファイルのカテゴリから決め、決められないもの（曲名だけのファイル）はスクリプトの対応表で決める。旧国歌は除く。`--dry-run` で対応の一覧だけを表示する。
+  Commons にない国は、米海軍軍楽隊の公式サイトにあった MP3 を、ウェイバックマシン（Internet Archive）の保存から取る（スクリプトのファイル名の対応表）。
+  同じ国歌を使う国（キプロスとギリシャ）は、公開版の録音をコピーする。
+  2026年11月の時点で、公開版と合わせて179か国。どこにも録音が見つからない国（アンドラ・台湾・トンガなど）と、
+  どちらのコンゴか分からない録音、旧国歌しかないナイジェリアは入れていない。
 - `pnpm dev:private`：全曲入りで手元で起動する。
 - 非公開のサイト：Cloudflare Workers の別の Worker（[wrangler.private.jsonc](../wrangler.private.jsonc)）に、**Cloudflare Access で本人だけがログインできる状態**にして上げる。CI からは上げない。
   1. `pnpm exec wrangler login`（初回だけ）。

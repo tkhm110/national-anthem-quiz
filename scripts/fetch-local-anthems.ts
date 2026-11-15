@@ -5,7 +5,7 @@
  * local/ は git の管理外で、公開サイトのビルドには入らない（docs/development.md「全曲入りの非公開版」）。
  * 権利の確認はしていないので、公開してはいけない。
  */
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { validateDataset } from "../src/lib/data/validate";
@@ -138,6 +138,73 @@ function tidyTitle(title: string): string {
     .trim();
 }
 
+/**
+ * Commons にない国の、米海軍軍楽隊の公式サイトにあった MP3 のファイル名（ウェイバックマシンに保存されているもの）。
+ * congo.mp3 はどちらのコンゴか分からず、nigeria.mp3 は2024年に変わる前の旧国歌なので使わない。
+ */
+const WAYBACK_FILES: Record<string, string> = {
+  ba: "bosnia-herzegovina.mp3",
+  lt: "lithuania.mp3",
+  lv: "latvia.mp3",
+  mk: "macedonia.mp3",
+  se: "sweden.mp3",
+  si: "slovenia.mp3",
+  sk: "slovak-republic.mp3",
+  va: "holy-see.mp3",
+  ae: "united-arab-emirates.mp3",
+  in: "india.mp3",
+  ir: "iran.mp3",
+  kh: "cambodia.mp3",
+  lk: "sri-lanka.mp3",
+  mn: "mongolia.mp3",
+  uz: "uzbekistan.mp3",
+  vn: "vietnam.mp3",
+  ye: "yemen.mp3",
+  ao: "angola.mp3",
+  ci: "cote-divoire.mp3",
+  cm: "cameroon.mp3",
+  et: "ethiopia.mp3",
+  gw: "guinea-bissau.mp3",
+  mz: "mozambique.mp3",
+  na: "namibia.mp3",
+  sl: "sierra-leone.mp3",
+  tg: "togo.mp3",
+  tn: "tunisia.mp3",
+  gt: "guatemala.mp3",
+  kn: "st-kitts-and-nevis.mp3",
+  vu: "vanuatu.mp3",
+};
+
+/** 同じ国歌を使う国（国ID → 録音をコピーする元の公開版の国ID）。同一旋律グループにも入っている */
+const SAME_ANTHEM_COPIES: Record<string, string> = { cy: "gr" };
+
+type Snapshot = { original: string; timestamp: string };
+
+/** ウェイバックマシンに保存されている、米海軍軍楽隊のサイトの国歌の MP3（小文字のファイル名 → 最新の保存） */
+async function listWaybackFiles(): Promise<Map<string, Snapshot>> {
+  const files = new Map<string, Snapshot>();
+  for (const path of ["navyband.navy.mil/music/anthems/*", "navyband.navy.mil/anthems/*"]) {
+    const url = `https://web.archive.org/cdx/search/cdx?${new URLSearchParams({
+      url: path,
+      output: "json",
+      fl: "original,timestamp",
+      filter: "statuscode:200",
+      collapse: "urlkey",
+      limit: "5000",
+    })}`;
+    const res = await fetch(url, { headers: { "User-Agent": UA } });
+    if (!res.ok) throw new Error(`${res.status} ${url}`);
+    const rows = ((await res.json()) as string[][]).slice(1);
+    for (const [original, timestamp] of rows) {
+      if (!original || !timestamp || !/\.mp3$/i.test(original)) continue;
+      const name = decodeURIComponent(original.slice(original.lastIndexOf("/") + 1)).toLowerCase();
+      const current = files.get(name);
+      if (!current || timestamp > current.timestamp) files.set(name, { original, timestamp });
+    }
+  }
+  return files;
+}
+
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /** Commons の負荷を避けるため、1件ごとに間を空け、429 のときは待ってやり直す */
@@ -188,27 +255,76 @@ for (const page of pages) {
   if (!current || duration > (current.videoinfo?.[0]?.duration ?? 0)) chosen.set(country.id, page);
 }
 
-console.log(`[INFO] 公開版にない国 ${chosen.size}か国`);
 for (const title of unmatched) console.warn(`[WARN] 国を特定できない：${title}`);
+
+/** 1か国分の取得元。音源の URL（copyFrom のときはコピー元のファイル）と、国データに書く曲名・出典 */
+type Source = { id: string; title: string; sourceUrl: string; mp3Url?: string; copyFrom?: string };
+const sources = new Map<string, Source>();
+for (const [id, page] of chosen) {
+  sources.set(id, {
+    id,
+    title: anthemTitleOf(page),
+    sourceUrl: `https://commons.wikimedia.org/wiki/${encodeURI(page.title.replace(/ /g, "_"))}`,
+    mp3Url: mp3Of(page),
+  });
+}
+console.log(`[INFO] Commons から ${sources.size}か国`);
+
+// Commons にない国は、米海軍軍楽隊の公式サイトにあった MP3（ウェイバックマシンの保存）から取る
+const archived = await listWaybackFiles();
+for (const [id, name] of Object.entries(WAYBACK_FILES)) {
+  if (publicIds.has(id) || sources.has(id)) continue;
+  const snapshot = archived.get(name);
+  if (!snapshot) {
+    console.warn(`[WARN] ${id}: ウェイバックマシンに ${name} がない`);
+    continue;
+  }
+  sources.set(id, {
+    id,
+    title: `National anthem of ${countries.find((c) => c.id === id)!.nameEn}`,
+    sourceUrl: `https://web.archive.org/web/${snapshot.timestamp}/${snapshot.original}`,
+    mp3Url: `https://web.archive.org/web/${snapshot.timestamp}id_/${snapshot.original}`,
+  });
+}
+
+// 同じ国歌を使う国は、もう一方の録音をコピーする
+for (const [id, fromId] of Object.entries(SAME_ANTHEM_COPIES)) {
+  if (publicIds.has(id) || sources.has(id)) continue;
+  const from = base.data.anthems.find((a) => a.id === fromId);
+  if (!from) continue;
+  sources.set(id, {
+    id,
+    title: from.anthemTitle.original,
+    sourceUrl: from.license.sourceUrl,
+    copyFrom: join(rootDir, "public", "audio", from.audio.file),
+  });
+}
+
+console.log(`[INFO] 公開版にない国 ${sources.size}か国`);
 if (dryRun) {
-  for (const [id, page] of [...chosen].sort()) {
-    console.log(`  ${id}  ${countries.find((c) => c.id === id)!.nameEn}  ←  ${page.title}`);
+  for (const s of [...sources.values()].sort((a, b) => a.id.localeCompare(b.id))) {
+    console.log(`  ${s.id}  ${countries.find((c) => c.id === s.id)!.nameEn}  ←  ${s.sourceUrl}`);
   }
   process.exit(0);
 }
 
 mkdirSync(anthemsDir, { recursive: true });
 mkdirSync(audioDir, { recursive: true });
-for (const [id, page] of [...chosen].sort()) {
+for (const source of [...sources.values()].sort((a, b) => a.id.localeCompare(b.id))) {
+  const { id } = source;
   const file = `${id}.mp3`;
   const audioPath = join(audioDir, file);
   if (!existsSync(audioPath)) {
-    const body = await download(mp3Of(page)!);
-    if (!body) {
-      console.warn(`[WARN] ${id}: ダウンロードに失敗`);
-      continue;
+    if (source.copyFrom) {
+      copyFileSync(source.copyFrom, audioPath);
+    } else {
+      const body = await download(source.mp3Url!);
+      if (!body) {
+        console.warn(`[WARN] ${id}: ダウンロードに失敗`);
+        continue;
+      }
+      writeFileSync(audioPath, body);
     }
-    writeFileSync(audioPath, body);
   }
   const duration = await readDurationWithMusicMetadata(audioPath);
   if (!duration) {
@@ -220,12 +336,12 @@ for (const [id, page] of [...chosen].sort()) {
     id,
     nameJa: country.nameJa,
     nameEn: country.nameEn,
-    anthemTitle: { original: anthemTitleOf(page) },
+    anthemTitle: { original: source.title },
     audio: { file, durationSec: Math.round(duration * 100) / 100 },
     license: {
       type: "public-domain",
       author: "United States Navy Band",
-      sourceUrl: `https://commons.wikimedia.org/wiki/${encodeURI(page.title.replace(/ /g, "_"))}`,
+      sourceUrl: source.sourceUrl,
       note: "私的利用専用（全曲入りの非公開版）。楽曲・編曲の権利は確認していないので、公開しない",
     },
   };
