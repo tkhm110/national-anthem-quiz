@@ -140,10 +140,12 @@ function tidyTitle(title: string): string {
 
 /**
  * Commons にない国の、米海軍軍楽隊の公式サイトにあった MP3 のファイル名（ウェイバックマシンに保存されているもの）。
- * congo.mp3 はどちらのコンゴか分からず、nigeria.mp3 は2024年に変わる前の旧国歌なので使わない。
+ * congo.mp3 は、旧サイトで「Congo (Republic of)」「Zaire」と別に置かれていた「Congo」と同じ中身で、
+ * どちらとも曲が違うので、コンゴ民主共和国の現行の国歌とみなす。nigeria.mp3 は2024年に変わる前の旧国歌なので使わない。
  */
 const WAYBACK_FILES: Record<string, string> = {
   ba: "bosnia-herzegovina.mp3",
+  cd: "congo.mp3",
   lt: "lithuania.mp3",
   lv: "latvia.mp3",
   mk: "macedonia.mp3",
@@ -192,9 +194,9 @@ async function listWaybackFiles(): Promise<Map<string, Snapshot>> {
       collapse: "urlkey",
       limit: "5000",
     })}`;
-    const res = await fetch(url, { headers: { "User-Agent": UA } });
-    if (!res.ok) throw new Error(`${res.status} ${url}`);
-    const rows = ((await res.json()) as string[][]).slice(1);
+    const body = await download(url);
+    if (!body) throw new Error(`ウェイバックマシンの一覧を取得できませんでした：${url}`);
+    const rows = (JSON.parse(body.toString("utf8")) as string[][]).slice(1);
     for (const [original, timestamp] of rows) {
       if (!original || !timestamp || !/\.mp3$/i.test(original)) continue;
       const name = decodeURIComponent(original.slice(original.lastIndexOf("/") + 1)).toLowerCase();
@@ -207,15 +209,15 @@ async function listWaybackFiles(): Promise<Map<string, Snapshot>> {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-/** Commons の負荷を避けるため、1件ごとに間を空け、429 のときは待ってやり直す */
+/** 相手の負荷を避けるため、1件ごとに間を空け、429・503 のときは待ってやり直す */
 async function download(url: string): Promise<Buffer | undefined> {
   for (let attempt = 0; attempt < 5; attempt++) {
     await sleep(2000);
     const res = await fetch(url, { headers: { "User-Agent": UA } });
     if (res.ok) return Buffer.from(await res.arrayBuffer());
-    if (res.status !== 429) return undefined;
+    if (res.status !== 429 && res.status !== 503) return undefined;
     const wait = Number(res.headers.get("retry-after")) || 30;
-    console.warn(`[INFO] 429 のため ${wait}秒待つ`);
+    console.warn(`[INFO] ${res.status} のため ${wait}秒待つ`);
     await sleep(wait * 1000);
   }
   return undefined;
