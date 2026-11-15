@@ -25,6 +25,18 @@ export function readLocalAnthemFiles(
     .map((name) => readJsonFile(join(anthemsDir, name), name));
 }
 
+/**
+ * 取得済みの音源を使い回してよいか。前回の国データの出典が今回の取得元と同じときだけ使い回す
+ * （取得元が変わったのに古い録音を残すと、国データの出典・ライセンスと実際の録音が食い違う）
+ */
+export function canReuseAudio(
+  audioExists: boolean,
+  cachedSourceUrl: string | undefined,
+  sourceUrl: string,
+): boolean {
+  return audioExists && cachedSourceUrl === sourceUrl;
+}
+
 /** 保存先のフォルダがなければ作ってから書く */
 export function writeFileCreatingDir(path: string, content: string): void {
   mkdirSync(dirname(path), { recursive: true });

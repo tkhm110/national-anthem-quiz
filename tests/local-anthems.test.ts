@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  canReuseAudio,
   isFormerAnthem,
   matchCountry,
   readLocalAnthemFiles,
@@ -16,6 +17,7 @@ import {
 } from "../scripts/lib/vite-local-anthems";
 import {
   checkAccessProtected,
+  deployPrivate,
   findWorkersDevUrl,
   isAccessLoginRedirect,
 } from "../scripts/lib/private-site";
@@ -158,5 +160,60 @@ describe("非公開版のデプロイの確認", () => {
     const base = "https://site.example.workers.dev";
     expect(await checkAccessProtected(base, protectedFetch)).toEqual([]);
     expect(await checkAccessProtected(base, openFetch)).toHaveLength(2);
+  });
+});
+
+describe("deployPrivate（非公開版のデプロイの手順）", () => {
+  const out = (url: string) => `Deployed national-anthem-quiz-private\n  ${url}\n`;
+  /** 呼ばれた手順を記録する偽物。deployUrls は空のページ・全曲の各デプロイが出す URL の順 */
+  function fakeDeps(deployUrls: string[], protectedUrls: string[]) {
+    const calls: string[] = [];
+    let i = 0;
+    return {
+      calls,
+      deps: {
+        deployPlaceholder: () => (calls.push("placeholder"), out(deployUrls[i++]!)),
+        buildAndDeploy: () => (calls.push("full"), out(deployUrls[i++]!)),
+        check: async (url: string) =>
+          protectedUrls.includes(url) ? [] : [`${url} は保護されていない`],
+        log: () => {},
+      },
+    };
+  }
+  const A = "https://national-anthem-quiz-private.a.workers.dev";
+  const B = "https://other-worker.b.workers.dev";
+
+  it("実際の上げ先（空のページを上げた先）が保護されていなければ、全曲を上げない", async () => {
+    // 以前保存した URL が保護されていても、今の上げ先が別の Worker なら止まる
+    const { deps, calls } = fakeDeps([B], [A]);
+    await expect(deployPrivate(deps, false)).rejects.toThrow();
+    expect(calls).toEqual(["placeholder"]);
+  });
+
+  it("保護された上げ先なら全曲を上げ、上げた後にも同じ URL と保護を確かめる", async () => {
+    const { deps, calls } = fakeDeps([A, A], [A]);
+    await expect(deployPrivate(deps, false)).resolves.toBe(A);
+    expect(calls).toEqual(["placeholder", "full"]);
+  });
+
+  it("全曲を上げた先が確かめた URL と違えば、すぐに空のページに戻して止まる", async () => {
+    const { deps, calls } = fakeDeps([A, B, B], [A]);
+    await expect(deployPrivate(deps, false)).rejects.toThrow();
+    expect(calls).toEqual(["placeholder", "full", "placeholder"]);
+  });
+
+  it("--placeholder では空のページだけを上げ、保護を確かめない", async () => {
+    const { deps, calls } = fakeDeps([A], []);
+    await expect(deployPrivate(deps, true)).resolves.toBe(A);
+    expect(calls).toEqual(["placeholder"]);
+  });
+});
+
+describe("canReuseAudio（pnpm fetch:local で取得済みの音源を使い回すか）", () => {
+  it("前回と同じ出典のときだけ使い回す（取得元が変われば取り直す）", () => {
+    expect(canReuseAudio(true, "https://x/a", "https://x/a")).toBe(true);
+    expect(canReuseAudio(true, "https://x/a", "https://x/b")).toBe(false);
+    expect(canReuseAudio(true, undefined, "https://x/a")).toBe(false);
+    expect(canReuseAudio(false, "https://x/a", "https://x/a")).toBe(false);
   });
 });

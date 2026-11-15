@@ -15,6 +15,7 @@ import { checkAudioFiles, readDurationWithMusicMetadata } from "./lib/check-audi
 import { readDataDir } from "./lib/read-data-dir";
 import {
   LOCAL_ANTHEMS_DIR,
+  canReuseAudio,
   LOCAL_AUDIO_DIR,
   isFormerAnthem,
   matchCountry,
@@ -389,7 +390,11 @@ for (const source of [...sources.values()].sort((a, b) => a.id.localeCompare(b.i
   const { id } = source;
   const file = `${id}.mp3`;
   const audioPath = join(audioDir, file);
-  if (!existsSync(audioPath)) {
+  const jsonPath = join(anthemsDir, `${id}.json`);
+  const cached = existsSync(jsonPath)
+    ? (JSON.parse(readFileSync(jsonPath, "utf8")) as Anthem).license?.sourceUrl
+    : undefined;
+  if (!canReuseAudio(existsSync(audioPath), cached, source.sourceUrl)) {
     if (source.copyFrom) {
       copyFileSync(source.copyFrom, audioPath);
     } else if (source.extra) {

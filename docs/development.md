@@ -380,12 +380,14 @@ main にマージされると、[.github/workflows/deploy.yml](../.github/workfl
 - `pnpm dev:private`：全曲入りで手元で起動する。
 - 非公開のサイト：Cloudflare Workers の別の Worker（[wrangler.private.jsonc](../wrangler.private.jsonc)）に、**Cloudflare Access で本人だけがログインできる状態**にして上げる。CI からは上げない。
   1. `pnpm exec wrangler login`（初回だけ）。
-  2. `pnpm deploy:private --placeholder`：音源の入っていない空のページを上げて Worker を作り、URL を `local/private-url.txt` に保存する。
+  2. `pnpm deploy:private --placeholder`：音源の入っていない空のページを上げて Worker を作り、その URL を表示する。
   3. ダッシュボードの Workers & Pages → その Worker → Settings → Domains & Routes で、workers.dev の Cloudflare Access を有効にし、
      作られた Access のアプリケーションのポリシーを、本人のメールアドレスだけを許可するものにする（ログインはメールに届く One-time PIN）。
      プレビュー用の URL は設定ファイル（`preview_urls: false`）で作らない。
-  4. `pnpm deploy:private`：ページと音源の URL が Access のログイン画面に移ることを確かめてから、全曲入りをビルドして上げ、上げた後にもう一度確かめる。
-     ログインがかかっていなければ、何も上げずに止まる。
+  4. `pnpm deploy:private`：まず空のページを上げて**実際の上げ先**の URL を知り、そのページと音源の URL が Access のログイン画面に移ることを確かめてから、
+     全曲入りをビルドして上げる。上げた後も同じ URL と保護を確かめ、違えばすぐに空のページに戻す。
+     ログインがかかっていなければ、空のページのまま止まる（保存した URL ではなく毎回の上げ先で確かめるので、
+     Worker の名前やアカウントを変えても、保護されていない先に音源を上げない）。
 - 許可するのは本人だけにする。ほかの人にも見せると、公衆への送信に近づく。
 
 ## 開発の進め方（AI エージェントとの分担）
